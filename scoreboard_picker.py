@@ -15,8 +15,8 @@ window = pyglet.window.Window(800, 480, fullscreen=isPi)
 
 class ScoreboardIcon:
     LINE_SPACING = 44
-    SELECTED_COLOR = (255,0,0,255) #red
-    DEFAULT_COLOR = (255,255,255,100) #white, opaque
+    SELECTED_COLOR = (255,255,255,255) #red
+    DEFAULT_COLOR = (255,255,255,40) #white, opaque
 
     def __init__(self, text,  position, width, batch, scoreboard):
         self.scoreboard = scoreboard

@@ -59,14 +59,8 @@ class TimedGameState(GameState):
         else:
             self.teams[team].modifyTimeoutsTaken(1)
 
-    def getTotalTimeInSeconds(self):
-        return self.seconds
-
-    def getMinutes(self) :
-        return self.seconds // 60
-
     def getSeconds(self) :
-        return self.seconds % 60
+        return self.seconds
 
  
     def getPeriod(self) :

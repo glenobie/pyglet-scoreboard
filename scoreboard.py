@@ -2,6 +2,7 @@ import pyglet
 
 from element import ScoreboardElement
 from element import HorizontalElement
+from element import ClockElement
 
 class Scoreboard():
 
@@ -65,25 +66,10 @@ class Scoreboard():
         self.elements.append(e)
 
     def addClock(self, height) :
-        self.clockColon = pyglet.text.Label(':', font_name=Scoreboard.DIGIT_FONT,  
-                                        font_size=Scoreboard.CLOCK_SIZE, color=Scoreboard.WHITE, 
-                                        batch=self.batch)
-        self.clockColon.anchor_x = 'center'
-        self.clockColon.anchor_y = 'top'
-        self.clockColon.position = (Scoreboard.CENTER, height)
-
-
-        e = ScoreboardElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=0, 
-                              updateFunc=self.state.getMinutes, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.CLOCK_SIZE, digitColor=Scoreboard.GREEN, maxDigits=2, batch=self.batch)
-        e.setRightTop(Scoreboard.CENTER - 20, height)
-        self.elements.append(e)
-
-        e = ScoreboardElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=0, 
+        e = ClockElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=0, textColor=Scoreboard.WHITE, 
                               updateFunc=self.state.getSeconds, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.CLOCK_SIZE, digitColor=Scoreboard.GREEN, maxDigits=2, 
-                              displayLeadingZeroes=True, batch=self.batch)
-        e.setLeftTop(Scoreboard.CENTER+20, height)
+                              digitSize=Scoreboard.CLOCK_SIZE, digitColor=Scoreboard.GREEN, maxDigits=2, batch=self.batch)
+        e.setCenterTop(Scoreboard.CENTER, height)
         self.elements.append(e)
 
     def addPeriod(self, height, horizontal=False, maxDigits=1) :

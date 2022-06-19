@@ -1,5 +1,6 @@
 from scoreboard import Scoreboard
 from element import ScoreboardElement
+from element import ClockElement
 from game_state import TeamState
 from game_state import TimedGameState
 
@@ -47,29 +48,17 @@ class HockeyGameState(TimedGameState) :
             self.incrementPenaltyClocks(-self.TIME_INTERVAL)
             
     
-    def getLeftTopPenaltyMinutes(self) :
-        return self.getPenaltySeconds[0].getPenaltyClock(0) // 60
-
     def getLeftTopPenaltySeconds(self) :
-        return self.getPenaltySeconds[0].getPenaltyClock(0) % 60
-
-    def getLeftBottomPenaltyMinutes(self) :
-        return self.getPenaltySeconds[0].getPenaltyClock(1) // 60
+        return self.getPenaltySeconds(0, 0)
 
     def getLeftBottomPenaltySeconds(self) :
-        return self.getPenaltySeconds[0].getPenaltyClock(1) % 60
-
-    def getRightTopPenaltyMinutes(self) :
-        return self.getPenaltySeconds[1].getPenaltyClock(0) // 60
+        return self.getPenaltySeconds(0, 1) 
 
     def getRightTopPenaltySeconds(self) :
-        return self.getPenaltySeconds[1].getPenaltyClock(0) % 60
-
-    def getRightBottomPenaltyMinutes(self) :
-        return self.getPenaltySeconds[1].getPenaltyClock(1) // 60
+        return self.getPenaltySeconds(1, 0) 
 
     def getRightBottomPenaltySeconds(self) :
-        return self.getPenaltySeconds[1].getPenaltyClock(1) % 60
+        return self.getPenaltySeconds(1, 1) 
 
     def getPenaltySeconds(self, team, index) :
         return self.teams[team].getPenaltyClock(index)
@@ -97,40 +86,13 @@ class HockeyScoreboard(Scoreboard) :
         self.addClock(440)
         self.addPeriod(300)
 
-        #self.addTeamFouls(280)
-        #self.addTimeouts(140)
-
-    def addTimeouts(self, height) :
-        e = ScoreboardElement(text='Timeouts', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getGuestTimeoutsTaken, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2, 
+        e = ClockElement(text='Penalty 1', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
+                              updateFunc=self.state.getLeftTopPenaltySeconds, digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=1, 
                               batch=self.batch)
-        e.setCenterTop(Scoreboard.LEFT_CENTER, height)
+
+        e.setCenterTop(Scoreboard.LEFT_CENTER, 200)
         self.elements.append(e)
-
-        e = ScoreboardElement(text='Timeouts', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE,
-                              updateFunc=self.state.getHomeTimeoutsTaken, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2,  
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.RIGHT_CENTER, height)
-        self.elements.append(e)
-
-
-    def addTeamFouls(self, height) :
-        e = ScoreboardElement(text='Team Fouls', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getGuestTeamFouls, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.LEFT_CENTER, height)
-        self.elements.append(e)
-
-        e = ScoreboardElement(text='Team Fouls', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE,
-                             updateFunc=self.state.getHomeTeamFouls, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2,  
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.RIGHT_CENTER, height)
-        self.elements.append(e)
-
 
     def handle_A(self, modified = False) :
         self.state.modifyTeamFouls(0, modified)
