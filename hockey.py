@@ -85,31 +85,40 @@ class HockeyScoreboard(Scoreboard) :
         self.addScores(3)
         self.addClock(440)
         self.addPeriod(300)
+        self.addPenaltyClock('Penalty 1', self.state.getLeftTopPenaltySeconds, Scoreboard.LEFT_CENTER, 290)
+        self.addPenaltyClock('Penalty 1', self.state.getRightTopPenaltySeconds, Scoreboard.RIGHT_CENTER, 290)
+        self.addPenaltyClock('Penalty 2', self.state.getLeftBottomPenaltySeconds, Scoreboard.LEFT_CENTER, 140)
+        self.addPenaltyClock('Penalty 2', self.state.getRightBottomPenaltySeconds, Scoreboard.RIGHT_CENTER, 140)
 
-        e = ClockElement(text='Penalty 1', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getLeftTopPenaltySeconds, digitFont=Scoreboard.DIGIT_FONT,
+
+    def addPenaltyClock(self, text, func, x, y) :
+        e = ClockElement(text=text, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
+                              updateFunc=func, digitFont=Scoreboard.DIGIT_FONT,
                               digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=1, 
                               batch=self.batch)
 
-        e.setCenterTop(Scoreboard.LEFT_CENTER, 200)
+        e.setCenterTop(x, y)
         self.elements.append(e)
 
+
     def handle_A(self, modified = False) :
-        self.state.modifyTeamFouls(0, modified)
+        self.state.modifyPenaltyClock(0, 0) 
         self.updateElements()
 
     def handle_D(self, modified = False) :
-        self.state.modifyTeamFouls(1, modified)
+        self.state.modifyPenaltyClock(1, 0) 
         self.updateElements()
  
     def handle_Q(self, modified = False) :
-        self.state.modifyTimeoutsTaken(0, modified)
+        self.state.modifyPenaltyClock(0, 1) 
         self.updateElements()
 
     def handle_E(self, modified = False) :
-        self.state.modifyTimeoutsTaken(1, modified)
+        self.state.modifyPenaltyClock(1, 1) 
         self.updateElements()
  
+
+
 
     
         

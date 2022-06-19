@@ -213,7 +213,6 @@ class ClockElement(ScoreboardElement) :
                                     displayLeadingZeroes=displayLeadingZeroes, batch=batch)
         
         f = font.load(digitFont, digitSize)
-        self.labelHeight = f.ascent
        
         self.colon = pyglet.text.Label(':', font_name=digitFont, font_size=digitSize, color=textColor, batch=batch, group=self.fg)
 
