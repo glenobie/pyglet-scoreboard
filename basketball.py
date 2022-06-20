@@ -57,12 +57,12 @@ class BasketballScoreboard(Scoreboard) :
         Scoreboard.__init__(self)
         self.state = BasketballGameState()
         
-        self.addScores(3)
+        self.addScores(3, 470)
         self.addClock(440)
         self.addPeriod(300)
 
-        self.addTeamFouls(280)
-        self.addTimeouts(140)
+        self.addTeamFouls(300)
+        self.addTimeouts(160)
 
     def addTimeouts(self, height) :
         e = ScoreboardElement(text='Timeouts', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 

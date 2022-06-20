@@ -14,14 +14,16 @@ class Scoreboard():
     CLOCK_SIZE = 84
     MEDIUM_DIGIT_SIZE = 64
     SMALL_DIGIT_SIZE = 44
+    VERY_SMALL_DIGIT_SIZE = 36
 
     LARGE_TEXT_SIZE = 50
     MEDIUM_TEXT_SIZE = 40
     SMALL_TEXT_SIZE = 30
 
     WHITE = (255,255,255,255)
-    RED = (255, 0, 0, 255)
-    GREEN = (0, 255, 0, 255)
+    RED = (255, 10, 10, 255)
+    GREEN = (10, 255, 10, 255)
+    YELLOW = (255, 255, 40, 255)
 
     DIGIT_FONT = 'Digital-7 Mono'
     TEXT_FONT = 'Built Titling'
@@ -50,19 +52,19 @@ class Scoreboard():
         for e in self.elements :
             e.update()
 
-    def addScores(self, maxDigits, leftLabel='GUEST', rightLabel='HOME') :
+    def addScores(self, maxDigits, height,  leftLabel='GUEST', rightLabel='HOME') :
         e = ScoreboardElement(text=leftLabel, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=self.state.getGuestScore, digitFont=Scoreboard.DIGIT_FONT,
                               digitSize=Scoreboard.SCORE_SIZE, digitColor=Scoreboard.RED, maxDigits=maxDigits, 
                               batch=self.batch)
-        e.setCenterTop(Scoreboard.LEFT_CENTER,460)
+        e.setCenterTop(Scoreboard.LEFT_CENTER, height)
         self.elements.append(e)
 
         e = ScoreboardElement(text=rightLabel, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=self.state.getHomeScore, digitFont=Scoreboard.DIGIT_FONT,
                               digitSize=Scoreboard.SCORE_SIZE, digitColor=Scoreboard.RED, maxDigits=maxDigits,  
                               batch=self.batch)
-        e.setCenterTop(Scoreboard.RIGHT_CENTER,460)
+        e.setCenterTop(Scoreboard.RIGHT_CENTER, height)
         self.elements.append(e)
 
     def addClock(self, height) :

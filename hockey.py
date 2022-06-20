@@ -82,19 +82,19 @@ class HockeyScoreboard(Scoreboard) :
         Scoreboard.__init__(self)
         self.state = HockeyGameState()
         
-        self.addScores(3)
+        self.addScores(3, 470)
         self.addClock(440)
         self.addPeriod(300)
-        self.addPenaltyClock('Penalty 1', self.state.getLeftTopPenaltySeconds, Scoreboard.LEFT_CENTER, 290)
-        self.addPenaltyClock('Penalty 1', self.state.getRightTopPenaltySeconds, Scoreboard.RIGHT_CENTER, 290)
-        self.addPenaltyClock('Penalty 2', self.state.getLeftBottomPenaltySeconds, Scoreboard.LEFT_CENTER, 140)
-        self.addPenaltyClock('Penalty 2', self.state.getRightBottomPenaltySeconds, Scoreboard.RIGHT_CENTER, 140)
+        self.addPenaltyClock('Penalty 1', self.state.getLeftTopPenaltySeconds, Scoreboard.LEFT_CENTER, 300)
+        self.addPenaltyClock('Penalty 1', self.state.getRightTopPenaltySeconds, Scoreboard.RIGHT_CENTER, 300)
+        self.addPenaltyClock('Penalty 2', self.state.getLeftBottomPenaltySeconds, Scoreboard.LEFT_CENTER, 160)
+        self.addPenaltyClock('Penalty 2', self.state.getRightBottomPenaltySeconds, Scoreboard.RIGHT_CENTER, 160)
 
 
     def addPenaltyClock(self, text, func, x, y) :
         e = ClockElement(text=text, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
                               updateFunc=func, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=1, 
+                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.YELLOW, maxDigits=1, 
                               batch=self.batch)
 
         e.setCenterTop(x, y)

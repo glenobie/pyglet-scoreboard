@@ -1,5 +1,4 @@
-from email import policy
-import os
+
 import socket
 import pyglet
 from pyglet import font
@@ -7,6 +6,11 @@ from basketball import BasketballScoreboard
 from football import FootballScoreboard
 from boxing import BoxingScoreboard
 from hockey import HockeyScoreboard
+from baseball import BaseballScoreboard
+from cricket import CricketScoreboard
+from tennis import TennisScoreboard
+from bowling import BowlingScoreboard
+from golf import GolfScoreboard
 
 # Make full screen on Raspberry Pi as long as its hostname = raspberrypi
 isPi = socket.gethostname() == "raspberrypi"
@@ -73,13 +77,13 @@ class ScoreboardPicker :
  
         self.scoreboards = (HockeyScoreboard(),  
                             BasketballScoreboard(),
-                            BasketballScoreboard(),  
+                            BaseballScoreboard(),  
                             FootballScoreboard(),
-                            BasketballScoreboard(),  
+                            CricketScoreboard(),  
                             BoxingScoreboard(),
-                            BasketballScoreboard(),  
-                            BasketballScoreboard(),
-                            BasketballScoreboard())
+                            TennisScoreboard(),  
+                            BowlingScoreboard(),
+                            GolfScoreboard())
 
 
         for i in range(0, len(ScoreboardPicker.TEXT_FONT_PAIRS)) :

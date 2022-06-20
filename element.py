@@ -18,7 +18,7 @@ class ScoreboardElement :
         self.bg = pyglet.graphics.OrderedGroup(0)
         self.fg = pyglet.graphics.OrderedGroup(1)
 
-
+        self.isOn = True
         self.updateFunc = updateFunc
         self.maxDigits = maxDigits
         self.label = None
@@ -39,7 +39,7 @@ class ScoreboardElement :
 
         self.borders = []
         for l in self.layouts :
-            self.borders.append(self.createBorder( l.width, l.height-8, batch, self.bg))        
+            self.borders.append(self.createBorder( l.width, l.height-(l.height//10), batch, self.bg))        
         
         self.update()
 
@@ -67,7 +67,10 @@ class ScoreboardElement :
         docs.append(document)
         return docs
 
-    
+    def setOn(self, value) :
+        self.isOn = value
+        self.update()
+
     def createLayout(self, doc, batch, group) :
         # find  width of a character at this size            
         #                                              
@@ -83,13 +86,16 @@ class ScoreboardElement :
 
     # base class assumes a single document
     def update(self) :
-        value = str(self.updateFunc())
         self.docs[0].delete_text(0, len(self.docs[0].text))
+        if self.isOn :
+            value = str(self.updateFunc())
 
-        missingDigits = self.maxDigits - len(value)
-        if self.displayLeadingZeroes & missingDigits > 0 :
-            for i in range(0, missingDigits) :
-                value = '0' + value
+            missingDigits = self.maxDigits - len(value)
+            if self.displayLeadingZeroes & missingDigits > 0 :
+                for i in range(0, missingDigits) :
+                    value = '0' + value
+        else :
+            value = ''
 
         self.docs[0].insert_text(0, value)
 

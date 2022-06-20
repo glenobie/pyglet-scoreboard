@@ -88,26 +88,26 @@ class BoxingScoreboard(Scoreboard) :
         Scoreboard.__init__(self)
         self.state = BoxingGameState()
         
-        self.addScores(2, leftLabel='RED', rightLabel='Blue')
+        self.addScores(2, leftLabel='RED', rightLabel='Blue', height=460)
         self.addClock(440)
         self.addPeriod(300, maxDigits=2)
 
-        self.addEndurance(280)
-        self.addTkoPoints(140)
+        self.addEndurance(300)
+        self.addTkoPoints(160)
 
-    def addScores(self, maxDigits, leftLabel='GUEST', rightLabel='HOME') :
+    def addScores(self, maxDigits, leftLabel='GUEST', rightLabel='HOME', height=460) :
         e = ScoreboardElement(text=leftLabel, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=self.state.getGuestScore, digitFont=Scoreboard.DIGIT_FONT,
                               digitSize=Scoreboard.SCORE_SIZE, digitColor=BoxingScoreboard.LEFT_DIGIT_COLOR, maxDigits=maxDigits, 
                               batch=self.batch)
-        e.setCenterTop(Scoreboard.LEFT_CENTER,460)
+        e.setCenterTop(Scoreboard.LEFT_CENTER,height)
         self.elements.append(e)
 
         e = ScoreboardElement(text=rightLabel, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=self.state.getHomeScore, digitFont=Scoreboard.DIGIT_FONT,
                               digitSize=Scoreboard.SCORE_SIZE, digitColor=BoxingScoreboard.RIGHT_DIGIT_COLOR, maxDigits=maxDigits,  
                               batch=self.batch)
-        e.setCenterTop(Scoreboard.RIGHT_CENTER,460)
+        e.setCenterTop(Scoreboard.RIGHT_CENTER,height)
         self.elements.append(e)
 
 

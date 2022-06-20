@@ -108,12 +108,12 @@ class FootballScoreboard(Scoreboard) :
     def __init__(self) :
         Scoreboard.__init__(self)
         self.state = FootballGameState()
-        self.addScores(2)
-        self.addClock(440)
-        self.addPeriod(320, horizontal=True)
-        self.addDown(230)
-        self.addYardsToGo(150)
-        self.addYardsToEndzone(60)
+        self.addScores(2, 470)
+        self.addClock(450)
+        self.addPeriod(340, horizontal=True)
+        self.addDown(242)
+        self.addYardsToGo(162)
+        self.addYardsToEndzone(70)
         self.ballMarker = self.addBallLocation(250)
 
  
@@ -129,7 +129,7 @@ class FootballScoreboard(Scoreboard) :
         e = ScoreboardElement(text='Ball On', textFont=Scoreboard.TEXT_FONT, 
                                 textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
                                 updateFunc=self.state.getLineOfScrimmage, digitFont=Scoreboard.DIGIT_FONT,
-                                digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=2, 
+                                digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2, 
                                 displayLeadingZeroes=False, batch=self.batch)
         e.setCenterTop(Scoreboard.LEFT_CENTER, height)
         self.elements.append(e)
@@ -141,7 +141,7 @@ class FootballScoreboard(Scoreboard) :
         e = HorizontalElement(text='Yards To Endzone:', textFont=Scoreboard.TEXT_FONT, 
                                 textSize=Scoreboard.SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE, 
                                 updateFunc=self.state.getYardsToEndzone, digitFont=Scoreboard.DIGIT_FONT,
-                                digitSize=Scoreboard.SMALL_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=2, 
+                                digitSize=Scoreboard.SMALL_DIGIT_SIZE, digitColor=Scoreboard.YELLOW, maxDigits=2, 
                                 displayLeadingZeroes=False, batch=self.batch)
         e.setCenterTop(Scoreboard.CENTER, height)
         self.elements.append(e)
@@ -151,7 +151,7 @@ class FootballScoreboard(Scoreboard) :
         e = HorizontalElement(text='Yards To Go:', textFont=Scoreboard.TEXT_FONT, 
                                 textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
                                 updateFunc=self.state.getYardsToGain, digitFont=Scoreboard.DIGIT_FONT,
-                                digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=2, 
+                                digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.YELLOW, maxDigits=2, 
                                 displayLeadingZeroes=False, batch=self.batch)
         e.setCenterTop(Scoreboard.CENTER, height)
         self.elements.append(e)
@@ -160,7 +160,7 @@ class FootballScoreboard(Scoreboard) :
         e = HorizontalElement(text='Down:', textFont=Scoreboard.TEXT_FONT, 
                                 textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
                                 updateFunc=self.state.getDown, digitFont=Scoreboard.DIGIT_FONT,
-                                digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=1, 
+                                digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.YELLOW, maxDigits=1, 
                                 displayLeadingZeroes=False, batch=self.batch)
         e.setCenterTop(Scoreboard.CENTER, height)
         self.elements.append(e)
