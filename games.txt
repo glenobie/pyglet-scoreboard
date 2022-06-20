@@ -28,4 +28,10 @@ BoxingScoreboard
 L
 Go Go Sports
 BOXING
+International Cricket
+cricket
+CricketScoreboard
+2
+England
+CRICKET
 EOF
