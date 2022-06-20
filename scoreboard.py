@@ -3,8 +3,9 @@ import pyglet
 from element import ScoreboardElement
 from element import HorizontalElement
 from element import ClockElement
+from key_handler import KeyHandler
 
-class Scoreboard():
+class Scoreboard(KeyHandler) :
 
     LEFT_CENTER = 140
     RIGHT_CENTER = 660
@@ -29,24 +30,13 @@ class Scoreboard():
     TEXT_FONT = 'Built Titling'
 
     def __init__(self) :
-        self.x = 0
+        #self.x = 0
         self.batch = pyglet.graphics.Batch()
         self.elements = []
-
-        self.running = False
         self.state = None
 
     def getBatch(self) :
         return self.batch
-
-    def isRunning(self) :
-        return self.running
-
-    def execute(self) :
-        self.running = True
-
-    def die(self) :
-        self.running = False
 
     def updateElements(self) :
         for e in self.elements :
@@ -93,7 +83,6 @@ class Scoreboard():
         e.setCenterTop(Scoreboard.CENTER, height)
         self.elements.append(e)
 
-
     def handle_Z(self, modified=False) :
         self.state.modifyGuestScore(modified)
         self.updateElements()
@@ -106,7 +95,7 @@ class Scoreboard():
         self.state.modifyTime(modified)
         self.updateElements()
     
-    def handle_S(self) :
+    def handle_S(self, modified=False) :
         self.state.modifyPeriod()
         self.updateElements()
 

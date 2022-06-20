@@ -1,7 +1,8 @@
-
 import socket
 import pyglet
 from pyglet import font
+from key_handler import KeyHandler
+from config_screen import ConfigScreen
 from basketball import BasketballScoreboard
 from football import FootballScoreboard
 from boxing import BoxingScoreboard
@@ -15,7 +16,6 @@ from golf import GolfScoreboard
 # Make full screen on Raspberry Pi as long as its hostname = raspberrypi
 isPi = socket.gethostname() == "raspberrypi"
 window = pyglet.window.Window(800, 480, fullscreen=isPi)
-
 
 class ScoreboardIcon:
     LINE_SPACING = 44
@@ -52,7 +52,7 @@ class ScoreboardIcon:
 
 
 ##########################################################
-class ScoreboardPicker :
+class ScoreboardPicker(KeyHandler) :
 
     TEXT_FONT_PAIRS = ( ('l'+u'\u2029'+'HOCKEY',     'Go Go Sports'),
                         ('P'+u'\u2029'+'BASKETBALL', 'Go Go Sports'),
@@ -71,7 +71,7 @@ class ScoreboardPicker :
     OPTION_WIDTH = 200
 
     def __init__(self):
-        self.running = True
+        self.activeScreen = self
         self.batch = pyglet.graphics.Batch()
         self.options = []   
  
@@ -91,12 +91,10 @@ class ScoreboardPicker :
                                                ScoreboardPicker.POSITIONS[i],
                                                ScoreboardPicker.OPTION_WIDTH, self.batch, 
                                                self.scoreboards[i]  ) )
-                                                 
-                    
         self.options[0].setSelected(True)
         self.selectedOption = 0
-        self.activeScoreboard = self.scoreboards[0]
 
+        self.configScreen = ConfigScreen()
  
     def selectNew(self, jump) :
         self.options[self.selectedOption].setSelected(False)
@@ -104,62 +102,65 @@ class ScoreboardPicker :
         self.options[self.selectedOption].setSelected(True)
 
     def processSelection(self) :
-        self.running = False
-        self.activeScoreboard = self.scoreboards[self.selectedOption]
-        self.activeScoreboard.execute()
-
+         self.activeScreen = self.scoreboards[self.selectedOption]
+ 
+    def getBatch(self) :
+        return self.batch
 
     def draw(self) :
-        if self.activeScoreboard.isRunning() :
-            self.activeScoreboard.getBatch().draw()
-        else :
-            self.batch.draw()
-
+        self.activeScreen.getBatch().draw()
+ 
     def update(self, dt) :
         x=1
+   
+    def handle_A(self, modified = False) :
+        if self.activeScreen == self :
+            self.selectNew(-1)
+        else :
+            self.activeScreen.handle_A(modified)
 
-    def isRunning(self) :
-        return self.running
-         
-    def killScoreboard(self) :
-        self.activeScoreboard.die()
-        self.running = True
+    def handle_D(self, modified = False) :
+        if self.activeScreen == self :
+            self.selectNew(1)
+        else :
+            self.activeScreen.handle_D(modified)
 
- 
+    def handle_S(self, modified = False) :
+        if self.activeScreen == self :
+            self.processSelection()
+        else :
+            if (modified) : # 'kill' other screen
+                self.activeScreen = self 
+            else :
+                self.activeScreen.handle_S(modified)
+
+    def handle_Q(self, modified=False) :
+        if modified :
+            self.activeScreen = self.configScreen
+
+    def handle_C(self, modified=False) :
+        if modified :
+            window.close()
+
+
 @window.event
 def on_key_press(symbol, modifiers):
-    if symbol == pyglet.window.key.D:
-        if picker.isRunning() :
-            picker.selectNew(1)  
-        else :
-            picker.activeScoreboard.handle_D(modifiers & pyglet.window.key.LSHIFT)
-    elif symbol == pyglet.window.key.A:
-        if picker.isRunning() :
-            picker.selectNew(-1)
-        else :
-            picker.activeScoreboard.handle_A(modifiers & pyglet.window.key.LSHIFT)
-    elif symbol == pyglet.window.key.S:
-        if modifiers & pyglet.window.key.LSHIFT :
-            picker.killScoreboard()
-        elif picker.isRunning() :
-            picker.processSelection()
-        else :
-            picker.activeScoreboard.handle_S()
-    elif symbol == pyglet.window.key.Z:
-        if not(picker.isRunning()) :
-            picker.activeScoreboard.handle_Z(modifiers & pyglet.window.key.LSHIFT)
-    elif symbol == pyglet.window.key.C:
-        if not(picker.isRunning()) :
-            picker.activeScoreboard.handle_C(modifiers & pyglet.window.key.LSHIFT)
-    elif symbol == pyglet.window.key.X:
-        if not(picker.isRunning()) :
-            picker.activeScoreboard.handle_X(modifiers & pyglet.window.key.LSHIFT)
-    elif symbol == pyglet.window.key.Q:
-        if not(picker.isRunning()) :
-            picker.activeScoreboard.handle_Q(modifiers & pyglet.window.key.LSHIFT)
-    elif symbol == pyglet.window.key.E:
-        if not(picker.isRunning()) :
-            picker.activeScoreboard.handle_E(modifiers & pyglet.window.key.LSHIFT)
+    if symbol == pyglet.window.key.D :
+        picker.activeScreen.handle_D(modifiers & pyglet.window.key.LSHIFT)
+    elif symbol == pyglet.window.key.A :
+        picker.activeScreen.handle_A(modifiers & pyglet.window.key.LSHIFT)
+    elif symbol == pyglet.window.key.S : #special case
+        picker.handle_S(modifiers & pyglet.window.key.LSHIFT)
+    elif symbol == pyglet.window.key.Z :
+        picker.activeScreen.handle_Z(modifiers & pyglet.window.key.LSHIFT)
+    elif symbol == pyglet.window.key.C :
+        picker.activeScreen.handle_C(modifiers & pyglet.window.key.LSHIFT)
+    elif symbol == pyglet.window.key.X :
+        picker.activeScreen.handle_X(modifiers & pyglet.window.key.LSHIFT)
+    elif symbol == pyglet.window.key.Q :
+        picker.activeScreen.handle_Q(modifiers & pyglet.window.key.LSHIFT)
+    elif symbol == pyglet.window.key.E :
+        picker.activeScreen.handle_E(modifiers & pyglet.window.key.LSHIFT)
 
 
 
@@ -167,7 +168,6 @@ def on_key_press(symbol, modifiers):
 def on_draw():
     window.clear()    
     picker.draw()
-
 
 font.add_directory('.') 
 font.add_file('sports.otf') 
