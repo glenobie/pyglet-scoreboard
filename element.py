@@ -201,7 +201,7 @@ class HorizontalElement(ScoreboardElement) :
         self.borders[0].position = (x, y)
 
 ################################
-# Creates to fields to fill via one function that gets seconds
+# Creates two layouts to fill via one function that gets seconds
 # maxDigits only refers to minutes
 # adds colon label between layouts
 
