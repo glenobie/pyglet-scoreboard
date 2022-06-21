@@ -99,3 +99,6 @@ class Scoreboard(KeyHandler) :
         self.state.modifyPeriod()
         self.updateElements()
 
+    def handleExit(self):
+        0
+

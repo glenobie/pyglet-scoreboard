@@ -25,6 +25,9 @@ class ScoreboardPicker(KeyHandler) :
         self.configScreen = ConfigScreen(self.batch)
         self.activeScreen = self
 
+        self.initializeMenu()
+    
+    def initializeMenu(self) :
         self.scoreboardTuples = self.configScreen.getScoreboards()
         i = 0
         for t in self.scoreboardTuples :
@@ -67,12 +70,16 @@ class ScoreboardPicker(KeyHandler) :
             self.processSelection()
         else :
             if (modified) : # 'kill' other screen
+                self.activeScreen.handleExit()
+                self.initializeMenu()
                 self.activeScreen = self 
             else :
                 self.activeScreen.handle_S(modified)
 
     def handle_Q(self, modified=False) :
         if modified :
+            self.batch = pyglet.graphics.Batch()
+            self.configScreen.setIconBatch(self.batch)
             self.activeScreen = self.configScreen
 
     def handle_C(self, modified=False) :

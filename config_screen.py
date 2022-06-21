@@ -48,6 +48,7 @@ class ScoreboardIcon:
         self.dingbat.color = c
         self.title.color = c
 
+########################################
 class GameList() :
 
     DEFAULT_COLOR = (255, 255, 255, 255)
@@ -160,6 +161,11 @@ class GameList() :
             self.selectedGameIndex = (self.selectedGameIndex + direction) % len(self.gameList)
             self.highlightSelectedRow()
 
+
+    def getGames(self) :
+        return self.gameList
+
+
 ######################################
 class ConfigScreen(KeyHandler) :
 
@@ -183,11 +189,14 @@ class ConfigScreen(KeyHandler) :
         chosenGames = self.processGamesFile(filename=ConfigScreen.CHOSEN_GAMES_FILE)
         unchosenGames = listDifference(allGames,chosenGames)
 
-        self.scoreboards = self.objectsFromGames(chosenGames)
-
         self.unchosenGameLayout = GameList(unchosenGames, self.batch, self.fg, self.bg, 100)
         
         self.chosenGameLayout = GameList(chosenGames, self.batch, self.fg, self.bg, 450)
+
+        self.handleExit()
+
+    def setIconBatch(self, batch) :
+        self.iconBatch = batch
 
     # create objects from text descriptions in games
     # (game name, scoreboard, icon/sprite)
@@ -217,6 +226,8 @@ class ConfigScreen(KeyHandler) :
             games.append(g)
         return games
 
+    def handleExit(self) :        
+        self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
 
     def getBatch(self) :
         return self.batch
