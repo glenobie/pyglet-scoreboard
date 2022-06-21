@@ -1,3 +1,5 @@
+from curses import start_color
+from telnetlib import GA
 import pyglet
 from pyglet import resource
 from pyglet import shapes
@@ -6,7 +8,16 @@ from key_handler import KeyHandler
 
 #############################
 # Ultimately this will become a sprite
-
+def listDifference(list1, list2) :
+    result = []
+    i=0
+    for e in list1 :
+        game = e[0]
+        if  not (game in (item for sublist in list2 for item in sublist)) :
+            result.append(e)
+        i = i + 1
+    return result
+    
 class ScoreboardIcon:
 
     VERTICAL_SPACING = -24
@@ -36,6 +47,74 @@ class ScoreboardIcon:
         self.dingbat.color = c
         self.title.color = c
 
+class GameList() :
+
+    DEFAULT_COLOR = (255, 255, 255, 255)
+    HIGHLIGHT_COLOR = (255, 0, 0, 255)
+    WHITE = (255, 255, 255)
+    GREY = (10,10,10)
+
+    def __init__(self, gameList, batch, textGroup, bgGroup, xPos) :
+        self.doc = pyglet.text.document.FormattedDocument('')
+        self.gameList = gameList
+        self.batch = batch
+        self.textGroup = textGroup
+        self.xPos = xPos
+
+
+        for g in self.gameList :
+            self.doc.insert_text(len(self.doc.text), g[0])
+            self.doc.insert_text(len(self.doc.text), u'\u2029')
+
+        self.doc.set_style(0, len(self.doc.text), dict(color=GameList.DEFAULT_COLOR)) 
+ 
+        self.layout = self.makeLayout()
+
+        self.border = shapes.BorderedRectangle(xPos-6, 94, 268, 308, color=GameList.GREY, 
+                                              border_color=GameList.WHITE, border=2, 
+                                               batch=batch, group=bgGroup) 
+
+        self.selectedGameIndex = 0
+        self.start = 0
+        self.end = self.doc.get_paragraph_end(1)
+        self.setParagraphColor(GameList.HIGHLIGHT_COLOR)
+
+ 
+    def makeLayout(self) :
+        layout = pyglet.text.layout.ScrollableTextLayout(self.doc, 260, 300,  
+                                                         multiline=True, 
+                                                         batch=self.batch, group=self.textGroup)
+        layout.anchor_x = 'left'
+        layout.anchor_y = 'bottom'
+        layout.y = 100
+        layout.x = self.xPos
+        return layout
+
+ 
+    def setParagraphColor(self, color) :
+        self.layout.delete()
+        self.doc.set_style(self.start, self.end, dict(color=color)) 
+        self.layout = self.makeLayout()
+
+    def selectNext(self) :
+        if self.selectedGameIndex < len(self.gameList) - 1:
+            self.setParagraphColor(GameList.DEFAULT_COLOR)
+            self.start = self.end
+            self.end = self.doc.get_paragraph_end(self.start+1)
+            self.setParagraphColor(GameList.HIGHLIGHT_COLOR)
+            self.selectedGameIndex = self.selectedGameIndex + 1 
+
+    def selectPrecious(self) :
+        0
+
+    def addGame(self, game) :
+        0
+    
+    def deleteGame(self, game) :
+        0
+
+
+
 ######################################
 class ConfigScreen(KeyHandler) :
 
@@ -57,29 +136,13 @@ class ConfigScreen(KeyHandler) :
         allGames = self.processGamesFile(filename=ConfigScreen.ALL_GAMES_FILE)
 
         chosenGames = self.processGamesFile(filename=ConfigScreen.CHOSEN_GAMES_FILE)
+        unchosenGames = listDifference(allGames,chosenGames)
+
         self.scoreboards = self.objectsFromGames(chosenGames)
 
-        self.allGameLayout = self.layoutGames(allGames, self.batch, group=self.fg)
-        self.allGameLayout.anchor_x = 'left'
-        self.allGameLayout.anchor_y = 'bottom'
-        self.allGameLayout.position = (100,100)
+        self.unchosenGameLayout = GameList(unchosenGames, self.batch, self.fg, self.bg, 100)
         
-        self.leftBorder = shapes.BorderedRectangle(94, 94, 268, 308, color=(10,10,40), 
-                                              border_color=(255,255,255), border=2, 
-                                               batch=self.batch, group=self.bg)     
-          
-
-    def layoutGames(self, gameList, batch, group=None) :
-        doc = pyglet.text.document.FormattedDocument('')
-        for g in gameList :
-            doc.insert_text(len(doc.text), g[0])
-            doc.insert_text(len(doc.text), u'\u2029')
-
-        doc.set_style(0, len(doc.text), dict(color=(255,255,255,255))) 
-        layout = pyglet.text.layout.ScrollableTextLayout(doc, 260, 300, 
-                                                         multiline=True, 
-                                                         batch=batch, group=group)
-        return layout
+        self.chosenGameLayout = GameList(chosenGames, self.batch, self.fg, self.bg, 500)
 
     # create objects from text descriptions in games
     # (game name, scoreboard, icon/sprite)
@@ -115,6 +178,11 @@ class ConfigScreen(KeyHandler) :
 
     def getScoreboards(self) :
         return self.scoreboards
+
+    def handle_C(self, modified) :
+        self.chosenGameLayout.selectNext()
+                           
+
     
 
     
