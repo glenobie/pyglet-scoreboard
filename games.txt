@@ -34,4 +34,10 @@ CricketScoreboard
 2
 England
 CRICKET
+History Maker Golf
+golf
+GolfScoreboard
+B
+Go Go Sports
+GOLF
 EOF

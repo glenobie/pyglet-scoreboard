@@ -14,8 +14,7 @@ class ScoreboardPicker(KeyHandler) :
 
     OPTIONS = (('2', 'CRICKET',    'England'),
                ('v', 'TENNIS' ,    'Go Go Sports'),  # or "t" or "o" or "7" or "v"
-               ('A', 'BOWLING' ,   'Go Go Sports'),
-               ('B', 'GOLF'  ,     'Go Go Sports'))
+               ('A', 'BOWLING' ,   'Go Go Sports'))
 
     POSITIONS = ( (160, 470), (400, 470), (640, 470),
                   (160, 312), (400, 312), (640, 312),
