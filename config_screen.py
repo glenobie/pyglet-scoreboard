@@ -55,11 +55,15 @@ class GameList() :
     WHITE = (255, 255, 255)
     GREY = (10,10,10)
 
+    EMPTY = -1
+
     def __init__(self, gameList, batch, textGroup, bgGroup, xPos) :
         self.gameList = gameList
         self.batch = batch
         self.textGroup = textGroup
         self.xPos = xPos
+
+        #TODO handle empty list
 
         self.doc = self.createDocument()
 
@@ -69,31 +73,35 @@ class GameList() :
                                               border_color=GameList.WHITE, border=2, 
                                                batch=batch, group=bgGroup) 
 
-        self.selectedGameIndex = 0
-        self.highlightSelectedRow()
+        if self.zeroGames() :
+            self.selectedGameIndex = GameList.EMPTY
+        else :
+            self.selectedGameIndex = 0
+            self.highlightSelectedRow()
 
     def createDocument(self) :
         d = pyglet.text.document.FormattedDocument('')
         for g in self.gameList :
             d.insert_text(len(d.text), g[0])
             d.insert_text(len(d.text), u'\u2029')
-
-        d.set_style(0, len(d.text), dict(color=GameList.DEFAULT_COLOR)) 
         return d
 
+    def zeroGames(self) :
+        return len(self.gameList) == 0
 
     def highlightSelectedRow(self) :
-        self.layout.delete()
-        j=0
-        while j < len(self.doc.text) :
-            end = self.doc.get_paragraph_end(j)
-            text = self.doc.text[j:end-1] # subtract off newline character
-            if text == self.gameList[self.selectedGameIndex][0] :
-                self.doc.set_style(j, end, dict(color=GameList.HIGHLIGHT_COLOR))
-            else :
-                self.doc.set_style(j, end, dict(color=GameList.DEFAULT_COLOR))
-            j = end
-        self.layout = self.makeLayout()
+        if not(self.zeroGames()) :
+            self.layout.delete()
+            j=0
+            while j < len(self.doc.text) :
+                end = self.doc.get_paragraph_end(j)
+                text = self.doc.text[j:end-1] # subtract off newline character
+                if text == self.gameList[self.selectedGameIndex][0] :
+                    self.doc.set_style(j, end, dict(color=GameList.HIGHLIGHT_COLOR))
+                else :
+                    self.doc.set_style(j, end, dict(color=GameList.DEFAULT_COLOR))
+                j = end
+            self.layout = self.makeLayout()
 
     def moveUp(self) :
         if (self.selectedGameIndex > 0) :
@@ -114,33 +122,43 @@ class GameList() :
             self.highlightSelectedRow()
 
     def removeSelectedGame(self) :
-        return 0
+        g = []
+        if not(self.zeroGames()) :
+            g = self.gameList[self.selectedGameIndex]
+            del self.gameList[self.selectedGameIndex]
+            self.doc = self.createDocument()
+            self.selectedGameIndex -= 1
+  
+            if not(self.zeroGames()) :
+                if (self.selectedGameIndex < 0) :
+                    self.selectedGameIndex = 0
+                self.highlightSelectedRow()
+            else :
+                self.layout.delete()
+                self.selectedGameIndex = GameList.EMPTY
+                self.layout = self.makeLayout()
+        return g
 
     def addGame(self, game) :
-        0
+        self.gameList.insert(self.selectedGameIndex+1, game)
+        self.selectedGameIndex += 1
+        self.doc = self.createDocument()
+        self.highlightSelectedRow()
 
     def makeLayout(self) :
         layout = pyglet.text.layout.ScrollableTextLayout(self.doc, 260, 300,  
                                                          multiline=True, 
                                                          batch=self.batch, group=self.textGroup)
         layout.anchor_x = 'left'
-        layout.anchor_y = 'bottom'
+        #layout.anchor_y = 'bottom'
         layout.y = 100
         layout.x = self.xPos
         return layout
         
-
     def selectNext(self, direction) :
-         self.selectedGameIndex = (self.selectedGameIndex + direction) % len(self.gameList)
-         self.highlightSelectedRow()
-
-    def addGame(self, game) :
-        0
-    
-    def deleteGame(self, game) :
-        0
-
-
+        if not(self.zeroGames()) :
+            self.selectedGameIndex = (self.selectedGameIndex + direction) % len(self.gameList)
+            self.highlightSelectedRow()
 
 ######################################
 class ConfigScreen(KeyHandler) :
@@ -225,12 +243,12 @@ class ConfigScreen(KeyHandler) :
         self.unchosenGameLayout.selectNext(-1)
 
     def handle_A(self, modified) :
-        if (modified) :
+        if (modified and not(self.chosenGameLayout.zeroGames())) :
             g = self.chosenGameLayout.removeSelectedGame()
             self.unchosenGameLayout.addGame(g)
 
     def handle_D(self, modified) :
-        if (modified) :
+        if (modified and not(self.unchosenGameLayout.zeroGames())) :
             g = self.unchosenGameLayout.removeSelectedGame()
             self.chosenGameLayout.addGame(g)
  
