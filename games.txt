@@ -3,13 +3,13 @@ hockey
 HockeyScoreboard
 l
 Go Go Sports
-HOCKEY
-InsidePitch
+HOCKEY BLAST
+Inside Pitch
 baseball
 BaseballScoreboard
 e
 Go Go Sports
-BASEBALL
+INSIDE PITCH
 Second Season
 football
 FootballScoreboard
@@ -34,10 +34,16 @@ CricketScoreboard
 2
 England
 CRICKET
-History Maker Golf
-golf
-GolfScoreboard
-B
+Centre Court Tennis
+tennis
+TennisScoreboard
+v
 Go Go Sports
-GOLF
+TENNIS
+Bowl-O-Rama
+bowling
+BowlingScoreboard
+A
+Go Go Sports
+BOWLING
 EOF

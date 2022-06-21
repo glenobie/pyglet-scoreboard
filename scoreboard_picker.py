@@ -8,14 +8,8 @@ from config_screen import ConfigScreen
 # Make full screen on Raspberry Pi as long as its hostname = raspberrypi
 isPi = socket.gethostname() == "raspberrypi"
 window = pyglet.window.Window(800, 480, fullscreen=isPi)
-
  
 class ScoreboardPicker(KeyHandler) :
-
-    OPTIONS = (('2', 'CRICKET',    'England'),
-               ('v', 'TENNIS' ,    'Go Go Sports'),  # or "t" or "o" or "7" or "v"
-               ('A', 'BOWLING' ,   'Go Go Sports'))
-
     POSITIONS = ( (160, 470), (400, 470), (640, 470),
                   (160, 312), (400, 312), (640, 312),
                   (160, 164),  (400, 164), (640, 164) )
@@ -23,18 +17,24 @@ class ScoreboardPicker(KeyHandler) :
     def __init__(self):
         self.batch = pyglet.graphics.Batch()
         self.configScreen = ConfigScreen(self.batch)
-        self.activeScreen = self
 
-        self.initializeMenu()
+        
+        self.scoreboardTuples = self.configScreen.getScoreboards()
+        if len(self.scoreboardTuples) > 0 :
+            self.initializeMenu()
+            self.activeScreen = self
+        else :
+            self.activeScreen = self.configScreen
     
     def initializeMenu(self) :
-        self.scoreboardTuples = self.configScreen.getScoreboards()
         i = 0
         for t in self.scoreboardTuples :
              t[2].setCenterTop(ScoreboardPicker.POSITIONS[i][0], ScoreboardPicker.POSITIONS[i][1])
              i = i+1
-        self.scoreboardTuples[0][2].setSelected(True)
-        self.selectedOption = 0
+            
+        if len(t) > 0  :
+            self.scoreboardTuples[0][2].setSelected(True)
+            self.selectedOption = 0
   
     def selectNew(self, jump) :
         self.scoreboardTuples[self.selectedOption][2].setSelected(False)
@@ -71,8 +71,10 @@ class ScoreboardPicker(KeyHandler) :
         else :
             if (modified) : # 'kill' other screen
                 self.activeScreen.handleExit()
-                self.initializeMenu()
-                self.activeScreen = self 
+                self.scoreboardTuples = self.configScreen.getScoreboards()
+                if len(self.scoreboardTuples) > 0 :
+                    self.initializeMenu()
+                    self.activeScreen = self 
             else :
                 self.activeScreen.handle_S(modified)
 

@@ -159,6 +159,33 @@ class CricketScoreboard(Scoreboard) :
         Scoreboard.__init__(self)
         self.state = CricketGameState()
         
-        self.addScores(2, 470)
+        self.addTotal(470)
+        self.addWickets(300)
+        self.addOvers(150)
+
+    def addTotal(self, height) :
+        e = ScoreboardElement(text='Total', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE, 
+                              updateFunc=self.state.getTotal, digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.SCORE_SIZE, digitColor=Scoreboard.RED, maxDigits=3, 
+                              batch=self.batch)
+        e.setCenterTop(Scoreboard.CENTER, height)
+        self.elements.append(e)
+       
+    def addWickets(self, height) :
+        e = ScoreboardElement(text='Wickets', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
+                              updateFunc=self.state.getWickets, digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=1, 
+                              batch=self.batch)
+        e.setCenterTop(Scoreboard.CENTER, height)
+        self.elements.append(e)
+
+    def addOvers(self, height) :
+        e = ScoreboardElement(text='Overs', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
+                              updateFunc=self.state.getOvers, digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=2, 
+                              batch=self.batch)
+        e.setCenterTop(Scoreboard.CENTER, height)
+        self.elements.append(e)
+
 
         

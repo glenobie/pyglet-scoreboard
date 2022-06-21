@@ -25,10 +25,14 @@ class ScoreboardIcon:
     TEXT_FONT = 'Built Titling'
     SELECTED_COLOR = (255,255,255,255) #red
     DEFAULT_COLOR = (255,255,255,40) #white, opaque
+    DINGBAT_SIZE = 80
+    TEXT_SIZE = 28
 
     def __init__(self, dingbatChar, dingbatFont, titleText, batch):
-        self.dingbat = pyglet.text.Label(text=dingbatChar, font_name=dingbatFont, font_size=80, color=ScoreboardIcon.DEFAULT_COLOR, batch=batch)
-        self.title = pyglet.text.Label(text=titleText, font_name=ScoreboardIcon.TEXT_FONT, font_size=40, color=ScoreboardIcon.DEFAULT_COLOR, batch=batch)
+        self.dingbat = pyglet.text.Label(text=dingbatChar, font_name=dingbatFont, 
+                        font_size=ScoreboardIcon.DINGBAT_SIZE, color=ScoreboardIcon.DEFAULT_COLOR, batch=batch)
+        self.title = pyglet.text.Label(text=titleText, font_name=ScoreboardIcon.TEXT_FONT, 
+                        font_size=ScoreboardIcon.TEXT_SIZE, color=ScoreboardIcon.DEFAULT_COLOR, batch=batch)
  
     def setCenterTop(self, x, y) :
         self.dingbat.anchor_x = 'center'
@@ -57,8 +61,12 @@ class GameList() :
     GREY = (10,10,10)
 
     EMPTY = -1
+    BOTTOM = 100
+    WIDTH = 260
+    HEIGHT = 300
+    SPACING = 6
 
-    def __init__(self, gameList, batch, textGroup, bgGroup, xPos) :
+    def __init__(self, labelText, gameList, batch, textGroup, bgGroup, xPos) :
         self.gameList = gameList
         self.batch = batch
         self.textGroup = textGroup
@@ -70,9 +78,15 @@ class GameList() :
 
         self.layout = self.makeLayout()
 
-        self.border = shapes.BorderedRectangle(xPos-6, 94, 268, 308, color=GameList.GREY, 
+        label_y = GameList.BOTTOM + GameList.HEIGHT + 20
+        self.label = pyglet.text.Label(labelText, font_name='Built Titling', font_size=20, color=GameList.DEFAULT_COLOR,
+                    x=xPos, y=label_y, batch=batch, group=textGroup)
+
+        self.border = shapes.BorderedRectangle(xPos-GameList.SPACING, GameList.BOTTOM - GameList.SPACING, 
+                                              GameList.WIDTH+GameList.SPACING*2, GameList.HEIGHT+GameList.SPACING*2, 
+                                              color=GameList.GREY, 
                                               border_color=GameList.WHITE, border=2, 
-                                               batch=batch, group=bgGroup) 
+                                              batch=batch, group=bgGroup) 
 
         if self.zeroGames() :
             self.selectedGameIndex = GameList.EMPTY
@@ -147,12 +161,12 @@ class GameList() :
         self.highlightSelectedRow()
 
     def makeLayout(self) :
-        layout = pyglet.text.layout.ScrollableTextLayout(self.doc, 260, 300,  
+        layout = pyglet.text.layout.ScrollableTextLayout(self.doc, GameList.WIDTH, GameList.HEIGHT,  
                                                          multiline=True, 
                                                          batch=self.batch, group=self.textGroup)
         layout.anchor_x = 'left'
         #layout.anchor_y = 'bottom'
-        layout.y = 100
+        layout.y = GameList.BOTTOM
         layout.x = self.xPos
         return layout
         
@@ -185,13 +199,12 @@ class ConfigScreen(KeyHandler) :
 
 
         allGames = self.processGamesFile(filename=ConfigScreen.ALL_GAMES_FILE)
-
         chosenGames = self.processGamesFile(filename=ConfigScreen.CHOSEN_GAMES_FILE)
         unchosenGames = listDifference(allGames,chosenGames)
 
-        self.unchosenGameLayout = GameList(unchosenGames, self.batch, self.fg, self.bg, 100)
+        self.unchosenGameLayout = GameList('Other Games', unchosenGames, self.batch, self.fg, self.bg, 100)
         
-        self.chosenGameLayout = GameList(chosenGames, self.batch, self.fg, self.bg, 450)
+        self.chosenGameLayout = GameList('Chosen Games', chosenGames, self.batch, self.fg, self.bg, 450)
 
         self.handleExit()
 
@@ -217,13 +230,14 @@ class ConfigScreen(KeyHandler) :
         lines = loader.file(filename, mode='r').read().splitlines()
         games = []
 
-        t = 0
-        while not(lines[t] == ConfigScreen.END_OF_FILE):
-            g = []
-            for i in range(0, ConfigScreen.LINES_PER_GAME) :
-                g.append(lines[t])
-                t = t + 1
-            games.append(g)
+        if len(lines) > 0 :
+            t = 0
+            while not(lines[t] == ConfigScreen.END_OF_FILE):
+                g = []
+                for i in range(0, ConfigScreen.LINES_PER_GAME) :
+                    g.append(lines[t])
+                    t = t + 1
+                games.append(g)
         return games
 
     def handleExit(self) :        
@@ -248,10 +262,10 @@ class ConfigScreen(KeyHandler) :
             self.chosenGameLayout.selectNext(-1)
  
     def handle_Q(self, modified) :
-        self.unchosenGameLayout.selectNext(1)
+        self.unchosenGameLayout.selectNext(-1)
                            
     def handle_Z(self, modified) :
-        self.unchosenGameLayout.selectNext(-1)
+        self.unchosenGameLayout.selectNext(1)
 
     def handle_A(self, modified) :
         if (modified and not(self.chosenGameLayout.zeroGames())) :
