@@ -245,3 +245,33 @@ class CricketScoreboard(Scoreboard) :
         e.setCenterTop(Scoreboard.RIGHT_CENTER, height)
         self.elements.append(e)
         
+    def handle_A(self, modified = False) :
+        self.state.modifyExtras(modified)
+        self.updateElements()
+
+    def handle_S(self, modified=False) :
+        self.state.incrementWickets()
+        self.updateElements()
+
+    def handle_Q(self, modified = False) :
+        self.state.incrementLeftBatterNumber()
+        self.updateElements()
+
+    def handle_E(self, modified = False) :
+        self.state.incrementRightBatterNumber()
+        self.updateElements()
+
+    def handle_Z(self, modified = False) :
+        self.state.modifyLeftBatterRuns(modified)
+        self.updateElements()
+
+    def handle_C(self, modified=False) :
+        self.state.modifyRightBatterRuns(modified)
+        self.updateElements()
+
+    def handle_D(self, modified=False) :
+        if (modified) :
+            self.state.changeSides()
+        else :
+            self.state.recordScore()
+        self.updateElements()
