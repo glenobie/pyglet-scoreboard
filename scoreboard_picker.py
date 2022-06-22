@@ -4,10 +4,6 @@ from pyglet import font
 from key_handler import KeyHandler
 from config_screen import ConfigScreen
 
-# Make full screen on Raspberry Pi as long as its hostname = raspberrypi
-isPi = socket.gethostname() == "raspberrypi"
-window = pyglet.window.Window(800, 480, fullscreen=isPi)
- 
 class ScoreboardPicker(KeyHandler) :
     POSITIONS = ( (160, 470), (400, 470), (640, 470),
                   (160, 312), (400, 312), (640, 312),
@@ -87,6 +83,18 @@ class ScoreboardPicker(KeyHandler) :
         if modified :
             window.close()
 
+
+##################################################
+# start me up!
+
+# Make full screen on Raspberry Pi as long as its hostname = raspberrypi
+isPi = socket.gethostname() == "raspberrypi"
+window = pyglet.window.Window(800, 480, fullscreen=isPi)
+
+
+#####################################################################
+# Pyglet Window Events
+
 @window.event
 def on_key_press(symbol, modifiers):
     if symbol == pyglet.window.key.D :
@@ -111,6 +119,8 @@ def on_key_press(symbol, modifiers):
 def on_draw():
     window.clear()    
     picker.draw()
+
+##########################################################
 
 font.add_directory('.') 
 font.add_file('sports.otf') 

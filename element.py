@@ -23,6 +23,8 @@ class ScoreboardElement :
         self.maxDigits = maxDigits
         self.label = None
         self.displayLeadingZeroes = displayLeadingZeroes
+        self.height = 0
+        self.width = 0
 
         if not(text is None) :
             f = font.load(textFont, textSize)
@@ -109,6 +111,9 @@ class ScoreboardElement :
         for d in self.docs :
             d.set_style(0, len(d.text), dict(color=fontColor))
 
+    def setLabelColor(self, fontColor) :
+        self.label.color = fontColor
+
    # base class assumes a single layout
     def setCenterTop(self, x, y) :
         self.top = y
@@ -127,7 +132,7 @@ class ScoreboardElement :
         y = y - self.numberHeight - ScoreboardElement.BORDER_SPACING[1]
         x = x - self.numberWidth // 2 - ScoreboardElement.BORDER_SPACING[0]
         self.borders[0].position = (x, y)
-
+        self.height = self.label.content_height + self.borders[0].height
     
    # base class assumes a single layout
     def setRightTop(self, x, y) :
@@ -164,6 +169,13 @@ class ScoreboardElement :
         y = y - self.numberHeight - ScoreboardElement.BORDER_SPACING[1]
         x = x  - ScoreboardElement.BORDER_SPACING[0]
         self.borders[0].position = (x, y)
+
+    def getHeight(self) :
+        return self.height
+
+    def getWidth(self) :
+        return self.borders[0].width
+
 
 
 ############################################
@@ -202,6 +214,10 @@ class HorizontalElement(ScoreboardElement) :
         y = y - self.numberHeight - ScoreboardElement.BORDER_SPACING[1]
         x = x - ScoreboardElement.BORDER_SPACING[0]
         self.borders[0].position = (x, y)
+
+        self.height = self.borders[0].height
+        if (self.label.content_height > self.height) :
+            self.height = self.label.content_height 
 
 ################################
 # Creates two layouts to fill via one function that gets seconds

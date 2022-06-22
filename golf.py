@@ -1,6 +1,10 @@
+from curses.ascii import NUL
 from scoreboard import Scoreboard
 from element import ScoreboardElement
+from element import HorizontalElement
 from game_state import GameState
+from functools import partial
+import pyglet
 
 #################################
 class Golfer() :
@@ -99,11 +103,134 @@ class GolfGameState(GameState) :
         for g in self.golfers :
             if g.getID() == id :
                 return g
+
+    def getShotsBack(self, id) :
+        return self.golfers[id].getScoreAsString()
+
+    def getHole(self, id) :
+        return self.golfers[id].getHoleAsString()
  
     ##################################
+
+class GolfHole() :
+    # position passed is center
+
+    WIDTH = 200
+    INTERIOR_SPACING = (4, 8)
+    EXTERIOR_SPACING = (2,4)
+    DEFAULT_OPACITY = 140
+    HIGHLIGHT_OPACITY = 255
+    DEFAULT_LABEL = (10, 200, 40, 255)
+    DIMMED_LABEL = (255,255,255,140)
+    DEFAULT_DIGIT = (255, 0, 0, 255)
+    DIMMED_DIGIT = (255,0,0,140)
+
+    def __init__(self, leftGolfer, rightGolfer, state, position, batch) :
+
+        self.batch = batch
+        self.position = position
+        
+        self.leftScore = ScoreboardElement(text=str(leftGolfer+1), textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
+                              updateFunc=partial(state.getShotsBack, leftGolfer), digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.SMALL_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=3, 
+                              batch=self.batch)
+        self.rightScore = ScoreboardElement(text=str(rightGolfer+1), textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
+                              updateFunc=partial(state.getShotsBack, rightGolfer), digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.SMALL_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=3, 
+                              batch=self.batch)
+
+        self.interiorWidth = self.leftScore.getWidth() + self.rightScore.getWidth() + GolfHole.INTERIOR_SPACING[0] 
+
+        self.leftScore.setCenterTop(position[0] - self.interiorWidth // 4, position[1])
+        self.rightScore.setCenterTop(position[0] + self.interiorWidth // 4, position[1])
+
+        self.holeNum = HorizontalElement(text=str('On Hole:'), textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
+                              updateFunc=partial(state.getHole, rightGolfer), digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.VERY_SMALL_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2, 
+                              batch=self.batch)
+        self.holeNum.setCenterTop(position[0], position[1]- GolfHole.INTERIOR_SPACING[1] - self.leftScore.getHeight())
+
+        self.border = self.getBorder((255,255,255))
+        self.setSelection(False)
+
+    def setSelection(self, value) :
+        if value :
+            self.setBorderOpacity(GolfHole.HIGHLIGHT_OPACITY)
+            self.setBorderColor((10, 200, 40))
+            self.holeNum.setLabelColor(GolfHole.DEFAULT_LABEL)
+            self.holeNum.setFontColor(GolfHole.DEFAULT_DIGIT)
+            self.leftScore.setFontColor(GolfHole.DEFAULT_DIGIT)
+            self.rightScore.setFontColor(GolfHole.DEFAULT_DIGIT)
+            self.leftScore.setLabelColor(GolfHole.DEFAULT_LABEL)
+            self.rightScore.setLabelColor(GolfHole.DEFAULT_LABEL)
+        else :
+            self.setBorderOpacity(GolfHole.DEFAULT_OPACITY)
+            self.holeNum.setLabelColor(GolfHole.DIMMED_LABEL)
+            self.holeNum.setFontColor(GolfHole.DIMMED_DIGIT)
+            self.leftScore.setFontColor(GolfHole.DIMMED_DIGIT)
+            self.rightScore.setFontColor(GolfHole.DIMMED_DIGIT)
+            self.leftScore.setLabelColor(GolfHole.DIMMED_LABEL)
+            self.rightScore.setLabelColor(GolfHole.DIMMED_LABEL)
+
+    def setBorderOpacity(self, value) :
+        for shape in self.border :
+            shape.opacity = value
+
+    def setBorderColor(self, color) :
+        for shape in self.border :
+            shape.color = color
+        
+        
+    def getBorder(self, color) :
+        lines = []
+        width = self.interiorWidth + GolfHole.EXTERIOR_SPACING[0] * 2
+        height = self.leftScore.getHeight() + self.holeNum.getHeight() + GolfHole.EXTERIOR_SPACING[1] * 2
+        # bottom left to top left
+        lines.append(pyglet.shapes.Line(self.position[0] - width // 2, self.position[1] - height, 
+                                        self.position[0] - width // 2, self.position[1], 
+                                        width=2, color=color, batch=self.batch))
+        #top left to top right
+        lines.append(pyglet.shapes.Line(self.position[0] - width // 2, self.position[1], 
+                                        self.position[0] + width // 2, self.position[1],
+                                        width=2, color=color, batch=self.batch))
+        #top right to bottom right
+        lines.append(pyglet.shapes.Line(self.position[0] + width // 2, self.position[1],
+                                        self.position[0] + width // 2, self.position[1] - height,
+                                        width=2, color=color, batch=self.batch))
+        #bottom right to bottom left
+        lines.append(pyglet.shapes.Line(self.position[0] + width // 2, self.position[1] - height,
+                                        self.position[0] - width // 2, self.position[1] - height, 
+                                        width=2, color=color, batch=self.batch))
+        return lines
+
+    def update(self) :
+        self.leftScore.update()
+        self.rightScore.update()
+        self.holeNum.update()
+
 class GolfScoreboard(Scoreboard) :
+    
+    NUM_PAIRINGS = 6
+
+    POSITIONS = ( (120, 474), (360, 474), (120, 316), (360, 316), (120, 158), (360, 158)  )
+
     def __init__(self) :
         Scoreboard.__init__(self)
         self.state = GolfGameState()
+
+        self.holes = []
+        self.selectedHole = 0
+
+        for i in range(0, GolfScoreboard.NUM_PAIRINGS ) :
+            self.holes.append( GolfHole(i*2, i*2+1, self.state, GolfScoreboard.POSITIONS[i], self.batch ) )
+        
+        self.holes[self.selectedHole].setSelection(True)
+
+
+    def updateElements(self) :
+        for e in self.holes :
+            e.update()
+        # TODO update leaderboard
+
         
       

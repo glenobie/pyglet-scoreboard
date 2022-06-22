@@ -20,6 +20,7 @@ class Scoreboard(KeyHandler) :
     LARGE_TEXT_SIZE = 50
     MEDIUM_TEXT_SIZE = 40
     SMALL_TEXT_SIZE = 30
+    VERY_SMALL_TEXT_SIZE = 22
 
     WHITE = (255,255,255,255)
     RED = (255, 10, 10, 255)
