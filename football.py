@@ -108,6 +108,10 @@ class FootballScoreboard(Scoreboard) :
     def __init__(self) :
         Scoreboard.__init__(self)
         self.state = FootballGameState()
+        
+        self.addElements()
+    
+    def addElements(self) :
         self.addScores(2, 470)
         self.addClock(450)
         self.addPeriod(340, horizontal=True)
@@ -185,4 +189,9 @@ class FootballScoreboard(Scoreboard) :
         self.changePossessingTeam()
         self.updateElements()
  
-   
+#################################
+class CFLScoreboard(FootballScoreboard) :
+    def __init__(self) :
+        Scoreboard.__init__(self)
+        self.state = FootballGameState(maxDowns = 3, fieldSize = 110)        
+        self.addElements()
