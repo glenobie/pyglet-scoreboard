@@ -50,7 +50,6 @@ class Golfer() :
             return "18"
         else :
             return str(c)
-       
 
     def getID(self) :
         return self.id
@@ -88,7 +87,6 @@ class GolfGameState(GameState) :
         self.leaders = sorted(self.golfers, key=lambda golfer: golfer.score)
         self.adjustShotsBack()
 
-
     def getLeaderboard(self) :
         return self.leaders
 
@@ -104,13 +102,22 @@ class GolfGameState(GameState) :
             if g.getID() == id :
                 return g
 
-    def getShotsBack(self, id) :
-        return self.golfers[id].getScoreAsString()
+    def getScoreAsString(self, id) :
+        return self.getGolfer(id).getScoreAsString()
 
-    def getHole(self, id) :
-        return self.golfers[id].getHoleAsString()
+    def getHoleAsString(self, id) :
+        return self.getGolfer(id).getHoleAsString()
+
+    def getThruAsString(self, id) :
+        return self.getGolfer(id).getCompletedHoleAsString()
+
+    def getIDAsString(self, id) :
+        return str(self.getGolfer(id).getID())
+    
+    def getShotsBackAsString(self, id) :
+        return str(self.getGolfer(id).getShotsBack())
  
-    ##################################
+##################################
 
 class GolfHole() :
     # position passed is center
@@ -130,12 +137,12 @@ class GolfHole() :
         self.batch = batch
         self.position = position
         
-        self.leftScore = ScoreboardElement(text=str(leftGolfer+1), textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
-                              updateFunc=partial(state.getShotsBack, leftGolfer), digitFont=Scoreboard.DIGIT_FONT,
+        self.leftScore = ScoreboardElement(text=str(leftGolfer), textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
+                              updateFunc=partial(state.getScoreAsString, leftGolfer), digitFont=Scoreboard.DIGIT_FONT,
                               digitSize=Scoreboard.SMALL_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=3, 
                               batch=self.batch)
-        self.rightScore = ScoreboardElement(text=str(rightGolfer+1), textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
-                              updateFunc=partial(state.getShotsBack, rightGolfer), digitFont=Scoreboard.DIGIT_FONT,
+        self.rightScore = ScoreboardElement(text=str(rightGolfer), textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
+                              updateFunc=partial(state.getScoreAsString, rightGolfer), digitFont=Scoreboard.DIGIT_FONT,
                               digitSize=Scoreboard.SMALL_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=3, 
                               batch=self.batch)
 
@@ -145,7 +152,7 @@ class GolfHole() :
         self.rightScore.setCenterTop(position[0] + self.interiorWidth // 4, position[1])
 
         self.holeNum = HorizontalElement(text=str('On Hole:'), textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
-                              updateFunc=partial(state.getHole, rightGolfer), digitFont=Scoreboard.DIGIT_FONT,
+                              updateFunc=partial(state.getHoleAsString, rightGolfer), digitFont=Scoreboard.DIGIT_FONT,
                               digitSize=Scoreboard.VERY_SMALL_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2, 
                               batch=self.batch)
         self.holeNum.setCenterTop(position[0], position[1]- GolfHole.INTERIOR_SPACING[1] - self.leftScore.getHeight())
@@ -211,8 +218,11 @@ class GolfHole() :
 class GolfScoreboard(Scoreboard) :
     
     NUM_PAIRINGS = 6
+    LEADERBOARD_FONT = 'Built Titling'
+    LEADERBOARD_FONT_SIZE = 22
 
     POSITIONS = ( (120, 474), (360, 474), (120, 316), (360, 316), (120, 158), (360, 158)  )
+    LEADERBOARD_COLS = (540, 610, 690, 770)
 
     def __init__(self) :
         Scoreboard.__init__(self)
@@ -222,10 +232,35 @@ class GolfScoreboard(Scoreboard) :
         self.selectedHole = 0
 
         for i in range(0, GolfScoreboard.NUM_PAIRINGS ) :
-            self.holes.append( GolfHole(i*2, i*2+1, self.state, GolfScoreboard.POSITIONS[i], self.batch ) )
+            self.holes.append(GolfHole(i*2+1, i*2+2, self.state, GolfScoreboard.POSITIONS[i], self.batch ) )
         
         self.holes[self.selectedHole].setSelection(True)
 
+        self.col1 = self.createLeaderBoardColumn(GolfScoreboard.LEADERBOARD_COLS[0], '#', self.state.getIDAsString)
+        self.col2 = self.createLeaderBoardColumn(GolfScoreboard.LEADERBOARD_COLS[1], 'THRU', self.state.getThruAsString)
+        self.col3 = self.createLeaderBoardColumn(GolfScoreboard.LEADERBOARD_COLS[2], 'PAR', self.state.getScoreAsString)
+        self.col4 = self.createLeaderBoardColumn(GolfScoreboard.LEADERBOARD_COLS[3], 'BACK', self.state.getShotsBackAsString)
+
+    def createLeaderBoardColumn(self, x, title, func) :
+        labels = []
+        header = pyglet.text.Label(title, GolfScoreboard.LEADERBOARD_FONT, GolfScoreboard.LEADERBOARD_FONT_SIZE,
+                                        batch=self.batch  )
+        header.position = (x, 450)
+        header.anchor_x = 'right'
+        labels.append(header)
+        
+        nextRow = 450 - header.content_height
+        
+        for g in self.state.getLeaderboard() :
+            value = func(g.getID())
+            golfer =  pyglet.text.Label(value, GolfScoreboard.LEADERBOARD_FONT, GolfScoreboard.LEADERBOARD_FONT_SIZE,
+                                        batch=self.batch  )  
+            golfer.position = (x, nextRow)
+            golfer.anchor_x = 'right'
+            nextRow = nextRow - golfer.content_height
+            labels.append(golfer)
+
+        return labels
 
     def updateElements(self) :
         for e in self.holes :

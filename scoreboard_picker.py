@@ -12,7 +12,6 @@ class ScoreboardPicker(KeyHandler) :
     def __init__(self):
         self.batch = pyglet.graphics.Batch()
         self.configScreen = ConfigScreen(self.batch)
-
         
         self.scoreboardTuples = self.configScreen.getScoreboards()
         if len(self.scoreboardTuples) > 0 :
