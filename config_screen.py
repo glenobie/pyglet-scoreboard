@@ -76,7 +76,7 @@ class GameList() :
 
         self.doc = self.createDocument()
 
-        self.layout = self.makeLayout()
+        self.layout = self.makeLayout(0)
 
         label_y = GameList.BOTTOM + GameList.HEIGHT + 20
         self.label = pyglet.text.Label(labelText, font_name='Built Titling', font_size=20, color=GameList.DEFAULT_COLOR,
@@ -116,7 +116,12 @@ class GameList() :
                 else :
                     self.doc.set_style(j, end, dict(color=GameList.DEFAULT_COLOR))
                 j = end
-            self.layout = self.makeLayout()
+            if (self.selectedGameIndex > 4) :
+                scroll_y = self.selectedGameIndex * -10
+            else :
+                scroll_y = 0
+
+            self.layout = self.makeLayout(scroll_y)
 
     def moveUp(self) :
         if (self.selectedGameIndex > 0) :
@@ -151,7 +156,7 @@ class GameList() :
             else :
                 self.layout.delete()
                 self.selectedGameIndex = GameList.EMPTY
-                self.layout = self.makeLayout()
+                self.layout = self.makeLayout(0)
         return g
 
     def addGame(self, game) :
@@ -160,7 +165,7 @@ class GameList() :
         self.doc = self.createDocument()
         self.highlightSelectedRow()
 
-    def makeLayout(self) :
+    def makeLayout(self, scroll_y) :
         layout = pyglet.text.layout.ScrollableTextLayout(self.doc, GameList.WIDTH, GameList.HEIGHT,  
                                                          multiline=True, 
                                                          batch=self.batch, group=self.textGroup)
@@ -168,6 +173,7 @@ class GameList() :
         #layout.anchor_y = 'bottom'
         layout.y = GameList.BOTTOM
         layout.x = self.xPos
+        layout.view_y = scroll_y
         return layout
         
     def selectNext(self, direction) :

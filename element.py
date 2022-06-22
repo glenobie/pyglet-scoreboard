@@ -105,6 +105,9 @@ class ScoreboardElement :
     def getTop(self) :
         return self.top
 
+    def setFontColor(self, fontColor) :
+        for d in self.docs :
+            d.set_style(0, len(d.text), dict(color=fontColor))
 
    # base class assumes a single layout
     def setCenterTop(self, x, y) :
@@ -226,6 +229,7 @@ class ClockElement(ScoreboardElement) :
 
     # uses update function to get total seconds, then inserts seconds and minutes into the 2 layouts
     def update(self) :
+
         totalSeconds = self.updateFunc()
         self.docs[0].delete_text(0, len(self.docs[0].text))
         self.docs[1].delete_text(0, len(self.docs[1].text))
