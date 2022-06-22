@@ -66,7 +66,7 @@ class TennisScoreboard(Scoreboard) :
     P1_Y = 360
     P2_Y = 240
 
-    COLS = [188, 410, 490, 570, 650, 730]
+    COLS = [194, 418, 498, 578, 658, 738]
   
     def __init__(self) :
         Scoreboard.__init__(self)
@@ -94,9 +94,9 @@ class TennisScoreboard(Scoreboard) :
         self.P2_sets[setNum].setFontColor(color)
 
     def addBall(self, x, y, player) :
-        e = ScoreboardElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_DIGIT_SIZE, textColor=Scoreboard.WHITE,
+        e = ScoreboardElement(text=None, textFont='', textSize=Scoreboard.VERY_SMALL_DIGIT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=partial(self.state.getServing, player), digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.VERY_SMALL_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=1, 
+                              digitSize=Scoreboard.VERY_SMALL_DIGIT_SIZE, digitColor=Scoreboard.YELLOW, maxDigits=1, 
                               batch=self.batch)
         e.setLeftTop(x,y)
         self.elements.append(e)
@@ -148,4 +148,7 @@ class TennisScoreboard(Scoreboard) :
         self.colorSet(self.selectedSet, Scoreboard.RED)
         self.selectedSet = (self.selectedSet + 1) % len(self.state.getPlayerSets(0))
         self.colorSet(self.selectedSet, Scoreboard.GREEN)
+        self.updateElements()
+
+    def handle_S(self, modified=False) :
         self.updateElements()
