@@ -4,7 +4,6 @@ from pyglet import font
 from key_handler import KeyHandler
 from config_screen import ConfigScreen
 
-
 # Make full screen on Raspberry Pi as long as its hostname = raspberrypi
 isPi = socket.gethostname() == "raspberrypi"
 window = pyglet.window.Window(800, 480, fullscreen=isPi)

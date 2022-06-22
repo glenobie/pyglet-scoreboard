@@ -162,6 +162,10 @@ class CricketScoreboard(Scoreboard) :
         self.addTotal(470)
         self.addWickets(300)
         self.addOvers(150)
+        self.addBalls(150)
+        self.addLastInnings(150)
+        self.addExtras(280)
+        self.addLastWicket(280)
 
     def addTotal(self, height) :
         e = ScoreboardElement(text='Total', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE, 
@@ -187,5 +191,35 @@ class CricketScoreboard(Scoreboard) :
         e.setCenterTop(Scoreboard.CENTER, height)
         self.elements.append(e)
 
+    def addBalls(self, height) :
+        e = ScoreboardElement(text='Balls', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
+                              updateFunc=self.state.getBalls, digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=1, 
+                              batch=self.batch)
+        e.setCenterTop(Scoreboard.LEFT_CENTER, height)
+        self.elements.append(e)
 
+    def addLastInnings(self, height) :
+        e = ScoreboardElement(text='Last Innings', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
+                              updateFunc=self.state.getLastInnings, digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=3, 
+                              batch=self.batch)
+        e.setCenterTop(Scoreboard.RIGHT_CENTER, height)
+        self.elements.append(e)
+        
+    def addExtras(self, height) :
+        e = ScoreboardElement(text='Extras', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
+                              updateFunc=self.state.getExtras, digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=1, 
+                              batch=self.batch)
+        e.setCenterTop(Scoreboard.LEFT_CENTER, height)
+        self.elements.append(e)
+
+    def addLastWicket(self, height) :
+        e = ScoreboardElement(text='Last Wicket', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
+                              updateFunc=self.state.getLastWicket, digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=3, 
+                              batch=self.batch)
+        e.setCenterTop(Scoreboard.RIGHT_CENTER, height)
+        self.elements.append(e)
         
