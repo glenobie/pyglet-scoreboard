@@ -46,4 +46,10 @@ BowlingScoreboard
 A
 Go Go Sports
 BOWLING
+History Maker Golf
+golf
+GolfScoreboard
+B
+Go Go Sports
+GOLF
 EOF

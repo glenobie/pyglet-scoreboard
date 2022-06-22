@@ -1,6 +1,7 @@
 
 from scoreboard import Scoreboard
 from element import ScoreboardElement
+from element import HorizontalElement
 from game_state import GameState
 
 class CricketBatter() :
@@ -24,7 +25,6 @@ class CricketBatter() :
 
     def getRuns(self) :
         return self.runs
-
     
 
 class CricketGameState(GameState) :
@@ -153,19 +153,41 @@ class CricketGameState(GameState) :
         self.leftBatter = self.rightBatter
         self.rightBatter = temp
 
-    ##################################
+##################################
 class CricketScoreboard(Scoreboard) :
     def __init__(self) :
         Scoreboard.__init__(self)
         self.state = CricketGameState()
         
         self.addTotal(470)
-        self.addWickets(300)
+        self.addWickets(290)
         self.addOvers(150)
         self.addBalls(150)
         self.addLastInnings(150)
-        self.addExtras(280)
-        self.addLastWicket(280)
+        self.addExtras(290)
+        self.addLastWicket(290)
+        self.addRuns(400, Scoreboard.LEFT_CENTER, self.state.getLeftBatterRuns)
+        self.addRuns(400, Scoreboard.RIGHT_CENTER, self.state.getRightBatterRuns)
+        self.addBatterNumber(450, Scoreboard.LEFT_CENTER, self.state.getLeftBatterNumber)
+        self.addBatterNumber(450, Scoreboard.RIGHT_CENTER, self.state.getRightBatterNumber)
+
+    def addBatterNumber(self, height, x, func) :
+        e = HorizontalElement(text='No.', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE, 
+                              updateFunc=func, digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.VERY_SMALL_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2, 
+                              batch=self.batch)
+        e.setCenterTop(x, height)
+        self.elements.append(e)
+
+
+    def addRuns(self, height, x, func) :
+        e = ScoreboardElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE, 
+                              updateFunc=func, digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.SCORE_SIZE, digitColor=Scoreboard.RED, maxDigits=3, 
+                              batch=self.batch)
+        e.setCenterTop(x, height)
+        self.elements.append(e)
+
 
     def addTotal(self, height) :
         e = ScoreboardElement(text='Total', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE, 
