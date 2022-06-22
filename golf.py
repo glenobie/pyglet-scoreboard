@@ -1,4 +1,5 @@
 from curses.ascii import NUL
+from weakref import getweakrefcount
 from scoreboard import Scoreboard
 from element import ScoreboardElement
 from element import HorizontalElement
@@ -136,6 +137,8 @@ class GolfHole() :
 
         self.batch = batch
         self.position = position
+        self.leftGolfer = leftGolfer
+        self.rightGolfer = rightGolfer
         
         self.leftScore = ScoreboardElement(text=str(leftGolfer), textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=partial(state.getScoreAsString, leftGolfer), digitFont=Scoreboard.DIGIT_FONT,
@@ -215,11 +218,21 @@ class GolfHole() :
         self.rightScore.update()
         self.holeNum.update()
 
+    def getLeftGolferID(self) :
+        return self.leftGolfer
+    
+    def getRightGolferID(self) :
+        return self.rightGolfer
+
+
+###################################################
 class GolfScoreboard(Scoreboard) :
     
     NUM_PAIRINGS = 6
     LEADERBOARD_FONT = 'Built Titling'
     LEADERBOARD_FONT_SIZE = 22
+    getweakrefcount = (10, 200, 40, 255)
+
 
     POSITIONS = ( (120, 474), (360, 474), (120, 316), (360, 316), (120, 158), (360, 158)  )
     LEADERBOARD_COLS = (540, 610, 690, 770)
@@ -236,36 +249,70 @@ class GolfScoreboard(Scoreboard) :
         
         self.holes[self.selectedHole].setSelection(True)
 
-        self.col1 = self.createLeaderBoardColumn(GolfScoreboard.LEADERBOARD_COLS[0], '#', self.state.getIDAsString)
-        self.col2 = self.createLeaderBoardColumn(GolfScoreboard.LEADERBOARD_COLS[1], 'THRU', self.state.getThruAsString)
-        self.col3 = self.createLeaderBoardColumn(GolfScoreboard.LEADERBOARD_COLS[2], 'PAR', self.state.getScoreAsString)
-        self.col4 = self.createLeaderBoardColumn(GolfScoreboard.LEADERBOARD_COLS[3], 'BACK', self.state.getShotsBackAsString)
+        self.leaderLabels = []
+
+        self.createLeaderboard()
+
+
+ 
+    def createLeaderboard(self) :   
+        for label in self.leaderLabels :
+            label.delete()
+
+        self.createLeaderBoardColumn(GolfScoreboard.LEADERBOARD_COLS[0], '#', self.state.getIDAsString)
+        self.createLeaderBoardColumn(GolfScoreboard.LEADERBOARD_COLS[1], 'THRU', self.state.getThruAsString)
+        self.createLeaderBoardColumn(GolfScoreboard.LEADERBOARD_COLS[2], 'PAR', self.state.getScoreAsString)
+        self.createLeaderBoardColumn(GolfScoreboard.LEADERBOARD_COLS[3], 'BACK', self.state.getShotsBackAsString)
 
     def createLeaderBoardColumn(self, x, title, func) :
-        labels = []
+
         header = pyglet.text.Label(title, GolfScoreboard.LEADERBOARD_FONT, GolfScoreboard.LEADERBOARD_FONT_SIZE,
                                         batch=self.batch  )
         header.position = (x, 450)
         header.anchor_x = 'right'
-        labels.append(header)
+        self.leaderLabels.append(header)
         
         nextRow = 450 - header.content_height
         
         for g in self.state.getLeaderboard() :
+            selectedGolfer = (g.getID() == self.holes[self.selectedHole].getLeftGolferID()) or (g.getID() == self.holes[self.selectedHole].getRightGolferID())
             value = func(g.getID())
             golfer =  pyglet.text.Label(value, GolfScoreboard.LEADERBOARD_FONT, GolfScoreboard.LEADERBOARD_FONT_SIZE,
                                         batch=self.batch  )  
+            if selectedGolfer :
+                golfer.color = GolfScoreboard.GREEN
+      
             golfer.position = (x, nextRow)
             golfer.anchor_x = 'right'
             nextRow = nextRow - golfer.content_height
-            labels.append(golfer)
+            self.leaderLabels.append(golfer)
 
-        return labels
+
 
     def updateElements(self) :
         for e in self.holes :
             e.update()
-        # TODO update leaderboard
+        self.createLeaderboard()
+
+
+    def handle_Z(self, modified=False) :
+        self.state.modifyScore(self.holes[self.selectedHole].getLeftGolferID(), -1)
+        self.updateElements()
+
+    def handle_A(self, modified=False) :
+        self.state.modifyScore(self.holes[self.selectedHole].getLeftGolferID(), 1)
+        self.updateElements()
+
+    def handle_D(self, modified=False) :
+        self.state.modifyScore(self.holes[self.selectedHole].getRightGolferID(), 1)
+        self.updateElements()
+
+    def handle_C(self, modified=False) :
+        self.state.modifyScore(self.holes[self.selectedHole].getRightGolferID(), -1)
+        self.updateElements()
+
+
+
 
         
       
