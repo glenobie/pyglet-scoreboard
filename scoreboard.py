@@ -70,7 +70,7 @@ class Scoreboard(KeyHandler) :
         e.setCenterTop(x,y)
         self.elements.append(e)
 
-    # add ahorizontal item with medium text to scoreboard
+    # add a horizontal item with medium text to scoreboard
     def addHorizontalElement(self, maxDigits, x, y, text, func, color) :
         e = HorizontalElement(text=text, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=func, digitFont=Scoreboard.DIGIT_FONT,

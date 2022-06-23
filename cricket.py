@@ -86,8 +86,7 @@ class CricketGameState(GameState) :
                 self.balls = 0
         elif self.balls >= CricketGameState.BALLS_PER_OVER :
             self.balls = 0
-            self.overs += 1
-            
+            self.overs += 1            
 
     def incrementWickets(self) :
         self.wickets = (self.wickets + 1) % CricketGameState.MAX_WICKETS

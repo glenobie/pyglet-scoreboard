@@ -46,7 +46,6 @@ class TennisGameState(GameState) :
         else :
             return ''
 
-
     def modifyGames(self, playerIndex, setIndex, doDecrement) :
         adj = 1
         if doDecrement : adj = -1
@@ -113,13 +112,14 @@ class TennisScoreboard(Scoreboard) :
 
 
     def addPoints(self, x, y, player, text) :
-
         e = HorizontalElement(text=text, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=partial(self.state.getPoints, player), digitFont=Scoreboard.DIGIT_FONT,
                               digitSize=Scoreboard.SCORE_SIZE, digitColor=Scoreboard.GREEN, maxDigits=2, 
                               batch=self.batch)
         e.setCenterTop(x,y)
         self.elements.append(e)
+
+    # handle keys
 
     def handle_Z(self, modified=False) :
         self.state.modifyPoints(0, modified)
