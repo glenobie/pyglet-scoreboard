@@ -1,49 +1,7 @@
-International Cricket
-cricket
-CricketScoreboard
-2
-England
-CRICKET
-Cold Snap
-football
-CFLScoreboard
-y
+Bowl-O-Rama
+bowling
+BowlingScoreboard
+A
 Go Go Sports
-COLD SNAP
-Hockey Blast
-hockey
-HockeyScoreboard
-l
-Go Go Sports
-HOCKEY BLAST
-Inside Pitch
-baseball
-BaseballScoreboard
-e
-Go Go Sports
-INSIDE PITCH
-Legends of Boxing
-boxing
-BoxingScoreboard
-L
-Go Go Sports
-BOXING
-Inside the Paint
-basketball
-BasketballScoreboard
-P
-Go Go Sports
-BASKETBALL
-Centre Court Tennis
-tennis
-TennisScoreboard
-v
-Go Go Sports
-TENNIS
-History Maker Golf
-golf
-GolfScoreboard
-B
-Go Go Sports
-GOLF
+BOWLING
 EOF

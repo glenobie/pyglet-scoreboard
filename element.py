@@ -90,6 +90,7 @@ class ScoreboardElement :
         for l in self.layouts :
             self.borders.append(ShadowBorder( l.width, l.height-(l.height//10), batch, self.bg, self.fg))        
         
+        self.computeHeight()
         self.update()
 
     # base class just creates a single document
@@ -151,6 +152,11 @@ class ScoreboardElement :
     def setLabelColor(self, fontColor) :
         self.label.color = fontColor
 
+    def computeHeight(self) :
+        self.height = self.borders[0].getHeight()
+        if not(self.label is None) :
+            self.height += self.label.content_height
+
    # base class assumes a single layout
     def setCenterTop(self, x, y) :
         self.top = y
@@ -169,9 +175,6 @@ class ScoreboardElement :
         y = y - self.numberHeight - ShadowBorder.BORDER_SPACING[1]
         x = x - self.numberWidth // 2 - ShadowBorder.BORDER_SPACING[0]
         self.borders[0].setPosition((x, y))
-        self.height = self.borders[0].getHeight()
-        if not(self.label is None) :
-            self.height += self.label.content_height
     
    # base class assumes a single layout
     def setRightTop(self, x, y) :
@@ -190,6 +193,7 @@ class ScoreboardElement :
         y = y - self.numberHeight - ShadowBorder.BORDER_SPACING[1]
         x = x - self.numberWidth  - ShadowBorder.BORDER_SPACING[0]
         self.borders[0].setPosition((x, y))
+
 
    # base class assumes a single layout
     def setLeftTop(self, x, y) :

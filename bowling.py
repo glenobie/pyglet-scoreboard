@@ -1,6 +1,7 @@
 from scoreboard import Scoreboard
 from element import ScoreboardElement
 from game_state import GameState
+from functools import partial
 
 class Frame() :
     SPARE = 10
@@ -159,13 +160,62 @@ class BowlingGameState(GameState) :
         p = self.bowlers[playerIndex].modifyPins(frameIndex, ballIndex, adj)
               
     def getPins(self, playerIndex, frameIndex, ballIndex) :
-        return BowlingGameState.PINS[ self.bowlers[playerIndex].frames[frameIndex][ballIndex] ]
+        return self.bowlers[playerIndex].frames[frameIndex-1].getDisplay(ballIndex)
+
+    def getScore(self, playerIndex, frameIndex) :
+        return self.bowlers[playerIndex].getScore(frameIndex)
     
 
-##################################
+###########################################################
+class FrameDisplay() :
+    SPACING_X = 8
+    SPACING_Y = 4
+    BALL_FONT_SIZE = 24
+    SCORE_FONT_SIZE = 24
+
+    def __init__(self, state, frameID, bowlerID, pinsFunc, scoreFunc, batch) :
+        self.pinsFunc = pinsFunc
+        self.scoreFunc = scoreFunc
+        
+        self.pins1 = ScoreboardElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
+                              updateFunc=partial(pinsFunc, bowlerID, frameID, 0), digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=FrameDisplay.BALL_FONT_SIZE, digitColor=Scoreboard.RED, maxDigits=1, batch=batch)
+        self.pins2 = ScoreboardElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
+                              updateFunc=partial(pinsFunc, bowlerID, frameID, 1), digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=FrameDisplay.BALL_FONT_SIZE, digitColor=Scoreboard.RED, maxDigits=1, batch=batch)
+        self.score = ScoreboardElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
+                              updateFunc=partial(scoreFunc, bowlerID, frameID), digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=FrameDisplay.SCORE_FONT_SIZE, digitColor=Scoreboard.RED, maxDigits=3, batch=batch)
+                            
+    def update(self) :
+        self.pins1.update()
+        self.pins2.update()
+        self.score.update()
+
+    def getWidth(self) :
+        return self.score.getWidth()
+
+    def setCenterTop(self, x, y) :
+        self.pins1.setRightTop(x - FrameDisplay.SPACING_X, y)
+        self.pins2.setLeftTop(x + FrameDisplay.SPACING_X, y)
+        self.score.setCenterTop(x, y-self.pins1.getHeight() - FrameDisplay.SPACING_Y)
+
 class BowlingScoreboard(Scoreboard) :
+
+    FIRST_COLUMN = 100
+    ROWS = [100, 200, 300, 400]
+    SPACING = 4
+
     def __init__(self) :
         Scoreboard.__init__(self)
         self.state = BowlingGameState()
-        
+
+        self.frames = []
+
+        for i in range(0, BowlingGameState.MAX_FRAMES) :
+            for b in range(0, len(self.state.bowlers)) :
+                f = FrameDisplay(self.state, i+1, b, self.state.getPins, self.state.getScore, self.batch )
+                f.setCenterTop(BowlingScoreboard.FIRST_COLUMN + i*f.getWidth()+i*BowlingScoreboard.SPACING, BowlingScoreboard.ROWS[b])
+                self.frames.append(f)
+
         
