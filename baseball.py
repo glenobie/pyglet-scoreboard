@@ -125,8 +125,6 @@ class BaseballScoreboard(Scoreboard) :
         self.addOuts(290)
         self.addInnings(460)
 
-
-
         self.top = ScoreboardElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
                               updateFunc=self.state.getHalfInning, digitFont=Scoreboard.DIGIT_FONT,
                               digitSize=Scoreboard.VERY_SMALL_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=3, 

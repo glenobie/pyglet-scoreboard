@@ -132,7 +132,9 @@ class ScoreboardElement :
         y = y - self.numberHeight - ScoreboardElement.BORDER_SPACING[1]
         x = x - self.numberWidth // 2 - ScoreboardElement.BORDER_SPACING[0]
         self.borders[0].position = (x, y)
-        self.height = self.label.content_height + self.borders[0].height
+        self.height = self.borders[0].height
+        if not(self.label is None) :
+            self.height += self.label.content_height
     
    # base class assumes a single layout
     def setRightTop(self, x, y) :

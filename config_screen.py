@@ -214,6 +214,15 @@ class ConfigScreen(KeyHandler) :
 
         self.handleExit()
 
+    def recordToFile(self, gameList) :
+        f = open(ConfigScreen.CHOSEN_GAMES_FILE, 'w')
+        for g in gameList :
+            for e in g :
+                f.write(e)
+                f.write('\n')    
+        f.write(ConfigScreen.END_OF_FILE + '\n')
+        f.close()
+
     def setIconBatch(self, batch) :
         self.iconBatch = batch
 
@@ -247,6 +256,7 @@ class ConfigScreen(KeyHandler) :
         return games
 
     def handleExit(self) :        
+        self.recordToFile(self.chosenGameLayout.getGames())
         self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
 
     def getBatch(self) :
