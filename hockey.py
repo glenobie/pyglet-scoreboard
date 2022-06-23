@@ -3,6 +3,7 @@ from element import ScoreboardElement
 from element import ClockElement
 from game_state import TeamState
 from game_state import TimedGameState
+from functools import partial
 
 ########################################
 class HockeyTeamState(TeamState):
@@ -47,19 +48,6 @@ class HockeyGameState(TimedGameState) :
         else:
             self.incrementPenaltyClocks(-self.TIME_INTERVAL)
             
-    
-    def getLeftTopPenaltySeconds(self) :
-        return self.getPenaltySeconds(0, 0)
-
-    def getLeftBottomPenaltySeconds(self) :
-        return self.getPenaltySeconds(0, 1) 
-
-    def getRightTopPenaltySeconds(self) :
-        return self.getPenaltySeconds(1, 0) 
-
-    def getRightBottomPenaltySeconds(self) :
-        return self.getPenaltySeconds(1, 1) 
-
     def getPenaltySeconds(self, team, index) :
         return self.teams[team].getPenaltyClock(index)
 
@@ -85,21 +73,22 @@ class HockeyScoreboard(Scoreboard) :
         self.addScores(3, 470)
         self.addClock(440)
         self.addPeriod(300)
-        self.addPenaltyClock('Penalty 1', self.state.getLeftTopPenaltySeconds, Scoreboard.LEFT_CENTER, 300)
-        self.addPenaltyClock('Penalty 1', self.state.getRightTopPenaltySeconds, Scoreboard.RIGHT_CENTER, 300)
-        self.addPenaltyClock('Penalty 2', self.state.getLeftBottomPenaltySeconds, Scoreboard.LEFT_CENTER, 160)
-        self.addPenaltyClock('Penalty 2', self.state.getRightBottomPenaltySeconds, Scoreboard.RIGHT_CENTER, 160)
+        self.addPenaltyClock('Penalty 1', Scoreboard.LEFT_CENTER, 300, 0, 0)
+        self.addPenaltyClock('Penalty 1', Scoreboard.RIGHT_CENTER, 300, 1, 0)
+        self.addPenaltyClock('Penalty 2', Scoreboard.LEFT_CENTER, 160, 0, 1)
+        self.addPenaltyClock('Penalty 2', Scoreboard.RIGHT_CENTER, 160, 1, 1)
 
 
-    def addPenaltyClock(self, text, func, x, y) :
+    def addPenaltyClock(self, text, x, y, team, clock) :
         e = ClockElement(text=text, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=func, digitFont=Scoreboard.DIGIT_FONT,
+                              updateFunc=partial(self.state.getPenaltySeconds, team, clock), digitFont=Scoreboard.DIGIT_FONT,
                               digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.YELLOW, maxDigits=1, 
                               batch=self.batch)
 
         e.setCenterTop(x, y)
         self.elements.append(e)
 
+    # key handlers
 
     def handle_A(self, modified = False) :
         self.state.modifyPenaltyClock(0, 0) 

@@ -115,8 +115,8 @@ class FootballScoreboard(Scoreboard) :
         self.addScores(2, 470)
         self.addClock(450)
         self.addPeriod(340, horizontal=True)
-        self.addDown(242)
-        self.addYardsToGo(162)
+        self.addHorizontalElement(1, Scoreboard.CENTER, 242, 'Down:', self.state.getDown, Scoreboard.YELLOW )
+        self.addHorizontalElement(2, Scoreboard.CENTER, 162, 'Yards to Go:', self.state.getYardsToGain, Scoreboard.YELLOW )
         self.addYardsToEndzone(70)
         self.ballMarker = self.addBallLocation(250)
 
@@ -139,32 +139,11 @@ class FootballScoreboard(Scoreboard) :
         self.elements.append(e)
         return e
 
-
-
     def addYardsToEndzone(self, height) :
         e = HorizontalElement(text='Yards To Endzone:', textFont=Scoreboard.TEXT_FONT, 
                                 textSize=Scoreboard.SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE, 
                                 updateFunc=self.state.getYardsToEndzone, digitFont=Scoreboard.DIGIT_FONT,
                                 digitSize=Scoreboard.SMALL_DIGIT_SIZE, digitColor=Scoreboard.YELLOW, maxDigits=2, 
-                                displayLeadingZeroes=False, batch=self.batch)
-        e.setCenterTop(Scoreboard.CENTER, height)
-        self.elements.append(e)
-
-
-    def addYardsToGo(self, height) :
-        e = HorizontalElement(text='Yards To Go:', textFont=Scoreboard.TEXT_FONT, 
-                                textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                                updateFunc=self.state.getYardsToGain, digitFont=Scoreboard.DIGIT_FONT,
-                                digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.YELLOW, maxDigits=2, 
-                                displayLeadingZeroes=False, batch=self.batch)
-        e.setCenterTop(Scoreboard.CENTER, height)
-        self.elements.append(e)
-
-    def addDown(self, height) :
-        e = HorizontalElement(text='Down:', textFont=Scoreboard.TEXT_FONT, 
-                                textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                                updateFunc=self.state.getDown, digitFont=Scoreboard.DIGIT_FONT,
-                                digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.YELLOW, maxDigits=1, 
                                 displayLeadingZeroes=False, batch=self.batch)
         e.setCenterTop(Scoreboard.CENTER, height)
         self.elements.append(e)

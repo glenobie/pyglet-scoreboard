@@ -2,7 +2,7 @@ from scoreboard import Scoreboard
 from element import ScoreboardElement
 from game_state import GameState
 from team_state import TeamState
-
+from functools import partial
 
 #########################
 class BaseballTeamState(TeamState) :
@@ -43,20 +43,8 @@ class BaseballGameState(GameState) :
     def getHits(self, team) :
         return self.teams[team].getHits()
 
-    def getLeftHits(self) :
-        return self.getHits(0)
-    
-    def getRightHits(self) :
-        return self.getHits(1)
-
     def getErrors(self, team) :
         return self.teams[team].getErrors()
-
-    def getLeftErrors(self) :
-        return self.getErrors(0)
-    
-    def getRightErrors(self) :
-        return self.getErrors(1)
 
     def changeSides(self) :
         self.teamAtBat = (self.teamAtBat + 1) % 2
@@ -119,12 +107,15 @@ class BaseballScoreboard(Scoreboard) :
         self.state = BaseballGameState()
         
         self.addScores(2, 470)
+        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 300, 'Hits', partial(self.state.getHits, 0), Scoreboard.RED)
+        self.addMediumElement(2, Scoreboard.RIGHT_CENTER, 300, 'Hits', partial(self.state.getHits, 1), Scoreboard.RED)
+        self.addMediumElement(1, Scoreboard.LEFT_CENTER, 160, 'Errors', partial(self.state.getErrors, 0), Scoreboard.RED)
+        self.addMediumElement(1, Scoreboard.RIGHT_CENTER, 160, 'Errors', partial(self.state.getErrors, 1), Scoreboard.RED)
 
-        self.addHits(300)
-        self.addErrors(160)
-        self.addOuts(290)
-        self.addInnings(460)
+        self.addMediumElement(1, Scoreboard.CENTER, 290, 'Outs', self.state.getOuts, Scoreboard.GREEN)
+        self.addMediumElement(2, Scoreboard.CENTER, 460, 'Inning', self.state.getInning, Scoreboard.GREEN)
 
+        # add layouts for top and bottom of inning indication
         self.top = ScoreboardElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
                               updateFunc=self.state.getHalfInning, digitFont=Scoreboard.DIGIT_FONT,
                               digitSize=Scoreboard.VERY_SMALL_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=3, 
@@ -140,56 +131,8 @@ class BaseballScoreboard(Scoreboard) :
         self.bottom.setCenterTop(500, 370)
         self.elements.append(self.bottom)
         self.bottom.setOn(self.state.getTeamAtBat() == GameState.HOME_INDEX)
-
-    def addInnings(self, height) :
-        e = ScoreboardElement(text='Inning', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getInning, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=2, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.CENTER, height)
-        self.elements.append(e)
-
-
-    def addOuts(self, height) :
-        e = ScoreboardElement(text='Outs', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getOuts, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=1, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.CENTER, height)
-        self.elements.append(e)
-       
-
-    def addErrors(self, height) :
-        e = ScoreboardElement(text='Errors', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getLeftErrors, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.LEFT_CENTER, height)
-        self.elements.append(e)
-
-        e = ScoreboardElement(text='Errors', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE,
-                              updateFunc=self.state.getRightErrors, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2,  
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.RIGHT_CENTER, height)
-        self.elements.append(e)
-
-
-    def addHits(self, height) :
-        e = ScoreboardElement(text='Hits', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getLeftHits, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.LEFT_CENTER, height)
-        self.elements.append(e)
-
-        e = ScoreboardElement(text='Hits', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE,
-                             updateFunc=self.state.getRightHits, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2,  
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.RIGHT_CENTER, height)
-        self.elements.append(e)
-
+      
+    # handle keys
 
     def handle_A(self, modified = False) :
         self.state.modifyHits(0, modified)

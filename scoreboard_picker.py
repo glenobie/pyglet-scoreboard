@@ -5,15 +5,24 @@ from key_handler import KeyHandler
 from config_screen import ConfigScreen
 
 class ScoreboardPicker(KeyHandler) :
+    #TODO: replace with carousel menu
     POSITIONS = ( (160, 470), (400, 470), (640, 470),
                   (160, 312), (400, 312), (640, 312),
                   (160, 164),  (400, 164), (640, 164) )
 
+    INDEX_SCOREBOARD = 1
+    INDEX_ICON = 2
+
     def __init__(self):
         self.batch = pyglet.graphics.Batch()
         self.configScreen = ConfigScreen(self.batch)
-        
+        self.selectedOption = 0
+        self.handleEntry()
+   
+    def handleEntry(self) :
+        # (title for config screen, scoreboard, icon, FUTURE: FAC)
         self.scoreboardTuples = self.configScreen.getScoreboards()
+        # only start the picker if there are games to pick from. Otherwise, start config screen
         if len(self.scoreboardTuples) > 0 :
             self.initializeMenu()
             self.activeScreen = self
@@ -23,20 +32,18 @@ class ScoreboardPicker(KeyHandler) :
     def initializeMenu(self) :
         i = 0
         for t in self.scoreboardTuples :
-             t[2].setCenterTop(ScoreboardPicker.POSITIONS[i][0], ScoreboardPicker.POSITIONS[i][1])
+             t[ScoreboardPicker.INDEX_ICON].setCenterTop(ScoreboardPicker.POSITIONS[i][0], ScoreboardPicker.POSITIONS[i][1])
              i = i+1
-            
-        if len(t) > 0  :
-            self.scoreboardTuples[0][2].setSelected(True)
-            self.selectedOption = 0
-  
+        self.scoreboardTuples[self.selectedOption][ScoreboardPicker.INDEX_ICON].setSelected(True)
+   
     def selectNew(self, jump) :
-        self.scoreboardTuples[self.selectedOption][2].setSelected(False)
+        self.scoreboardTuples[self.selectedOption][ScoreboardPicker.INDEX_ICON].setSelected(False)
         self.selectedOption = (self.selectedOption + jump) % len(self.scoreboardTuples)
-        self.scoreboardTuples[self.selectedOption][2].setSelected(True)
+        self.scoreboardTuples[self.selectedOption][ScoreboardPicker.INDEX_ICON].setSelected(True)
 
+    # open the selected scoreboard
     def processSelection(self) :
-         self.activeScreen = self.scoreboardTuples[self.selectedOption][1]
+         self.activeScreen = self.scoreboardTuples[self.selectedOption][ScoreboardPicker.INDEX_SCOREBOARD]
  
     def getBatch(self) :
         return self.batch
@@ -47,6 +54,8 @@ class ScoreboardPicker(KeyHandler) :
     def update(self, dt) :
         self.draw()
    
+   # keyboard event handlers
+  
     def handle_A(self, modified = False) :
         if self.activeScreen == self :
             self.selectNew(-1)
@@ -65,10 +74,7 @@ class ScoreboardPicker(KeyHandler) :
         else :
             if (modified) : # 'kill' other screen
                 self.activeScreen.handleExit()
-                self.scoreboardTuples = self.configScreen.getScoreboards()
-                if len(self.scoreboardTuples) > 0 :
-                    self.initializeMenu()
-                    self.activeScreen = self 
+                self.handleEntry()
             else :
                 self.activeScreen.handle_S(modified)
 

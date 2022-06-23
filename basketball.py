@@ -3,7 +3,7 @@ from team_state import TeamStateWithTimeouts
 from game_state import TimedGameState
 from scoreboard import Scoreboard
 from element import ScoreboardElement
-
+from functools import partial
 
 #################################################
 class BasketballTeamState(TeamStateWithTimeouts):
@@ -39,12 +39,6 @@ class BasketballGameState(TimedGameState) :
     def getTeamFouls(self, team=0) :
         return self.teams[team].getTeamFouls()
 
-    def getGuestTeamFouls(self) :
-        return self.getTeamFouls(0)
-
-    def getHomeTeamFouls(self) :
-        return self.getTeamFouls(1)
-
     def modifyTeamFouls(self, team, doDecrement=False) :
         if doDecrement :
             self.teams[team].modifyTeamFouls(-1)
@@ -61,40 +55,12 @@ class BasketballScoreboard(Scoreboard) :
         self.addClock(440)
         self.addPeriod(300)
 
-        self.addTeamFouls(300)
-        self.addTimeouts(160)
+        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 300, 'Team Fouls', partial(self.state.getTeamFouls, 0), Scoreboard.RED)
+        self.addMediumElement(2, Scoreboard.RIGHT_CENTER, 300, 'Team Fouls', partial(self.state.getTeamFouls, 1), Scoreboard.RED)
+        self.addMediumElement(1, Scoreboard.LEFT_CENTER, 160, 'Timeouts', partial(self.state.getTimeoutsTaken, 0), Scoreboard.RED)
+        self.addMediumElement(1, Scoreboard.RIGHT_CENTER, 160, 'Timeouts', partial(self.state.getTimeoutsTaken, 1), Scoreboard.RED)
 
-    def addTimeouts(self, height) :
-        e = ScoreboardElement(text='Timeouts', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getGuestTimeoutsTaken, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.LEFT_CENTER, height)
-        self.elements.append(e)
-
-        e = ScoreboardElement(text='Timeouts', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE,
-                              updateFunc=self.state.getHomeTimeoutsTaken, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2,  
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.RIGHT_CENTER, height)
-        self.elements.append(e)
-
-
-    def addTeamFouls(self, height) :
-        e = ScoreboardElement(text='Team Fouls', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getGuestTeamFouls, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.LEFT_CENTER, height)
-        self.elements.append(e)
-
-        e = ScoreboardElement(text='Team Fouls', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE,
-                             updateFunc=self.state.getHomeTeamFouls, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2,  
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.RIGHT_CENTER, height)
-        self.elements.append(e)
-
+     # handle keys
 
     def handle_A(self, modified = False) :
         self.state.modifyTeamFouls(0, modified)

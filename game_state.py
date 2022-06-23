@@ -1,13 +1,10 @@
 from team_state import TeamState, TeamStateWithTimeouts
 
-
 class GameState :
-
     HOME_INDEX = 0
     GUEST_INDEX = 1
     
     def __init__(self) : 
-        
         self.maxScore = 99
         self.teams = [TeamState(0, self.getMaxScore()), TeamState(0, self.getMaxScore())]
 
@@ -26,12 +23,8 @@ class GameState :
     def getMaxScore(self) :
         return self.maxScore
         
-    def getHomeScore(self) :
-        return self.teams[GameState.HOME_INDEX].getScore()
-
-    def getGuestScore(self) :
-        return self.teams[GameState.GUEST_INDEX].getScore()
-
+    def getScore(self, team) :
+        return self.teams[team].getScore()
 
 ###########################   
 class TimedGameState(GameState):
@@ -47,12 +40,6 @@ class TimedGameState(GameState):
     def getTimeoutsTaken(self, team=0) :
         return self.teams[team].getTimeoutsTaken()
 
-    def getGuestTimeoutsTaken(self) :
-        return self.getTimeoutsTaken(0)
-
-    def getHomeTimeoutsTaken(self) :
-        return self.getTimeoutsTaken(1)
-
     def modifyTimeoutsTaken(self, team, doDecrement=False) :
         if doDecrement :
             self.teams[team].modifyTimeoutsTaken(-1)
@@ -61,7 +48,6 @@ class TimedGameState(GameState):
 
     def getSeconds(self) :
         return self.seconds
-
  
     def getPeriod(self) :
         return self.period

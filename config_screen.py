@@ -7,8 +7,8 @@ from pyglet import shapes
 import importlib
 from key_handler import KeyHandler
 
-#############################
-# Ultimately this will become a sprite
+
+# helper function to subtract one list from another
 def listDifference(list1, list2) :
     result = []
     i=0
@@ -19,11 +19,13 @@ def listDifference(list1, list2) :
         i = i + 1
     return result
     
+#############################
+# Ultimately this will become a sprite
 class ScoreboardIcon:
 
     VERTICAL_SPACING = -24
     TEXT_FONT = 'Built Titling'
-    SELECTED_COLOR = (255,255,255,255) #red
+    SELECTED_COLOR = (255,255,255,255) #white
     DEFAULT_COLOR = (255,255,255,40) #white, opaque
     DINGBAT_SIZE = 80
     TEXT_SIZE = 28
@@ -55,16 +57,17 @@ class ScoreboardIcon:
 ########################################
 class GameList() :
 
-    DEFAULT_COLOR = (255, 255, 255, 255)
-    HIGHLIGHT_COLOR = (255, 0, 0, 255)
+    DEFAULT_COLOR = (255, 255, 255, 255) #white
+    HIGHLIGHT_COLOR = (255, 0, 0, 255) #red
     WHITE = (255, 255, 255)
     GREY = (10,10,10)
 
-    EMPTY = -1
+    EMPTY = -1 # selected item if list is empty
     BOTTOM = 100
     WIDTH = 260
     HEIGHT = 300
     SPACING = 6
+  
 
     def __init__(self, labelText, gameList, batch, textGroup, bgGroup, xPos) :
         self.gameList = gameList
@@ -79,11 +82,13 @@ class GameList() :
         self.layout = self.makeLayout(0)
 
         label_y = GameList.BOTTOM + GameList.HEIGHT + 20
+  
+        # title atop the list
         self.label = pyglet.text.Label(labelText, font_name='Built Titling', font_size=20, color=GameList.DEFAULT_COLOR,
-                    x=xPos, y=label_y, batch=batch, group=textGroup)
+                                        x=xPos, y=label_y, batch=batch, group=textGroup)
 
         self.border = shapes.BorderedRectangle(xPos-GameList.SPACING, GameList.BOTTOM - GameList.SPACING, 
-                                              GameList.WIDTH+GameList.SPACING*2, GameList.HEIGHT+GameList.SPACING*2, 
+                                              GameList.WIDTH+GameList.SPACING*2, GameList.HEIGHT+GameList.SPACING * 2, 
                                               color=GameList.GREY, 
                                               border_color=GameList.WHITE, border=2, 
                                               batch=batch, group=bgGroup) 
@@ -98,11 +103,12 @@ class GameList() :
         d = pyglet.text.document.FormattedDocument('')
         for g in self.gameList :
             d.insert_text(len(d.text), g[0])
-            d.insert_text(len(d.text), u'\u2029')
+            d.insert_text(len(d.text), u'\u2029') # denote a new paragraph
         return d
 
     def zeroGames(self) :
         return len(self.gameList) == 0
+
 
     def highlightSelectedRow(self) :
         if not(self.zeroGames()) :
@@ -120,9 +126,9 @@ class GameList() :
                 scroll_y = self.selectedGameIndex * -10
             else :
                 scroll_y = 0
-
             self.layout = self.makeLayout(scroll_y)
 
+    # move the selected game up in the list by deleting and inserting
     def moveUp(self) :
         if (self.selectedGameIndex > 0) :
             g = self.gameList[self.selectedGameIndex]
@@ -132,6 +138,7 @@ class GameList() :
             self.doc = self.createDocument()
             self.highlightSelectedRow()
 
+    # move the selected game down in the list by deleting and inserting
     def moveDown(self) : 
         if (self.selectedGameIndex < len(self.gameList) - 1) :
             g = self.gameList[self.selectedGameIndex]
@@ -165,6 +172,8 @@ class GameList() :
         self.doc = self.createDocument()
         self.highlightSelectedRow()
 
+    # make/remake the layout after changes in  document
+    # TODO: could use event listener??
     def makeLayout(self, scroll_y) :
         layout = pyglet.text.layout.ScrollableTextLayout(self.doc, GameList.WIDTH, GameList.HEIGHT,  
                                                          multiline=True, 
@@ -203,16 +212,14 @@ class ConfigScreen(KeyHandler) :
         self.bg = pyglet.graphics.OrderedGroup(0)
         self.fg = pyglet.graphics.OrderedGroup(1)
 
-
         allGames = self.processGamesFile(filename=ConfigScreen.ALL_GAMES_FILE)
         chosenGames = self.processGamesFile(filename=ConfigScreen.CHOSEN_GAMES_FILE)
         unchosenGames = listDifference(allGames,chosenGames)
 
-        self.unchosenGameLayout = GameList('Other Games', unchosenGames, self.batch, self.fg, self.bg, 100)
-        
+        self.unchosenGameLayout = GameList('Other Games', unchosenGames, self.batch, self.fg, self.bg, 100)        
         self.chosenGameLayout = GameList('Chosen Games', chosenGames, self.batch, self.fg, self.bg, 450)
 
-        self.handleExit()
+        self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
 
     def recordToFile(self, gameList) :
         f = open(ConfigScreen.CHOSEN_GAMES_FILE, 'w')
@@ -255,15 +262,19 @@ class ConfigScreen(KeyHandler) :
                 games.append(g)
         return games
 
-    def handleExit(self) :        
-        self.recordToFile(self.chosenGameLayout.getGames())
-        self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
-
+ 
     def getBatch(self) :
         return self.batch
 
     def getScoreboards(self) :
         return self.scoreboards
+
+    # on exit, write to file and save scoraboards to list for picker
+    def handleExit(self) :        
+        self.recordToFile(self.chosenGameLayout.getGames())
+        self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
+
+    # keyboard handlers
 
     def handle_C(self, modified) :
         if (modified) :

@@ -2,6 +2,7 @@ from game_state import TimedGameState
 from game_state import TeamState
 from scoreboard import Scoreboard
 from element import ScoreboardElement
+from functools import partial
 
 
 ######################
@@ -45,21 +46,9 @@ class BoxingGameState(TimedGameState) :
     def getEndurance(self, team) :
         return self.teams[team].getEndurance()
 
-    def getLeftEndurance(self) :
-        return self.getEndurance(0)
-    
-    def getRightEndurance(self) :
-        return self.getEndurance(1)
-
     def getTkoPoints(self, team) :
         return self.teams[team].getTkoPoints()
  
-    def getLeftTkoPoints(self) :
-        return self.getTkoPoints(0)
-
-    def getRightTkoPoints(self) :
-        return self.getTkoPoints(1)
-
     def modifyEndurance(self, team, doIncrement=False) :
         if doIncrement :
             self.teams[team].modifyEndurance(1)
@@ -81,67 +70,22 @@ class BoxingGameState(TimedGameState) :
 
 class BoxingScoreboard(Scoreboard) :
 
-    LEFT_DIGIT_COLOR = (255,0,0,255)
-    RIGHT_DIGIT_COLOR = (0,0,255,255)
-    
+   
     def __init__(self) :
         Scoreboard.__init__(self)
         self.state = BoxingGameState()
         
-        self.addScores(2, leftLabel='RED', rightLabel='Blue', height=460)
+        self.addLargeElement(2, Scoreboard.LEFT_CENTER, 460, 'RED', partial(self.state.getScore, 0), Scoreboard.RED)
+        self.addLargeElement(2, Scoreboard.RIGHT_CENTER, 460, 'BLUE', partial(self.state.getScore, 1), Scoreboard.BLUE)
         self.addClock(440)
         self.addPeriod(300, maxDigits=2)
 
-        self.addEndurance(300)
-        self.addTkoPoints(160)
-
-    def addScores(self, maxDigits, leftLabel='GUEST', rightLabel='HOME', height=460) :
-        e = ScoreboardElement(text=leftLabel, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE,
-                              updateFunc=self.state.getGuestScore, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.SCORE_SIZE, digitColor=BoxingScoreboard.LEFT_DIGIT_COLOR, maxDigits=maxDigits, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.LEFT_CENTER,height)
-        self.elements.append(e)
-
-        e = ScoreboardElement(text=rightLabel, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE,
-                              updateFunc=self.state.getHomeScore, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.SCORE_SIZE, digitColor=BoxingScoreboard.RIGHT_DIGIT_COLOR, maxDigits=maxDigits,  
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.RIGHT_CENTER,height)
-        self.elements.append(e)
-
-
-    def addEndurance(self, height) :
-        e = ScoreboardElement(text='Endurance', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getLeftEndurance, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=BoxingScoreboard.LEFT_DIGIT_COLOR, maxDigits=2, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.LEFT_CENTER, height)
-        self.elements.append(e)
-
-        e = ScoreboardElement(text='Endurance', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE,
-                              updateFunc=self.state.getRightEndurance, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=BoxingScoreboard.RIGHT_DIGIT_COLOR, maxDigits=2,  
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.RIGHT_CENTER, height)
-        self.elements.append(e)
-
-
-    def addTkoPoints(self, height) :
-        e = ScoreboardElement(text='TKO Points', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getLeftTkoPoints, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=BoxingScoreboard.LEFT_DIGIT_COLOR, maxDigits=2, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.LEFT_CENTER, height)
-        self.elements.append(e)
-
-        e = ScoreboardElement(text='TKO Points', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE,
-                             updateFunc=self.state.getRightTkoPoints, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=BoxingScoreboard.RIGHT_DIGIT_COLOR, maxDigits=2,  
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.RIGHT_CENTER, height)
-        self.elements.append(e)
-
+        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 300, 'Endurance', partial(self.state.getEndurance, 0), Scoreboard.RED)
+        self.addMediumElement(2, Scoreboard.RIGHT_CENTER, 300, 'Endurance', partial(self.state.getEndurance, 1), Scoreboard.BLUE)
+        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 160, 'TKO Points', partial(self.state.getTkoPoints, 0), Scoreboard.RED)
+        self.addMediumElement(2, Scoreboard.RIGHT_CENTER, 160, 'TKO Points', partial(self.state.getTkoPoints, 1), Scoreboard.BLUE)
+ 
+    # handle keys
 
     def handle_A(self, modified = False) :
         self.state.modifyEndurance(0, modified)

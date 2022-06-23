@@ -1,5 +1,6 @@
 import pyglet
 
+from functools import partial
 from element import ScoreboardElement
 from element import HorizontalElement
 from element import ClockElement
@@ -7,10 +8,12 @@ from key_handler import KeyHandler
 
 class Scoreboard(KeyHandler) :
 
+    # THree main columns top scorebaord screen
     LEFT_CENTER = 140
     RIGHT_CENTER = 660
     CENTER = 400
 
+    # font sizes
     SCORE_SIZE = 76
     CLOCK_SIZE = 84
     MEDIUM_DIGIT_SIZE = 64
@@ -26,6 +29,7 @@ class Scoreboard(KeyHandler) :
     RED = (255, 10, 10, 255)
     GREEN = (10, 255, 10, 255)
     YELLOW = (255, 255, 40, 255)
+    BLUE = (0, 0, 255, 255)
 
     DIGIT_FONT = 'Digital-7 Mono'
     TEXT_FONT = 'Built Titling'
@@ -43,20 +47,35 @@ class Scoreboard(KeyHandler) :
         for e in self.elements :
             e.update()
 
+    # convenience method to add guest and home scores
     def addScores(self, maxDigits, height,  leftLabel='GUEST', rightLabel='HOME') :
-        e = ScoreboardElement(text=leftLabel, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE,
-                              updateFunc=self.state.getGuestScore, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.SCORE_SIZE, digitColor=Scoreboard.RED, maxDigits=maxDigits, 
+        self.addLargeElement(maxDigits, Scoreboard.LEFT_CENTER, height, leftLabel, partial(self.state.getScore, 0), Scoreboard.RED)
+        self.addLargeElement(maxDigits, Scoreboard.RIGHT_CENTER, height, rightLabel, partial(self.state.getScore, 1), Scoreboard.RED)
+
+    def addLargeElement(self, maxDigits, x, y, text, func, color) :
+        e = ScoreboardElement(text=text, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE,
+                              updateFunc=func, digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.SCORE_SIZE, digitColor=color, maxDigits=maxDigits,  
                               batch=self.batch)
-        e.setCenterTop(Scoreboard.LEFT_CENTER, height)
+        e.setCenterTop(x,y)
         self.elements.append(e)
 
-        e = ScoreboardElement(text=rightLabel, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE,
-                              updateFunc=self.state.getHomeScore, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.SCORE_SIZE, digitColor=Scoreboard.RED, maxDigits=maxDigits,  
+    def addMediumElement(self, maxDigits, x, y, text, func, color) :
+        e = ScoreboardElement(text=text, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE,
+                              updateFunc=func, digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=color, maxDigits=maxDigits,  
                               batch=self.batch)
-        e.setCenterTop(Scoreboard.RIGHT_CENTER, height)
+        e.setCenterTop(x,y)
         self.elements.append(e)
+
+    def addHorizontalElement(self, maxDigits, x, y, text, func, color) :
+        e = HorizontalElement(text=text, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE,
+                              updateFunc=func, digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=color, maxDigits=maxDigits,  
+                              batch=self.batch)
+        e.setCenterTop(x,y)
+        self.elements.append(e)
+
 
     def addClock(self, height) :
         e = ClockElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=0, textColor=Scoreboard.WHITE, 
@@ -67,22 +86,22 @@ class Scoreboard(KeyHandler) :
 
     def addPeriod(self, height, horizontal=False, maxDigits=1) :
         text = self.state.getTimeDivisionName()
+        func = ScoreboardElement
         if horizontal :
             text = text + ':'
-            e = HorizontalElement(text=text, textFont=Scoreboard.TEXT_FONT, 
+            func = HorizontalElement
+        e = func(text=text, textFont=Scoreboard.TEXT_FONT, 
                                   textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
                                   updateFunc=self.state.getPeriod, digitFont=Scoreboard.DIGIT_FONT,
                                   digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=maxDigits, 
                                   displayLeadingZeroes=False, batch=self.batch)
-        else :           
-            e = ScoreboardElement(text=text, textFont=Scoreboard.TEXT_FONT, 
-                                textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                                updateFunc=self.state.getPeriod, digitFont=Scoreboard.DIGIT_FONT,
-                                digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=maxDigits, 
-                                displayLeadingZeroes=False, batch=self.batch)
-
         e.setCenterTop(Scoreboard.CENTER, height)
         self.elements.append(e)
+
+    def handleExit(self):
+        0
+
+    # handle keys
 
     def handle_Z(self, modified=False) :
         self.state.modifyGuestScore(modified)
@@ -99,7 +118,4 @@ class Scoreboard(KeyHandler) :
     def handle_S(self, modified=False) :
         self.state.modifyPeriod()
         self.updateElements()
-
-    def handleExit(self):
-        0
 
