@@ -9,11 +9,10 @@ class Frame() :
     VALUES = [0,1,2,3,4,5,6,7,8,9,10,10]
     BALL_1_SCORES = 10
     NUM_SCORES = 12
-    
-
+  
     def __init__(self, value) :
         self.balls = [0,0,0] # index into PINS
-        self.value = value # frame number 1 to 10
+        self.value = value # number of frame: 1 to 10
         self.empty = True
      
     def numPins(value) :
@@ -68,15 +67,11 @@ class Frame() :
              
 class Bowler() :
 
-    def __init__(self, bowling) :
+    def __init__(self) :
         self.frames = []
         for i in range(BowlingGameState.MAX_FRAMES) :
             self.frames.append( Frame(i+1) )
-        self.bowling = bowling
         self.scores = [0,0,0,0,0,0,0,0,0,0]
-
-    def changeBowler(self) :
-        self.bowling = not(self.bowling)
 
     def modifyPins(self, frameIndex, ballIndex, value) :
         # can only change empty frame if its first empty frame
@@ -104,7 +99,6 @@ class Bowler() :
             nextBalls = self.frames[frameIndex+1].getBalls()
             if len(nextBalls) > 0 :
                 score += 10 + nextBalls[0]
-        
         return score
 
     def computeTenthFrame(self) :
@@ -112,7 +106,6 @@ class Bowler() :
         score = 0
         for b in nextBalls :
             score += b
-
         return score
 
     def computeFrameScores(self) :
@@ -142,7 +135,6 @@ class Bowler() :
         for i in range(BowlingGameState.MAX_FRAMES) :
             if self.frames[i].isEmpty() :
                 return i+1
-        
         return BowlingGameState.MAX_FRAMES+1
 
 ################################################################      
@@ -153,12 +145,10 @@ class BowlingGameState(GameState) :
     def __init__(self):
         #invoking the __init__ of the parent class 
         GameState.__init__(self) 
- 
-        self.bowlers = [Bowler(True), Bowler(False)]
+        self.bowlers = [Bowler(), Bowler(), Bowler(), Bowler()]
 
     def modifyTime(self, t=False) :
-        for p in self.bowlers :
-            p.changeBowler()
+        0
         
     def getPlayerFrames(self, playerIndex ):
         return self.bowlers[playerIndex].frames
