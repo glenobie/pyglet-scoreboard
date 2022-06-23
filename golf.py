@@ -175,6 +175,7 @@ class GolfHole() :
             self.rightScore.setLabelColor(GolfHole.DEFAULT_LABEL)
         else :
             self.setBorderOpacity(GolfHole.DEFAULT_OPACITY)
+            self.setBorderColor((255,255,255))
             self.holeNum.setLabelColor(GolfHole.DIMMED_LABEL)
             self.holeNum.setFontColor(GolfHole.DIMMED_DIGIT)
             self.leftScore.setFontColor(GolfHole.DIMMED_DIGIT)
@@ -311,8 +312,24 @@ class GolfScoreboard(Scoreboard) :
         self.state.modifyScore(self.holes[self.selectedHole].getRightGolferID(), -1)
         self.updateElements()
 
+    def handle_Q(self, modified=False) :
+        self.holes[self.selectedHole].setSelection(False)
+        self.selectedHole = (self.selectedHole - 1) % len(self.holes)
+        self.holes[self.selectedHole].setSelection(True)
+        self.updateElements()
 
+    def handle_E(self, modified=False) :
+        self.holes[self.selectedHole].setSelection(False)
+        self.selectedHole = (self.selectedHole + 1) % len(self.holes)
+        self.holes[self.selectedHole].setSelection(True)
+        self.updateElements()
 
+    def handle_X(self, modified=False) :
+        self.state.incrementHoles()
+        self.updateElements()
+
+    def handle_S(self, modified=False) :
+        self.updateElements()
 
         
       
