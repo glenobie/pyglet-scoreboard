@@ -3,20 +3,64 @@ import pyglet
 from pyglet import shapes
 from pyglet import font 
 
+class ShadowBorder() :
+
+    BORDER_SPACING = (5, 8)
+    BG_COLOR = (18,18,18)
+
+    def __init__(self, width, height, batch, bg, fg) :
+        self.batch = batch
+        self.fg = fg
+        self.bg = bg
+        self.width = width + ShadowBorder.BORDER_SPACING[0] * 2
+        self.height = height + ShadowBorder.BORDER_SPACING[1] * 2
+
+    def drawLines(self) :
+        self.border = shapes.Rectangle(0, 0, self.width, self.height, color=ShadowBorder.BG_COLOR, batch=self.batch, group=self.bg  )
+        x2 = self.x1 + self.getWidth()
+        y2 = self.y1 + self.getHeight()
+
+        self.l0 = pyglet.shapes.Line(self.x1, self.y1, self.x1, y2, 1,  batch=self.batch, group = self.fg)
+        self.l0.opacity = 40
+        self.l1 = pyglet.shapes.Line(self.x1, y2, x2, y2, 1,  batch=self.batch, group = self.fg)
+        self.l1.opacity = 40
+
+
+
+        self.l2 = pyglet.shapes.Line(self.x1+2, self.y1+2, self.x1+2, y2-2, 3, color=(0,0,0), batch=self.batch, group = self.fg)
+        self.l3 = pyglet.shapes.Line(self.x1+2, y2-2, x2-1, y2-2, 3, color=(0,0,0), batch=self.batch, group = self.fg)
+        self.l4 = pyglet.shapes.Line(x2-2, y2-1, x2-2, self.y1+2, 3, batch=self.batch, group = self.fg)
+        self.l4.opacity = 60
+        self.l5 = pyglet.shapes.Line(x2-2, self.y1+2, self.x1+1, self.y1+2, 3, batch=self.batch, group = self.fg)
+        self.l5.opacity = 60
+    
+     
+    def getHeight(self) :
+        return self.height
+
+    def getWidth(self) :
+        return self.width
+
+    # sets bottom left
+    def setPosition(self, pos) :
+        self.x1 = pos[0]
+        self.y1 = pos[1]
+        self.drawLines()
+        #self.border.position = pos
+
+
 class ScoreboardElement :
 
     DIGIT_KERNING = 6
-    BORDER_SPACING = (4, 8)
     VERTICAL_SPACING = 10
-    BG_COLOR = (10,10,20)
 
     def __init__(self, text=None, textFont='', textSize=44, textColor=None, 
                    updateFunc=None, digitFont='', digitSize=80, digitColor=None, 
                    maxDigits=2, displayLeadingZeroes=False, batch=None) :
 
         # border will go in the background group, all others foreground
-        self.bg = pyglet.graphics.OrderedGroup(0)
-        self.fg = pyglet.graphics.OrderedGroup(1)
+        self.bg = pyglet.graphics.OrderedGroup(1)
+        self.fg = pyglet.graphics.OrderedGroup(2)
 
         self.isOn = True
         self.updateFunc = updateFunc
@@ -41,19 +85,9 @@ class ScoreboardElement :
 
         self.borders = []
         for l in self.layouts :
-            self.borders.append(self.createBorder( l.width, l.height-(l.height//10), batch, self.bg))        
+            self.borders.append(ShadowBorder( l.width, l.height-(l.height//10), batch, self.bg, self.fg))        
         
         self.update()
-
-    def createBorder(self, width, height, batch, group) :
-        border = shapes.BorderedRectangle(0, 0, width, height, 
-                                               color=ScoreboardElement.BG_COLOR, 
-                                               border_color=(255,255,255), border=1, 
-                                               batch=batch, group=group)  
-        border.width = border.width + ScoreboardElement.BORDER_SPACING[0] * 2
-        border.height = border.height + ScoreboardElement.BORDER_SPACING[1] * 2
-        return border
-
 
     # base class just creates a single document
     def createDocuments(self, fontName, fontSize, fontColor, maxDigits) :
@@ -80,7 +114,7 @@ class ScoreboardElement :
             charWidth = doc.get_font(0).get_glyphs('0')[0].advance
             self.numberWidth = self.numberWidth = charWidth*maxDigits + ScoreboardElement.DIGIT_KERNING*(maxDigits-1)
                 
-            self.numberHeight = self.docs[0].get_font(0).ascent 
+            self.numberHeight = self.docs[0].get_font(0).ascent #fudge
         
             layout = pyglet.text.layout.TextLayout(doc, width=self.numberWidth, height=self.numberHeight, 
                                                         batch=batch, multiline=True, group=group)
@@ -129,10 +163,10 @@ class ScoreboardElement :
         self.layouts[0].anchor_y = 'top'
         self.layouts[0].position = (x, y)
  
-        y = y - self.numberHeight - ScoreboardElement.BORDER_SPACING[1]
-        x = x - self.numberWidth // 2 - ScoreboardElement.BORDER_SPACING[0]
-        self.borders[0].position = (x, y)
-        self.height = self.borders[0].height
+        y = y - self.numberHeight - ShadowBorder.BORDER_SPACING[1]
+        x = x - self.numberWidth // 2 - ShadowBorder.BORDER_SPACING[0]
+        self.borders[0].setPosition((x, y))
+        self.height = self.borders[0].getHeight()
         if not(self.label is None) :
             self.height += self.label.content_height
     
@@ -150,9 +184,9 @@ class ScoreboardElement :
         self.layouts[0].anchor_y = 'top'
         self.layouts[0].position = (x, y)
         
-        y = y - self.numberHeight - ScoreboardElement.BORDER_SPACING[1]
-        x = x - self.numberWidth  - ScoreboardElement.BORDER_SPACING[0]
-        self.borders[0].position = (x, y)
+        y = y - self.numberHeight - ShadowBorder.BORDER_SPACING[1]
+        x = x - self.numberWidth  - ShadowBorder.BORDER_SPACING[0]
+        self.borders[0].setPosition((x, y))
 
    # base class assumes a single layout
     def setLeftTop(self, x, y) :
@@ -168,15 +202,15 @@ class ScoreboardElement :
         self.layouts[0].anchor_y = 'top'
         self.layouts[0].position = (x, y)
         
-        y = y - self.numberHeight - ScoreboardElement.BORDER_SPACING[1]
-        x = x  - ScoreboardElement.BORDER_SPACING[0]
-        self.borders[0].position = (x, y)
+        y = y - self.numberHeight - ShadowBorder.BORDER_SPACING[1]
+        x = x  - ShadowBorder.BORDER_SPACING[0]
+        self.borders[0].setPosition((x, y))
 
     def getHeight(self) :
         return self.height
 
     def getWidth(self) :
-        return self.borders[0].width
+        return self.borders[0].getWidth()
 
 
 
@@ -213,11 +247,11 @@ class HorizontalElement(ScoreboardElement) :
             x = x - self.numberWidth // 2
             self.layouts[0].position = (x,y)
             
-        y = y - self.numberHeight - ScoreboardElement.BORDER_SPACING[1]
-        x = x - ScoreboardElement.BORDER_SPACING[0]
-        self.borders[0].position = (x, y)
+        y = y - self.numberHeight - ShadowBorder.BORDER_SPACING[1]
+        x = x - ShadowBorder.BORDER_SPACING[0]
+        self.borders[0].setPosition((x, y))
 
-        self.height = self.borders[0].height
+        self.height = self.borders[0].getHeight()
         if (self.label.content_height > self.height) :
             self.height = self.label.content_height 
 
@@ -324,6 +358,6 @@ class ClockElement(ScoreboardElement) :
         self.layouts[0].position = (x, y)
 
 
-        y = y - self.numberHeight - ScoreboardElement.BORDER_SPACING[1]
-        self.borders[0].position = (colon_x + colon_width - ScoreboardElement.BORDER_SPACING[0], y)
-        self.borders[1].position = (colon_x - self.layouts[1].width - ScoreboardElement.BORDER_SPACING[0], y)
+        y = y - self.numberHeight - ShadowBorder.BORDER_SPACING[1]
+        self.borders[0].setPosition((colon_x + colon_width - ShadowBorder.BORDER_SPACING[0], y))
+        self.borders[1].setPosition((colon_x - self.layouts[1].width - ShadowBorder.BORDER_SPACING[0], y))

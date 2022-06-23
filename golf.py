@@ -126,12 +126,12 @@ class GolfHole() :
     WIDTH = 200
     INTERIOR_SPACING = (4, 8)
     EXTERIOR_SPACING = (2,4)
-    DEFAULT_OPACITY = 140
+    DEFAULT_OPACITY = 100
     HIGHLIGHT_OPACITY = 255
-    DEFAULT_LABEL = (10, 200, 40, 255)
-    DIMMED_LABEL = (255,255,255,140)
+    DEFAULT_LABEL = (255,255, 255, 255)
+    DIMMED_LABEL = (255,255,255, 180)
     DEFAULT_DIGIT = (255, 0, 0, 255)
-    DIMMED_DIGIT = (255,0,0,140)
+    DIMMED_DIGIT = (255,0,0, 200)
 
     def __init__(self, leftGolfer, rightGolfer, state, position, batch) :
 
@@ -168,18 +168,12 @@ class GolfHole() :
             self.setBorderOpacity(GolfHole.HIGHLIGHT_OPACITY)
             self.setBorderColor((10, 200, 40))
             self.holeNum.setLabelColor(GolfHole.DEFAULT_LABEL)
-            self.holeNum.setFontColor(GolfHole.DEFAULT_DIGIT)
-            self.leftScore.setFontColor(GolfHole.DEFAULT_DIGIT)
-            self.rightScore.setFontColor(GolfHole.DEFAULT_DIGIT)
             self.leftScore.setLabelColor(GolfHole.DEFAULT_LABEL)
             self.rightScore.setLabelColor(GolfHole.DEFAULT_LABEL)
         else :
             self.setBorderOpacity(GolfHole.DEFAULT_OPACITY)
             self.setBorderColor((255,255,255))
             self.holeNum.setLabelColor(GolfHole.DIMMED_LABEL)
-            self.holeNum.setFontColor(GolfHole.DIMMED_DIGIT)
-            self.leftScore.setFontColor(GolfHole.DIMMED_DIGIT)
-            self.rightScore.setFontColor(GolfHole.DIMMED_DIGIT)
             self.leftScore.setLabelColor(GolfHole.DIMMED_LABEL)
             self.rightScore.setLabelColor(GolfHole.DIMMED_LABEL)
 
@@ -232,7 +226,7 @@ class GolfScoreboard(Scoreboard) :
     NUM_PAIRINGS = 6
     LEADERBOARD_FONT = 'Built Titling'
     LEADERBOARD_FONT_SIZE = 22
-    getweakrefcount = (10, 200, 40, 255)
+    GREEN = (10, 200, 40, 255)
 
 
     POSITIONS = ( (120, 474), (360, 474), (120, 316), (360, 316), (120, 158), (360, 158)  )
@@ -278,7 +272,7 @@ class GolfScoreboard(Scoreboard) :
         for g in self.state.getLeaderboard() :
             selectedGolfer = (g.getID() == self.holes[self.selectedHole].getLeftGolferID()) or (g.getID() == self.holes[self.selectedHole].getRightGolferID())
             value = func(g.getID())
-            golfer =  pyglet.text.Label(value, GolfScoreboard.LEADERBOARD_FONT, GolfScoreboard.LEADERBOARD_FONT_SIZE,
+            golfer =  pyglet.text.Label(value, GolfScoreboard.LEADERBOARD_FONT, GolfScoreboard.LEADERBOARD_FONT_SIZE, color=Scoreboard.OFF_WHITE,
                                         batch=self.batch  )  
             if selectedGolfer :
                 golfer.color = GolfScoreboard.GREEN

@@ -30,6 +30,7 @@ class Scoreboard(KeyHandler) :
     GREEN = (10, 255, 10, 255)
     YELLOW = (255, 255, 40, 255)
     BLUE = (0, 0, 255, 255)
+    OFF_WHITE = (230,230,230,255)
 
     DIGIT_FONT = 'Digital-7 Mono'
     TEXT_FONT = 'Built Titling'
@@ -37,6 +38,10 @@ class Scoreboard(KeyHandler) :
     def __init__(self) :
         #self.x = 0
         self.batch = pyglet.graphics.Batch()
+        self.bg = pyglet.graphics.OrderedGroup(0)
+
+        self.background = pyglet.shapes.Rectangle(0,0,800,480, (18,18,18), self.batch, self.bg)
+
         self.elements = []
         self.state = None
 
