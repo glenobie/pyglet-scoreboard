@@ -21,18 +21,21 @@ class ShadowBorder() :
         y2 = self.y1 + self.getHeight()
 
         self.l0 = pyglet.shapes.Line(self.x1, self.y1, self.x1, y2, 1,  batch=self.batch, group = self.fg)
-        self.l0.opacity = 40
+        self.l0.opacity = 10
         self.l1 = pyglet.shapes.Line(self.x1, y2, x2, y2, 1,  batch=self.batch, group = self.fg)
-        self.l1.opacity = 40
+        self.l1.opacity = 10
+        self.l6 = pyglet.shapes.Line(x2,y2, x2, self.y1, 1, batch=self.batch, group = self.fg)
+        self.l6.opacity = 30
+        self.l7 = pyglet.shapes.Line(x2, self.y1, self.x1+2, self.y1, 1, batch=self.batch, group = self.fg)
+        self.l7.opacity = 30
 
 
-
-        self.l2 = pyglet.shapes.Line(self.x1+2, self.y1+2, self.x1+2, y2-2, 3, color=(0,0,0), batch=self.batch, group = self.fg)
-        self.l3 = pyglet.shapes.Line(self.x1+2, y2-2, x2-1, y2-2, 3, color=(0,0,0), batch=self.batch, group = self.fg)
-        self.l4 = pyglet.shapes.Line(x2-2, y2-1, x2-2, self.y1+2, 3, batch=self.batch, group = self.fg)
-        self.l4.opacity = 60
-        self.l5 = pyglet.shapes.Line(x2-2, self.y1+2, self.x1+1, self.y1+2, 3, batch=self.batch, group = self.fg)
-        self.l5.opacity = 60
+        self.l2 = pyglet.shapes.Line(self.x1+2, self.y1, self.x1+2, y2-2, 4, color=(0,0,0), batch=self.batch, group = self.fg)
+        self.l3 = pyglet.shapes.Line(self.x1+2, y2-3, x2-1, y2-3, 4, color=(0,0,0), batch=self.batch, group = self.fg)
+        self.l4 = pyglet.shapes.Line(x2-1, y2-1, x2-1, self.y1+2, 1, batch=self.batch, group = self.fg)
+        self.l4.opacity = 10
+        self.l5 = pyglet.shapes.Line(x2-1, self.y1+1, self.x1+1, self.y1+1, 1, batch=self.batch, group = self.fg)
+        self.l5.opacity = 20
     
      
     def getHeight(self) :
