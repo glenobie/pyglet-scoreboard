@@ -126,8 +126,7 @@ class FootballScoreboard(Scoreboard) :
         if pos == Scoreboard.LEFT_CENTER :
             self.ballMarker.setCenterTop(Scoreboard.RIGHT_CENTER, self.ballMarker.getTop())
         else :
-            self.ballMarker.setCenterTop(Scoreboard.LEFT_CENTER, self.ballMarker.getTop())
-        
+            self.ballMarker.setCenterTop(Scoreboard.LEFT_CENTER, self.ballMarker.getTop())        
 
     def addBallLocation(self, height) :
         e = ScoreboardElement(text='Ball On', textFont=Scoreboard.TEXT_FONT, 

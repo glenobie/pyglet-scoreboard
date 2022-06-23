@@ -1,8 +1,8 @@
 
 from scoreboard import Scoreboard
-from element import ScoreboardElement
 from element import HorizontalElement
 from game_state import GameState
+from functools import partial
 
 class CricketBatter() :
 
@@ -43,6 +43,7 @@ class CricketGameState(GameState) :
         self.extras = 0
         self.balls = 0
         self.lockedTotal = 0
+        self.batters = [CricketBatter(1), CricketBatter(2)]
         self.changeSides()
   
     def getOvers(self) :
@@ -66,12 +67,11 @@ class CricketGameState(GameState) :
         self.lastWicket = 0
         self.overs = 0
         self.extras = 0
-        self.leftBatter = CricketBatter(1)
-        self.rightBatter =  CricketBatter(2)
+        self.batters[0].setNumber(1)
+        self.batters[1].setNumber(2)
 
     def recordScore(self):
-        self.lastWicket = self.total
-        
+        self.lastWicket = self.total        
 
     def modifyTime(self, doDecrement=False) :
         # add/subtract overs from team in field
@@ -95,29 +95,17 @@ class CricketGameState(GameState) :
     def getTotal(self) :
         return self.total
 
-    def getLeftBatterNumber(self) :
-        return self.leftBatter.getNumber()
-
-    def getRightBatterNumber(self) :
-        return self.rightBatter.getNumber()
+    def getBatterNumber(self, id) :
+        return self.batters[id].getNumber()
         
-    def getLeftBatterRuns(self) :
-        return self.leftBatter.getRuns()
+    def getBatterRuns(self, id) :
+        return self.batters[id].getRuns()
 
-    def getRightBatterRuns(self) :
-        return self.rightBatter.getRuns()
-
-    def modifyLeftBatterRuns(self, doDecrement=False) :
+    def modifyBatterRuns(self, id, doDecrement=False) :
         adj = 1
         if doDecrement : adj = -1
-        self.leftBatter.modifyRuns(adj)
-        self.total = self.lockedTotal + self.leftBatter.getRuns() + self.rightBatter.getRuns() + self.extras
-
-    def modifyRightBatterRuns(self, doDecrement=False) :
-        adj = 1
-        if doDecrement : adj = -1
-        self.rightBatter.modifyRuns(adj)
-        self.total = self.lockedTotal + self.leftBatter.getRuns() + self.rightBatter.getRuns() + self.extras
+        self.batters[id].modifyRuns(adj)
+        self.total = self.lockedTotal + self.batters[0].getRuns() + self.batters[1].getRuns() + self.extras
 
     def modifyExtras(self, doDecrement = False) :
         adj = 1
@@ -128,11 +116,8 @@ class CricketGameState(GameState) :
         else :
             self.total += adj
 
-    def incrementLeftBatterNumber(self) :
-        self.leftBatter.setNumber((self.leftBatter.getNumber()  % CricketGameState.MAX_BATTERS) + 1)
-
-    def incrementRightBatterNumber(self) :
-        self.rightBatter.setNumber((self.rightBatter.getNumber()  % CricketGameState.MAX_BATTERS) + 1)
+    def incrementBatterNumber(self, id) :
+        self.batters[id].setNumber((self.batters[id].getNumber()  % CricketGameState.MAX_BATTERS) + 1)
 
     def getLastInnings(self) :
         return self.lastInnings
@@ -140,18 +125,14 @@ class CricketGameState(GameState) :
     def getLastWicket(self) :
         return self.lastWicket
 
-    def changeRightBatter(self) :
-        self.lockedTotal += self.rightBatter.getRuns()
-        self.rightBatter.resetRuns()
-
-    def changeLeftBatter(self) :
-        self.lockedTotal += self.leftBatter.getRuns()
+    def changeBatter(self, id) :
+        self.lockedTotal += self.batters[id].getRuns()
         self.leftBatter.resetRuns()
         
     def swapBatters(self) :
-        temp = self.leftBatter
-        self.leftBatter = self.rightBatter
-        self.rightBatter = temp
+        temp = self.batters[0]
+        self.batters[0] = self.batters[1]
+        self.batters[1] = temp
 
 ##################################
 class CricketScoreboard(Scoreboard) :
@@ -159,17 +140,17 @@ class CricketScoreboard(Scoreboard) :
         Scoreboard.__init__(self)
         self.state = CricketGameState()
         
-        self.addTotal(470)
-        self.addWickets(290)
-        self.addOvers(150)
-        self.addBalls(150)
-        self.addLastInnings(150)
-        self.addExtras(290)
-        self.addLastWicket(290)
-        self.addRuns(400, Scoreboard.LEFT_CENTER, self.state.getLeftBatterRuns)
-        self.addRuns(400, Scoreboard.RIGHT_CENTER, self.state.getRightBatterRuns)
-        self.addBatterNumber(450, Scoreboard.LEFT_CENTER, self.state.getLeftBatterNumber)
-        self.addBatterNumber(450, Scoreboard.RIGHT_CENTER, self.state.getRightBatterNumber)
+        self.addLargeElement(3, Scoreboard.CENTER, 470, 'Total', self.state.getTotal, Scoreboard.RED)
+        self.addMediumElement(1, Scoreboard.CENTER, 290, 'Wickets', self.state.getWickets, Scoreboard.GREEN)
+        self.addMediumElement(2, Scoreboard.CENTER, 150, 'Overs', self.state.getOvers, Scoreboard.GREEN)
+        self.addMediumElement(1, Scoreboard.LEFT_CENTER, 150, 'Balls', self.state.getBalls, Scoreboard.GREEN)
+        self.addMediumElement(3, Scoreboard.RIGHT_CENTER, 150, 'Last Innings', self.state.getLastInnings, Scoreboard.GREEN)
+        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 290, 'Extras', self.state.getExtras, Scoreboard.RED)
+        self.addMediumElement(3, Scoreboard.RIGHT_CENTER, 290, 'Last Wicket', self.state.getLastWicket, Scoreboard.RED)
+        self.addLargeElement(3, Scoreboard.LEFT_CENTER, 400, None, partial(self.state.getBatterRuns, 0), Scoreboard.RED)
+        self.addLargeElement(3, Scoreboard.RIGHT_CENTER, 400, None, partial(self.state.getBatterRuns, 1), Scoreboard.RED)
+        self.addBatterNumber(450, Scoreboard.LEFT_CENTER, partial(self.state.getBatterNumber, 0))
+        self.addBatterNumber(450, Scoreboard.RIGHT_CENTER, partial(self.state.getBatterNumber, 1))
 
     def addBatterNumber(self, height, x, func) :
         e = HorizontalElement(text='No.', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE, 
@@ -179,71 +160,7 @@ class CricketScoreboard(Scoreboard) :
         e.setCenterTop(x, height)
         self.elements.append(e)
 
-
-    def addRuns(self, height, x, func) :
-        e = ScoreboardElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=func, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.SCORE_SIZE, digitColor=Scoreboard.RED, maxDigits=3, 
-                              batch=self.batch)
-        e.setCenterTop(x, height)
-        self.elements.append(e)
-
-
-    def addTotal(self, height) :
-        e = ScoreboardElement(text='Total', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getTotal, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.SCORE_SIZE, digitColor=Scoreboard.RED, maxDigits=3, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.CENTER, height)
-        self.elements.append(e)
-       
-    def addWickets(self, height) :
-        e = ScoreboardElement(text='Wickets', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getWickets, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=1, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.CENTER, height)
-        self.elements.append(e)
-
-    def addOvers(self, height) :
-        e = ScoreboardElement(text='Overs', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getOvers, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=2, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.CENTER, height)
-        self.elements.append(e)
-
-    def addBalls(self, height) :
-        e = ScoreboardElement(text='Balls', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getBalls, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=1, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.LEFT_CENTER, height)
-        self.elements.append(e)
-
-    def addLastInnings(self, height) :
-        e = ScoreboardElement(text='Last Innings', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getLastInnings, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=3, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.RIGHT_CENTER, height)
-        self.elements.append(e)
-        
-    def addExtras(self, height) :
-        e = ScoreboardElement(text='Extras', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getExtras, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=1, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.LEFT_CENTER, height)
-        self.elements.append(e)
-
-    def addLastWicket(self, height) :
-        e = ScoreboardElement(text='Last Wicket', textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
-                              updateFunc=self.state.getLastWicket, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=3, 
-                              batch=self.batch)
-        e.setCenterTop(Scoreboard.RIGHT_CENTER, height)
-        self.elements.append(e)
+    # handle keys
         
     def handle_A(self, modified = False) :
         self.state.modifyExtras(modified)
@@ -254,19 +171,19 @@ class CricketScoreboard(Scoreboard) :
         self.updateElements()
 
     def handle_Q(self, modified = False) :
-        self.state.incrementLeftBatterNumber()
+        self.state.incrementBatterNumber(0)
         self.updateElements()
 
     def handle_E(self, modified = False) :
-        self.state.incrementRightBatterNumber()
+        self.state.incrementBatterNumber(1)
         self.updateElements()
 
     def handle_Z(self, modified = False) :
-        self.state.modifyLeftBatterRuns(modified)
+        self.state.modifyBatterRuns(0, modified)
         self.updateElements()
 
     def handle_C(self, modified=False) :
-        self.state.modifyRightBatterRuns(modified)
+        self.state.modifyBatterRuns(1, modified)
         self.updateElements()
 
     def handle_D(self, modified=False) :

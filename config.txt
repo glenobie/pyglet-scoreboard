@@ -1,7 +1,7 @@
-Second Season
-football
-FootballScoreboard
-y
-Go Go Sports
-FOOTBALL
+International Cricket
+cricket
+CricketScoreboard
+2
+England
+CRICKET
 EOF

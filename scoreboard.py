@@ -52,6 +52,7 @@ class Scoreboard(KeyHandler) :
         self.addLargeElement(maxDigits, Scoreboard.LEFT_CENTER, height, leftLabel, partial(self.state.getScore, 0), Scoreboard.RED)
         self.addLargeElement(maxDigits, Scoreboard.RIGHT_CENTER, height, rightLabel, partial(self.state.getScore, 1), Scoreboard.RED)
 
+    # add an item with large text to scoreboard
     def addLargeElement(self, maxDigits, x, y, text, func, color) :
         e = ScoreboardElement(text=text, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.LARGE_TEXT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=func, digitFont=Scoreboard.DIGIT_FONT,
@@ -60,6 +61,7 @@ class Scoreboard(KeyHandler) :
         e.setCenterTop(x,y)
         self.elements.append(e)
 
+    # add an item with medium text to scoreboard
     def addMediumElement(self, maxDigits, x, y, text, func, color) :
         e = ScoreboardElement(text=text, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=func, digitFont=Scoreboard.DIGIT_FONT,
@@ -68,6 +70,7 @@ class Scoreboard(KeyHandler) :
         e.setCenterTop(x,y)
         self.elements.append(e)
 
+    # add ahorizontal item with medium text to scoreboard
     def addHorizontalElement(self, maxDigits, x, y, text, func, color) :
         e = HorizontalElement(text=text, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=func, digitFont=Scoreboard.DIGIT_FONT,

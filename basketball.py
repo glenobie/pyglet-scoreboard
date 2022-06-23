@@ -2,7 +2,6 @@ from audioop import add
 from team_state import TeamStateWithTimeouts
 from game_state import TimedGameState
 from scoreboard import Scoreboard
-from element import ScoreboardElement
 from functools import partial
 
 #################################################

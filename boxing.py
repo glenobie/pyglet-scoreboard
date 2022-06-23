@@ -1,7 +1,6 @@
 from game_state import TimedGameState
 from game_state import TeamState
 from scoreboard import Scoreboard
-from element import ScoreboardElement
 from functools import partial
 
 
