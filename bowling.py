@@ -1,6 +1,5 @@
 from os import truncate
 import pyglet
-from pyrsistent import s
 
 from scoreboard import Scoreboard
 from element import ScoreboardElement

@@ -1,11 +1,14 @@
 from curses import start_color
 from pydoc import doc
+from re import L
 from telnetlib import GA
+from xmlrpc.server import DocXMLRPCRequestHandler
 import pyglet
 from pyglet import resource
 from pyglet import shapes
 import importlib
 from key_handler import KeyHandler
+import math
 
 
 # helper function to subtract one list from another
@@ -19,6 +22,55 @@ def listDifference(list1, list2) :
         i = i + 1
     return result
     
+class ScoreboardIconSprite :
+    def __init__(self, dir, imageFile, batch):
+        image = pyglet.image.load(dir + '/' + imageFile)
+        self.icon = pyglet.sprite.Sprite(image, batch=batch)
+        self.speed = 20
+        self.scale_speed = 4
+        
+        self.moving = False
+
+    def setPath(self, path) :
+        self.path = path
+
+    def getSprite(self) :
+        return self.icon
+
+    def moveTo(self, x, y, scale) :
+        self.dest_x = x
+        self.dest_y = y
+        self.dest_scale = scale
+        self.moving = True
+
+    def update(self, dt) :
+        if self.moving :
+            x_d = self.dest_x - self.icon.x
+            y_d = self.dest_y - self.icon.y
+            scale_d = self.dest_scale - self.icon.scale
+
+            angle = math.atan2(y_d, x_d)
+            distance = math.sqrt((self.icon.x - self.dest_x) ** 2 + (self.icon.y - self.dest_y) ** 2)
+            speed = min(self.speed, distance)
+            change_x = math.cos(angle) * speed
+            change_y = math.sin(angle) * speed
+            change_scale =  scale_d / self.scale_speed
+            self.icon.x += change_x
+            self.icon.y += change_y
+            self.icon.scale += change_scale
+            distance = math.sqrt((self.icon.x - self.dest_x) ** 2 + (self.icon.y - self.dest_y) ** 2)
+
+            # close enough?
+            if distance <= self.speed:
+                self.icon.x = self.dest_x
+                self.icon.y = self.dest_y
+                self.icon.scale = self.dest_scale
+                self.moving= False
+
+
+    
+
+
 #############################
 # Ultimately this will become a sprite
 class ScoreboardIcon:
@@ -198,10 +250,11 @@ class GameList() :
 ######################################
 class ConfigScreen(KeyHandler) :
 
-    LINES_PER_GAME = 6
+    LINES_PER_GAME = 4
     END_OF_FILE = 'EOF'
-    ALL_GAMES_FILE = 'games.txt'
+    ALL_GAMES_FILE = 'games-w-icons.txt'
     CHOSEN_GAMES_FILE = 'config.txt'
+    ICON_DIR = 'icons'
 
     def __init__(self, iconBatch) :
         self.batch = pyglet.graphics.Batch()
@@ -241,8 +294,9 @@ class ConfigScreen(KeyHandler) :
             s = []
             s.append(g[0])   
             scoreboardClass = getattr(importlib.import_module(g[1]), g[2])
-            s.append(scoreboardClass( ))
-            s.append(ScoreboardIcon(g[3], g[4], g[5], self.iconBatch  ) )
+            s.append(scoreboardClass())
+            s.append(ScoreboardIconSprite(ConfigScreen.ICON_DIR, g[3], self.iconBatch))
+            #s.append(ScoreboardIcon(g[3], g[4], g[5], self.iconBatch  ) )
             objectList.append(s)
         return objectList
 

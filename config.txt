@@ -1,25 +1,21 @@
-Bowl-O-Rama
-bowling
-BowlingScoreboard
-A
-Go Go Sports
-BOWLING
-History Maker Golf
-golf
-GolfScoreboard
-B
-Go Go Sports
-GOLF
-Cold Snap
-football
-CFLScoreboard
-y
-Go Go Sports
-COLD SNAP
-Inside the Paint
-basketball
-BasketballScoreboard
-P
-Go Go Sports
-BASKETBALL
+Inside Pitch
+baseball
+BaseballScoreboard
+inside_pitch.png
+Payoff Pitch
+baseball
+BaseballScoreboard
+payoff_pitch.png
+Statis-Pro Baseball
+baseball
+BaseballScoreboard
+statis-pro.png
+APBA Baseball
+baseball
+BaseballScoreboard
+APBA.png
+History Maker Baseball
+baseball
+BaseballScoreboard
+hmb.png
 EOF
