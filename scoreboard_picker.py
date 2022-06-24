@@ -5,45 +5,48 @@ from key_handler import KeyHandler
 from config_screen import ConfigScreen
 
 class ScoreboardPicker(KeyHandler) :
-    #TODO: replace with carousel menu
-    POSITIONS = ( (160, 470), (400, 470), (640, 470),
-                  (160, 312), (400, 312), (640, 312),
-                  (160, 164),  (400, 164), (640, 164) )
-
     INDEX_SCOREBOARD = 1
     INDEX_ICON = 2
 
-    def __init__(self):
+    def __init__(self) :
         self.batch = pyglet.graphics.Batch()
         self.configScreen = ConfigScreen(self.batch)
-        self.selectedOption = 0
+ 
+        # will contain lists of (index into gameList, x, y, scale)
+        self.locationData = []
         self.handleEntry()
+
+
    
     def handleEntry(self) :
         # (title for config screen, scoreboard, icon, FUTURE: FAC)
         self.scoreboardTuples = self.configScreen.getScoreboards()
         # only start the picker if there are games to pick from. Otherwise, start config screen
         if len(self.scoreboardTuples) > 0 :
+ 
+        # determine positions and scales based on number of games
+            self.locationData.append([0, 288, 140, 0.8])
+            self.locationData.append([4, 128, 180, 0.6])
+            
+            self.locationData.append([3, 268, 340, 0.2])
+            self.locationData.append([2, 488, 340, 0.2])
+            self.locationData.append([1, 488, 180, 0.6])
+
             self.initializeMenu()
             self.activeScreen = self
         else :
             self.activeScreen = self.configScreen
     
     def initializeMenu(self) :
-        i = 0
-        for t in self.scoreboardTuples :
-             t[ScoreboardPicker.INDEX_ICON].setCenterTop(ScoreboardPicker.POSITIONS[i][0], ScoreboardPicker.POSITIONS[i][1])
-             i = i+1
-        self.scoreboardTuples[self.selectedOption][ScoreboardPicker.INDEX_ICON].setSelected(True)
-   
-    def selectNew(self, jump) :
-        self.scoreboardTuples[self.selectedOption][ScoreboardPicker.INDEX_ICON].setSelected(False)
-        self.selectedOption = (self.selectedOption + jump) % len(self.scoreboardTuples)
-        self.scoreboardTuples[self.selectedOption][ScoreboardPicker.INDEX_ICON].setSelected(True)
-
+        for t in self.locationData :
+            icon = self.scoreboardTuples[t[0]][ScoreboardPicker.INDEX_ICON].getSprite()
+            icon.update(x=t[1], y=t[2], scale=t[3] )
+ 
     # open the selected scoreboard
     def processSelection(self) :
-         self.activeScreen = self.scoreboardTuples[self.selectedOption][ScoreboardPicker.INDEX_SCOREBOARD]
+         #self.activeScreen = self.scoreboardTuples[self.selectedOption][ScoreboardPicker.INDEX_SCOREBOARD]
+         # load scoreboard at position 1
+         0
  
     def getBatch(self) :
         return self.batch
@@ -52,19 +55,34 @@ class ScoreboardPicker(KeyHandler) :
         self.activeScreen.getBatch().draw()
  
     def update(self, dt) :
+        for t in self.scoreboardTuples :
+            t[2].update(dt)
         self.draw()
    
+    def rotate(self, direction) :
+        for d in self.locationData :
+            g = (d.pop(0) + direction) % len(self.locationData)
+            d.insert(0, g)
+            self.scoreboardTuples[g][2].moveTo(d[1], d[2], d[3])
+
    # keyboard event handlers
   
     def handle_A(self, modified = False) :
         if self.activeScreen == self :
-            self.selectNew(-1)
+            self.rotate(-1)
         else :
             self.activeScreen.handle_A(modified)
 
+    # TODO: Delete this
+    def handle_X(self, modified = False) :
+        if self.activeScreen == self :
+            self.scoreboardTuples[0][2].moveTo(0, 0)
+        else :
+            self.activeScreen.handle_Q(modified)
+
     def handle_D(self, modified = False) :
         if self.activeScreen == self :
-            self.selectNew(1)
+            self.rotate(1)
         else :
             self.activeScreen.handle_D(modified) 
 
