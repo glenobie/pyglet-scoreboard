@@ -1,3 +1,7 @@
+from os import truncate
+import pyglet
+from pyrsistent import s
+
 from scoreboard import Scoreboard
 from element import ScoreboardElement
 from game_state import GameState
@@ -154,16 +158,15 @@ class BowlingGameState(GameState) :
     def getPlayerFrames(self, playerIndex ):
         return self.bowlers[playerIndex].frames
                
-    def modifyPins(self, playerIndex, frameIndex, ballIndex, doDecrement) :
-        adj = 1
-        if doDecrement : adj = -1
-        p = self.bowlers[playerIndex].modifyPins(frameIndex, ballIndex, adj)
+    def modifyPins(self, playerIndex, frameID, ballIndex, doDecrement) :
+        adj = -1 if doDecrement else 1
+        self.bowlers[playerIndex].modifyPins(frameID-1, ballIndex, adj)
               
-    def getPins(self, playerIndex, frameIndex, ballIndex) :
-        return self.bowlers[playerIndex].frames[frameIndex-1].getDisplay(ballIndex)
+    def getPins(self, playerIndex, frameID, ballIndex) :
+        return self.bowlers[playerIndex].frames[frameID-1].getDisplay(ballIndex)
 
-    def getScore(self, playerIndex, frameIndex) :
-        return self.bowlers[playerIndex].getScore(frameIndex)
+    def getScore(self, playerIndex, frameID) :
+        return self.bowlers[playerIndex].getScore(frameID)
     
 
 ###########################################################
@@ -172,21 +175,41 @@ class FrameDisplay() :
     SPACING_Y = 4
     BALL_FONT_SIZE = 24
     SCORE_FONT_SIZE = 24
+    DIMMED_OPACITY = 60
+    FULL_OPACITY = 230
 
     def __init__(self, state, frameID, bowlerID, pinsFunc, scoreFunc, batch) :
         self.pinsFunc = pinsFunc
         self.scoreFunc = scoreFunc
+        self.batch = batch
+        self.state = state
+
         
         self.pins1 = ScoreboardElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=partial(pinsFunc, bowlerID, frameID, 0), digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=FrameDisplay.BALL_FONT_SIZE, digitColor=Scoreboard.RED, maxDigits=1, batch=batch)
+                              digitSize=FrameDisplay.BALL_FONT_SIZE, digitColor=Scoreboard.RED, maxDigits=1,batch= self.batch)
         self.pins2 = ScoreboardElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=partial(pinsFunc, bowlerID, frameID, 1), digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=FrameDisplay.BALL_FONT_SIZE, digitColor=Scoreboard.RED, maxDigits=1, batch=batch)
+                              digitSize=FrameDisplay.BALL_FONT_SIZE, digitColor=Scoreboard.RED, maxDigits=1, batch=self.batch)
         self.score = ScoreboardElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=partial(scoreFunc, bowlerID, frameID), digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=FrameDisplay.SCORE_FONT_SIZE, digitColor=Scoreboard.RED, maxDigits=3, batch=batch)
-                            
+                              digitSize=FrameDisplay.SCORE_FONT_SIZE, digitColor=Scoreboard.RED, maxDigits=3, batch=self.batch)
+
+        self.height = self.pins1.getHeight() + self.score.getHeight() + FrameDisplay.SPACING_Y  
+    
+
+    def drawBorder(self) :
+        self.border = []
+        x = self.topCenter[0] - self.getWidth() // 2 - 1 # left
+        y = self.topCenter[1] + 11 # top : Why 8 extra?  Don't know
+        x2 = x + self.getWidth() + 2 # right
+        y2 = y - self.getHeight() - 3 # bottom
+
+        self.border.append(pyglet.shapes.Line(x, y, x2, y, 1, batch = self.batch)) #top
+        self.border.append(pyglet.shapes.Line(x2, y, x2, y2, 1, batch = self.batch)) #right
+        self.border.append(pyglet.shapes.Line(x2, y2, x, y2, 1, batch = self.batch)) #bottom
+        self.border.append(pyglet.shapes.Line(x, y2, x, y, 1, batch = self.batch)) #left
+        
     def update(self) :
         self.pins1.update()
         self.pins2.update()
@@ -195,27 +218,118 @@ class FrameDisplay() :
     def getWidth(self) :
         return self.score.getWidth()
 
+    def getHeight(self) :
+        return self.height
+
     def setCenterTop(self, x, y) :
         self.pins1.setRightTop(x - FrameDisplay.SPACING_X, y)
         self.pins2.setLeftTop(x + FrameDisplay.SPACING_X, y)
         self.score.setCenterTop(x, y-self.pins1.getHeight() - FrameDisplay.SPACING_Y)
+        self.topCenter = (x, y)
+        self.drawBorder()
 
+    def setSelected(self, isSelected) :
+        opacity = FrameDisplay.FULL_OPACITY if isSelected else FrameDisplay.DIMMED_OPACITY
+        for line in self.border :
+            line.opacity = opacity
+
+############################################################
 class BowlingScoreboard(Scoreboard) :
 
     FIRST_COLUMN = 100
-    ROWS = [100, 200, 300, 400]
+    ROWS = [400, 300, 200, 100]
     SPACING = 4
+    HEADER_Y = 424
 
     def __init__(self) :
         Scoreboard.__init__(self)
         self.state = BowlingGameState()
+        self.selectedFrame = 0
+        self.inUpper = True
+        gp = pyglet.graphics.Group()
 
         self.frames = []
+        self.labels = []
+
+        for i in range(0, len(self.state.bowlers)) :
+            rowLabel = pyglet.text.Label('B'+str(i+1), Scoreboard.TEXT_FONT, Scoreboard.SMALL_TEXT_SIZE, batch=self.batch, group=gp)             
+            rowLabel.anchor_x = 'left'
+            rowLabel.position = (24, BowlingScoreboard.ROWS[i] - 44)
+            
+            self.labels.append(rowLabel)
+
 
         for i in range(0, BowlingGameState.MAX_FRAMES) :
-            for b in range(0, len(self.state.bowlers)) :
+            frameSet = []
+            x=0
+            for b in range(0, len(self.state.bowlers)) :  
                 f = FrameDisplay(self.state, i+1, b, self.state.getPins, self.state.getScore, self.batch )
-                f.setCenterTop(BowlingScoreboard.FIRST_COLUMN + i*f.getWidth()+i*BowlingScoreboard.SPACING, BowlingScoreboard.ROWS[b])
-                self.frames.append(f)
+                x =  BowlingScoreboard.FIRST_COLUMN + i*f.getWidth()+i*BowlingScoreboard.SPACING
+                f.setCenterTop(x, BowlingScoreboard.ROWS[b])
+                f.setSelected(False)
+                frameSet.append(f)
+            self.frames.append(frameSet)
+            columnLabel = pyglet.text.Label(str(i+1), Scoreboard.TEXT_FONT, Scoreboard.SMALL_TEXT_SIZE, batch = self.batch, group=gp)             
+            columnLabel.anchor_x = 'center'
+            columnLabel.position = (x, BowlingScoreboard.HEADER_Y)
+            self.labels.append(columnLabel)
 
+        self.selectFrames(1, True)
+
+
+    def selectFrames(self, frameId, isSelected) :
+        for f in self.frames :
+            if self.inUpper :
+                self.frames[self.selectedFrame][0].setSelected(isSelected)
+                self.frames[self.selectedFrame][1].setSelected(isSelected)
+            else :
+                self.frames[self.selectedFrame][2].setSelected(isSelected)
+                self.frames[self.selectedFrame][3].setSelected(isSelected)
         
+    # presently not called
+    def updateAllElements(self):
+        for s in self.frames :
+            for b in s :
+                b.update()
+
+
+    # handle keys
+
+    def handle_Q(self, modified=False) :
+        self.selectFrames(self.selectedFrame, False)
+        self.selectedFrame = (self.selectedFrame - 1) % len(self.frames)
+        self.selectFrames(self.selectedFrame, True)
+
+    def handle_E(self, modified=False) :
+        self.selectFrames(self.selectedFrame, False)
+        self.selectedFrame = (self.selectedFrame + 1) % len(self.frames)
+        self.selectFrames(self.selectedFrame, True)
+
+    def handle_X(self, modified=False) :
+        self.selectFrames(self.selectedFrame, False)
+        self.inUpper = not(self.inUpper)
+        self.selectFrames(self.selectedFrame, True)
+
+    def handle_A(self, modified=False) :
+        bowler = 0 if self.inUpper else 2
+        self.state.modifyPins(bowler, self.selectedFrame+1, 0, modified)
+        self.frames[self.selectedFrame][bowler].update()
+
+    def handle_D(self, modified=False) :
+        bowler = 0 if self.inUpper else 2
+        self.state.modifyPins(bowler, self.selectedFrame+1, 1, modified)
+        self.frames[self.selectedFrame][bowler].update()
+
+    def handle_Z(self, modified=False) :
+        bowler = 1 if self.inUpper else 3
+        self.state.modifyPins(bowler, self.selectedFrame+1, 0, modified)
+        self.frames[self.selectedFrame][bowler].update()
+
+    def handle_C(self, modified=False) :
+        bowler = 1 if self.inUpper else 3
+        self.state.modifyPins(bowler, self.selectedFrame+1, 1, modified)
+        self.frames[self.selectedFrame][bowler].update()
+
+    def handle_S(self, modified=False):
+        0
+

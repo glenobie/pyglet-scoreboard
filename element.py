@@ -13,7 +13,7 @@ class ShadowBorder() :
         self.fg = fg
         self.bg = bg
         self.width = width + ShadowBorder.BORDER_SPACING[0] * 2
-        self.height = height + ShadowBorder.BORDER_SPACING[1] * 2
+        self.height = height + ShadowBorder.BORDER_SPACING[1] * 2 + 3 # why 3? don't know
 
     def drawLines(self) :
         self.border = shapes.Rectangle(0, 0, self.width, self.height, color=ShadowBorder.BG_COLOR, batch=self.batch, group=self.bg  )
@@ -55,7 +55,7 @@ class ShadowBorder() :
 class ScoreboardElement :
 
     DIGIT_KERNING = 6
-    VERTICAL_SPACING = 10
+    VERTICAL_SPACING = 2
 
     def __init__(self, text=None, textFont='', textSize=44, textColor=None, 
                    updateFunc=None, digitFont='', digitSize=80, digitColor=None, 
@@ -74,9 +74,6 @@ class ScoreboardElement :
         self.width = 0
 
         if not(text is None) :
-            f = font.load(textFont, textSize)
-            self.labelHeight = f.ascent
-       
             self.label = pyglet.text.Label(text, font_name=textFont, 
                                         font_size=textSize, color=textColor, batch=batch, group=self.fg)
 
@@ -97,7 +94,6 @@ class ScoreboardElement :
     def createDocuments(self, fontName, fontSize, fontColor, maxDigits) :
         docs = []
         document = pyglet.text.document.UnformattedDocument('0')
-        
         document.set_style(0, len(document.text), dict(font_name = fontName, 
                                                        font_size = fontSize, 
                                                        color=fontColor,
@@ -166,7 +162,7 @@ class ScoreboardElement :
             self.label.anchor_y = 'top'
     
             self.label.position = (x, y)
-            y = y - self.labelHeight - ScoreboardElement.VERTICAL_SPACING
+            y = y - self.label.content_height - ScoreboardElement.VERTICAL_SPACING
         
         self.layouts[0].anchor_x = 'center'
         self.layouts[0].anchor_y = 'top'
@@ -184,7 +180,7 @@ class ScoreboardElement :
             self.label.anchor_y = 'top'
     
             self.label.position = (x, y)
-            y = y - self.labelHeight - ScoreboardElement.VERTICAL_SPACING
+            y = y - self.label.content_height - ScoreboardElement.VERTICAL_SPACING
         
         self.layouts[0].anchor_x = 'right'
         self.layouts[0].anchor_y = 'top'
@@ -203,7 +199,7 @@ class ScoreboardElement :
             self.label.anchor_y = 'top'
     
             self.label.position = (x, y)
-            y = y - self.labelHeight - ScoreboardElement.VERTICAL_SPACING
+            y = y - self.label.content_height - ScoreboardElement.VERTICAL_SPACING
         
         self.layouts[0].anchor_x = 'left'
         self.layouts[0].anchor_y = 'top'

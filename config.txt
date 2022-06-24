@@ -4,4 +4,22 @@ BowlingScoreboard
 A
 Go Go Sports
 BOWLING
+History Maker Golf
+golf
+GolfScoreboard
+B
+Go Go Sports
+GOLF
+Cold Snap
+football
+CFLScoreboard
+y
+Go Go Sports
+COLD SNAP
+Inside the Paint
+basketball
+BasketballScoreboard
+P
+Go Go Sports
+BASKETBALL
 EOF
