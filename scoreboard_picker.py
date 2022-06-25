@@ -1,4 +1,5 @@
 import socket
+import trace
 import pyglet
 from pyglet import font
 from key_handler import KeyHandler
@@ -96,24 +97,25 @@ class Carousel :
         frontNode.setFront(newNode)
         newNode.setBack(frontNode)
  
-    def tracePath(self, t) :
+    def tracePath(self, t, traceFunc) :
         index = t.getIndex()
-        t = t.getFront()
+        t = traceFunc(t)
         path = []  
         while True :
             path.append(t.getLocation())
             if not(t.isEmpty()) :
                 t.setStagedIndex(index)
                 return (path)
-            t = t.getFront()
-        
+            t = traceFunc(t)
 
-    def rotateCounterClockwise(self) :
+            
+    def rotate(self, direction=1) :
+        traceFunc = MenuLocationNode.getFront if direction == 1 else MenuLocationNode.getBack
         t = self.listFront
         circumnavigated = False
         while not(circumnavigated) :
             if not(t.isEmpty()) : # found a location that has an index to an icon
-                path =  self.tracePath(t)
+                path =  self.tracePath(t, traceFunc)
                 self.scoreboards[t.getIndex()][ScoreboardPicker.INDEX_ICON].moveTo(path)
             t = t.getFront()
             if t == self.listFront :
@@ -126,14 +128,6 @@ class Carousel :
             if t == self.listFront :
                 circumnavigated = True
 
-
-        
-        
-    def rotateClockwise(self) :
-        0
-
-    def getScoreboard(self) :
-        return self.scoreboards[self.listFront][ScoreboardPicker.INDEX_SCOREBOARD]
 
     # after one call to initialize, just use the move functions
     def initialize(self) :
@@ -157,6 +151,8 @@ class Carousel :
           if t == self.listFront : break
         print("End of List")
 
+    def getSelection(self) :
+        return self.listFront.getIndex()
     
 
 
@@ -207,9 +203,7 @@ class ScoreboardPicker(KeyHandler) :
     
     # open the selected scoreboard
     def processSelection(self) :
-        for option in self.options :
-            if option.isInFront () :
-                self.activeScreen = option.getScoreboard()
+        self.activeScreen = self.scoreboardTuples[self.options.getSelection()][ScoreboardPicker.INDEX_SCOREBOARD]
  
     def getBatch(self) :
         return self.batch
@@ -227,16 +221,16 @@ class ScoreboardPicker(KeyHandler) :
   
     def handle_A(self, modified = False) :
         if self.activeScreen == self :
-            self.options.rotateClockwise()
-            self.options.printList()
+            self.options.rotate(1)
+            #self.options.printList()
         else :
             self.activeScreen.handle_A(modified)
 
  
     def handle_D(self, modified = False) :
         if self.activeScreen == self :
-            self.options.rotateCounterClockwise()    
-            self.options.printList()      
+            self.options.rotate(-1)    
+            #self.options.printList()      
         else :
             self.activeScreen.handle_D(modified) 
 
