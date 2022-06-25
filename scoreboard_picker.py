@@ -11,11 +11,18 @@ class MenuLocationNode :
         self.location = location
         self.setFront(self)
         self.setBack(self) 
+        self.stagedIndex = MenuLocationNode.IS_EMPTY
         self.index = MenuLocationNode.IS_EMPTY
 
     def setIndex(self, index) :
         self.index = index
     
+    def setStagedIndex(self, staged) :
+        self.stagedIndex = staged
+    
+    def updateIndex(self) :
+        self.index = self.stagedIndex
+
     def getIndex(self) :
         return self.index
 
@@ -90,12 +97,14 @@ class Carousel :
         newNode.setBack(frontNode)
  
     def tracePath(self, t) :
+        index = t.getIndex()
         t = t.getFront()
         path = []  
         while True :
             path.append(t.getLocation())
             if not(t.isEmpty()) :
-                return (path, t.getIndex())
+                t.setStagedIndex(index)
+                return (path)
             t = t.getFront()
         
 
@@ -104,13 +113,21 @@ class Carousel :
         circumnavigated = False
         while not(circumnavigated) :
             if not(t.isEmpty()) : # found a location that has an index to an icon
-                pathList =  self.tracePath(t)
-                self.scoreboards[t.getIndex()][ScoreboardPicker.INDEX_ICON].moveTo(pathList[0])
-                t.setIndex(pathList[1])
-
+                path =  self.tracePath(t)
+                self.scoreboards[t.getIndex()][ScoreboardPicker.INDEX_ICON].moveTo(path)
             t = t.getFront()
             if t == self.listFront :
                 circumnavigated = True
+
+        circumnavigated = False
+        while not(circumnavigated) :
+            t.updateIndex()
+            t = t.getFront()
+            if t == self.listFront :
+                circumnavigated = True
+
+
+        
         
     def rotateClockwise(self) :
         0
