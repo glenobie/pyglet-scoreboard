@@ -8,16 +8,60 @@ class ScoreboardPicker(KeyHandler) :
     INDEX_SCOREBOARD = 1
     INDEX_ICON = 2
 
+    ICON_WIDTH = 122
+
+
     def __init__(self) :
         self.batch = pyglet.graphics.Batch()
         self.configScreen = ConfigScreen(self.batch)
- 
-        # will contain lists of (index into gameList, x, y, scale)
+
+        # center points for the icons
+        # This list contains duplicate items to fake a circular list
+        # the list locationData will index into this list but only to the first 
+        # half
+        self.controlPoints = ( (400, 240, 0.8),   # 0: front, center
+                               (200, 280, 0.6),   # 1: front, left of center
+                               (100, 320, 0.4),     # 2: front, just before apex
+                               (80, 330, 0.4),     # 3: left apex
+                               (100, 340, 0.35),    # 4: back, just after apex
+                               (260, 380, 0.3),    # 5: back, left of center
+                               (400, 400, 0.25),   # 6: back center
+                               (540, 380, 0.3),    # 7: back, right of center
+                               (700, 340, 0.35),   # 8: back, just before apex
+                               (720, 330, 0.4),    # 9: right apex
+                               (700, 320, 0.4),    # 10: right, front, just after apex
+                               (600, 280, 0.6),    # 11: front, right of center  
+                               (400, 240, 0.8),   # 0: repeated: front, center
+                               (200, 280, 0.6),   # 1: repeated: front, left of center
+                               (100, 320, 0.4),     # 2: repeated: front, just before apex
+                               (80, 330, 0.4),     # 3: repeated: left apex
+                               (100, 340, 0.35),    # 4: repeated: back, just after apex
+                               (260, 380, 0.3),    # 5: repeated: back, left of center
+                               (400, 400, 0.25),   # 6: repeated: back center
+                               (540, 380, 0.3),    # 7: repeated: back, right of center
+                               (700, 340, 0.35),   # 8: repeated: back, just before apex
+                               (720, 330, 0.4),    # 9: repeated: right apex
+                               (700, 320, 0.4),    # 10: repeated: right, front, just after apex
+                               (600, 280, 0.6),    # 11: repeated: front, right of center
+                               )
+
+
+
+        # will contain lists of (index into gameList, index into controlPoints)
         self.locationData = []
         self.handleEntry()
 
+        # in clockwise order
 
-   
+    def calculatePositions(self) :
+        self.locationData.append([0, 0])
+        self.locationData.append([1, 11])
+        self.locationData.append([2, 7])
+        self.locationData.append([3, 5])
+        self.locationData.append([4, 1])
+
+
+
     def handleEntry(self) :
         # (title for config screen, scoreboard, icon, FUTURE: FAC)
         self.scoreboardTuples = self.configScreen.getScoreboards()
@@ -25,12 +69,7 @@ class ScoreboardPicker(KeyHandler) :
         if len(self.scoreboardTuples) > 0 :
  
         # determine positions and scales based on number of games
-            self.locationData.append([0, 288, 140, 0.8])
-            self.locationData.append([4, 128, 180, 0.6])
-            
-            self.locationData.append([3, 268, 340, 0.2])
-            self.locationData.append([2, 488, 340, 0.2])
-            self.locationData.append([1, 488, 180, 0.6])
+            self.calculatePositions()
 
             self.initializeMenu()
             self.activeScreen = self
@@ -39,8 +78,9 @@ class ScoreboardPicker(KeyHandler) :
     
     def initializeMenu(self) :
         for t in self.locationData :
-            icon = self.scoreboardTuples[t[0]][ScoreboardPicker.INDEX_ICON].getSprite()
-            icon.update(x=t[1], y=t[2], scale=t[3] )
+            icon = self.scoreboardTuples[t[0]][ScoreboardPicker.INDEX_ICON]
+            location = self.controlPoints[t[1]]
+            icon.setCenterAndScale(location)
  
     # open the selected scoreboard
     def processSelection(self) :
@@ -60,10 +100,18 @@ class ScoreboardPicker(KeyHandler) :
         self.draw()
    
     def rotate(self, direction) :
-        for d in self.locationData :
-            g = (d.pop(0) + direction) % len(self.locationData)
-            d.insert(0, g)
-            self.scoreboardTuples[g][2].moveTo(d[1], d[2], d[3])
+        # TODO: use direction
+        for d in self.locationData : 
+            icon = self.scoreboardTuples[d[0]][ScoreboardPicker.INDEX_ICON]
+            # TODO: make this real
+            nextIndex = d[1] + 2
+
+            path = self.controlPoints[d[1]+1 : nextIndex ]
+            icon.moveTo(path)
+            d.pop(-1)
+            d.insert(1, nextIndex)
+            
+
 
    # keyboard event handlers
   
@@ -73,13 +121,7 @@ class ScoreboardPicker(KeyHandler) :
         else :
             self.activeScreen.handle_A(modified)
 
-    # TODO: Delete this
-    def handle_X(self, modified = False) :
-        if self.activeScreen == self :
-            self.scoreboardTuples[0][2].moveTo(0, 0)
-        else :
-            self.activeScreen.handle_Q(modified)
-
+ 
     def handle_D(self, modified = False) :
         if self.activeScreen == self :
             self.rotate(1)
