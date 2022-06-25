@@ -4,23 +4,160 @@ from pyglet import font
 from key_handler import KeyHandler
 from config_screen import ConfigScreen
 
+class MenuLocationNode :
+    IS_EMPTY = -1
+
+    def __init__(self, location) :
+        self.location = location
+        self.setFront(self)
+        self.setBack(self) 
+        self.index = MenuLocationNode.IS_EMPTY
+
+    def setIndex(self, index) :
+        self.index = index
+    
+    def getIndex(self) :
+        return self.index
+
+    def getLocation(self) :
+        return self.location
+
+    def isEmpty(self) :
+        return self.index <= MenuLocationNode.IS_EMPTY
+
+    def setFront(self, node) :
+        self.front = node
+    
+    def setBack(self, node) :
+        self.back = node
+
+    def getFront(self) :
+        return self.front
+
+    def getBack(self) :
+        return self.back
+
+class Carousel :
+    def __init__(self, controlPoints, scoreboards)  :
+        self.scoreboards = scoreboards
+        self.conotrlPoints = controlPoints
+        self.listFront = None
+        self.build()
+
+    def build(self) :
+        tempFront = None
+        for c in self.conotrlPoints :
+            newNode = MenuLocationNode(c)
+            if self.listFront is None :
+                self.listFront = newNode
+                tempFront = self.listFront
+            else :
+                self.insertInFrontOf(tempFront, newNode)
+                tempFront = newNode
+
+        self.backCenter = self.listFront
+        for i in range(0, len(self.conotrlPoints) // 2) :
+            self.backCenter = self.backCenter.getFront()
+        
+        size = len(self.scoreboards)
+        end = size - 1 # position of final item to be placed
+        if size > 0 :
+            self.listFront.setIndex(0)   
+        if size > 1 :
+            self.listFront.getBack().setIndex(1)
+        if size > 2 :
+            self.listFront.getFront().setIndex(2)
+        if size > 3 and size % 2 == 0 : #put end of list in center back, if even number of items
+            self.backCenter.setIndex(size-1)
+            end -= 1
+        if size > 6 :
+            self.listFront.getBack().getBack().setIndex(3)
+            self.listFront.getFront().getFront().setIndex(4)
+            self.scatterTheRemains(5, end, size) # inclusive
+        elif size == 5 :  # 4 or 5 items in list 
+            self.backCenter.getBack().setIndex(3)
+            self.backCenter.getFront().setIndex(4)
+    
+    # TODO: spread the remainder between back left and back right
+    def scatterTheRemains(self, start, end, size) :
+        0
+
+
+    def insertInFrontOf(self, frontNode, newNode) :
+        frontNode.getFront().setBack(newNode)
+        newNode.setFront(frontNode.getFront())
+        frontNode.setFront(newNode)
+        newNode.setBack(frontNode)
+ 
+    def tracePath(self, t) :
+        t = t.getFront()
+        path = []  
+        while True :
+            path.append(t.getLocation())
+            if not(t.isEmpty()) :
+                return (path, t.getIndex())
+            t = t.getFront()
+        
+
+    def rotateCounterClockwise(self) :
+        t = self.listFront
+        circumnavigated = False
+        while not(circumnavigated) :
+            if not(t.isEmpty()) : # found a location that has an index to an icon
+                pathList =  self.tracePath(t)
+                self.scoreboards[t.getIndex()][ScoreboardPicker.INDEX_ICON].moveTo(pathList[0])
+                t.setIndex(pathList[1])
+
+            t = t.getFront()
+            if t == self.listFront :
+                circumnavigated = True
+        
+    def rotateClockwise(self) :
+        0
+
+    def getScoreboard(self) :
+        return self.scoreboards[self.listFront][ScoreboardPicker.INDEX_SCOREBOARD]
+
+    # after one call to initialize, just use the move functions
+    def initialize(self) :
+        t = self.listFront
+        circumnavigated = False
+        if not(t is None) :
+            while not(circumnavigated) :
+                if not(t.isEmpty()) :
+                    self.scoreboards[t.getIndex()][ScoreboardPicker.INDEX_ICON].setCenterAndScale(t.getLocation())
+                t = t.getFront()
+                if t == self.listFront : 
+                    circumnavigated = True
+
+
+    def printList(self) :
+        t = self.listFront
+        print ("Start of List")
+        while True :
+          print(str(t.getIndex()) + " ")
+          t = t.getFront()
+          if t == self.listFront : break
+        print("End of List")
+
+    
+
+
 class ScoreboardPicker(KeyHandler) :
     INDEX_SCOREBOARD = 1
     INDEX_ICON = 2
 
     ICON_WIDTH = 122
 
-
     def __init__(self) :
         self.batch = pyglet.graphics.Batch()
         self.configScreen = ConfigScreen(self.batch)
 
         # center points for the icons
-        # This list contains duplicate items to fake a circular list
         # the list locationData will index into this list but only to the first 
         # half
-        self.controlPoints = ( (400, 240, 0.8),   # 0: front, center
-                               (200, 280, 0.6),   # 1: front, left of center
+        self.controlPoints = ( (400, 240, 0.9),   # 0: front, center
+                               (220, 280, 0.6),   # 1: front, left of center
                                (100, 320, 0.4),     # 2: front, just before apex
                                (80, 330, 0.4),     # 3: left apex
                                (100, 340, 0.35),    # 4: back, just after apex
@@ -30,63 +167,32 @@ class ScoreboardPicker(KeyHandler) :
                                (700, 340, 0.35),   # 8: back, just before apex
                                (720, 330, 0.4),    # 9: right apex
                                (700, 320, 0.4),    # 10: right, front, just after apex
-                               (600, 280, 0.6),    # 11: front, right of center  
-                               (400, 240, 0.8),   # 0: repeated: front, center
-                               (200, 280, 0.6),   # 1: repeated: front, left of center
-                               (100, 320, 0.4),     # 2: repeated: front, just before apex
-                               (80, 330, 0.4),     # 3: repeated: left apex
-                               (100, 340, 0.35),    # 4: repeated: back, just after apex
-                               (260, 380, 0.3),    # 5: repeated: back, left of center
-                               (400, 400, 0.25),   # 6: repeated: back center
-                               (540, 380, 0.3),    # 7: repeated: back, right of center
-                               (700, 340, 0.35),   # 8: repeated: back, just before apex
-                               (720, 330, 0.4),    # 9: repeated: right apex
-                               (700, 320, 0.4),    # 10: repeated: right, front, just after apex
-                               (600, 280, 0.6),    # 11: repeated: front, right of center
+                               (580, 280, 0.6),    # 11: front, right of center
                                )
 
-
-
         # will contain lists of (index into gameList, index into controlPoints)
-        self.locationData = []
         self.handleEntry()
 
-        # in clockwise order
-
-    def calculatePositions(self) :
-        self.locationData.append([0, 0])
-        self.locationData.append([1, 11])
-        self.locationData.append([2, 7])
-        self.locationData.append([3, 5])
-        self.locationData.append([4, 1])
-
-
+        
 
     def handleEntry(self) :
         # (title for config screen, scoreboard, icon, FUTURE: FAC)
         self.scoreboardTuples = self.configScreen.getScoreboards()
-        # only start the picker if there are games to pick from. Otherwise, start config screen
-        if len(self.scoreboardTuples) > 0 :
- 
-        # determine positions and scales based on number of games
-            self.calculatePositions()
+        self.options = Carousel(self.controlPoints, self.scoreboardTuples)
+        self.options.initialize()
 
-            self.initializeMenu()
+        self.options.printList()
+
+        if len(self.scoreboardTuples) > 0 :
             self.activeScreen = self
         else :
             self.activeScreen = self.configScreen
     
-    def initializeMenu(self) :
-        for t in self.locationData :
-            icon = self.scoreboardTuples[t[0]][ScoreboardPicker.INDEX_ICON]
-            location = self.controlPoints[t[1]]
-            icon.setCenterAndScale(location)
- 
     # open the selected scoreboard
     def processSelection(self) :
-         #self.activeScreen = self.scoreboardTuples[self.selectedOption][ScoreboardPicker.INDEX_SCOREBOARD]
-         # load scoreboard at position 1
-         0
+        for option in self.options :
+            if option.isInFront () :
+                self.activeScreen = option.getScoreboard()
  
     def getBatch(self) :
         return self.batch
@@ -99,32 +205,21 @@ class ScoreboardPicker(KeyHandler) :
             t[2].update(dt)
         self.draw()
    
-    def rotate(self, direction) :
-        # TODO: use direction
-        for d in self.locationData : 
-            icon = self.scoreboardTuples[d[0]][ScoreboardPicker.INDEX_ICON]
-            # TODO: make this real
-            nextIndex = d[1] + 2
-
-            path = self.controlPoints[d[1]+1 : nextIndex ]
-            icon.moveTo(path)
-            d.pop(-1)
-            d.insert(1, nextIndex)
-            
-
-
+ 
    # keyboard event handlers
   
     def handle_A(self, modified = False) :
         if self.activeScreen == self :
-            self.rotate(-1)
+            self.options.rotateClockwise()
+            self.options.printList()
         else :
             self.activeScreen.handle_A(modified)
 
  
     def handle_D(self, modified = False) :
         if self.activeScreen == self :
-            self.rotate(1)
+            self.options.rotateCounterClockwise()    
+            self.options.printList()      
         else :
             self.activeScreen.handle_D(modified) 
 
