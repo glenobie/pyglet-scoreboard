@@ -28,13 +28,13 @@ class ScoreboardIconSprite :
         self.icon = pyglet.sprite.Sprite(image, batch=batch)
         self.speed = 20
         self.scale_speed = 4
-        
         self.moving = False
 
-    def setCenterAndScale(self, tuple) :
+    def setCenterAndScale(self, tuple, group) :
         self.icon.scale = tuple[2]
         self.icon.x = tuple[0] - self.icon.width / 2
         self.icon.y = tuple[1] - self.icon.height / 2
+        self.icon.group = group        
 
     def setPath(self, path) :
         self.path = path
@@ -50,14 +50,16 @@ class ScoreboardIconSprite :
 
     # path is a list of location tuples (x, y, scale) where (x,y) is center
     # last element of path is final destination
-    def moveTo(self, path) :
+    def moveTo(self, path, group) :
         self.pathIndex = 0
         self.path = path
         self.currentDest = self.path[self.pathIndex]
         self.moving = True
+        self.group = group
 
     def getDistance(self, dest_x, dest_y) :
         return math.sqrt((self.centerX() - dest_x) ** 2 + (self.centerY() - dest_y) ** 2)
+
 
     def update(self, dt) :
         if self.moving :
@@ -71,12 +73,12 @@ class ScoreboardIconSprite :
             change_x = math.cos(angle) * speed
             change_y = math.sin(angle) * speed
             change_scale =  scale_d / self.scale_speed
-            self.setCenterAndScale((self.centerX()+change_x, self.centerY() + change_y, self.icon.scale + change_scale))
+            self.setCenterAndScale((self.centerX()+change_x, self.centerY() + change_y, self.icon.scale + change_scale), self.group)
             distance = self.getDistance(self.currentDest[0], self.currentDest[1]) 
 
             # close enough?
             if distance <= self.speed:
-                self.setCenterAndScale(self.path[self.pathIndex])
+                self.setCenterAndScale(self.path[self.pathIndex], self.group)
                 self.pathIndex += 1
                 if (self.pathIndex >= len(self.path)) :
                     self.moving= False

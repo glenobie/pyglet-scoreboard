@@ -1,21 +1,45 @@
-APBA Baseball
-baseball
-BaseballScoreboard
-APBA.png
-Statis-Pro Baseball
-baseball
-BaseballScoreboard
-statis-pro.png
+International Cricket
+cricket
+CricketScoreboard
+cricket.png
+History Maker Golf
+golf
+GolfScoreboard
+hmg.png
 Payoff Pitch
 baseball
 BaseballScoreboard
-payoff_pitch.png
+payoff-pitch.png
+Second Season
+football
+FootballScoreboard
+second-season.png
+Inside Blitz
+football
+FootballScoreboard
+inside-blitz.png
 Inside Pitch
 baseball
 BaseballScoreboard
-inside_pitch.png
+inside-pitch.png
+Cold Snap
+football
+CFLScoreboard
+cold-snap.png
+APBA Baseball
+baseball
+BaseballScoreboard
+apba_baseball.png
+Statis-Pro Baseball
+baseball
+BaseballScoreboard
+statis-pro-baseball.png
 History Maker Baseball
 baseball
 BaseballScoreboard
 hmb.png
+Legends of Boxing
+boxing
+BoxingScoreboard
+legends_of_boxing.png
 EOF

@@ -44,12 +44,16 @@ class MenuLocationNode :
     def getBack(self) :
         return self.back
 
+################################################
 class Carousel :
     def __init__(self, controlPoints, scoreboards)  :
         self.scoreboards = scoreboards
         self.conotrlPoints = controlPoints
         self.listFront = None
         self.build()
+        self.bg = pyglet.graphics.OrderedGroup(0)
+        self.fg = pyglet.graphics.OrderedGroup(1)
+        self.bg_group_y = 330 # icons above this are background
 
     def build(self) :
         tempFront = None
@@ -77,7 +81,7 @@ class Carousel :
         if size > 3 and size % 2 == 0 : #put end of list in center back, if even number of items
             self.backCenter.setIndex(size-1)
             end -= 1
-        if size > 6 : # add 3 and 4 to the 'front'
+        if size > 5 : # add 3 and 4 to the 'front'
             self.listFront.getBack().getBack().setIndex(3)
             self.listFront.getFront().getFront().setIndex(4)
             
@@ -86,7 +90,7 @@ class Carousel :
 
             # find range to add to each side
             # left range is 5 to  5 + number of items/2 - 1
-            numPerSide = (end - 5) / 2
+            numPerSide = (end - 5) // 2
             leftmostNode = self.backCenter.getBack().getBack()
             rightmostNode = self.backCenter.getFront().getFront()
             self.scatterRemains(5, 5 + numPerSide - 1, leftmostNode, self.backCenter) 
@@ -110,7 +114,7 @@ class Carousel :
         if (endIndex - startIndex) > 0 : 
             self.createNewNode(leftNode, gapNode)   
             self.createNewNode(gapNode, rightNode)
-            nodesPerSide = (1 + endIndex - startIndex ) / 2
+            nodesPerSide = (1 + endIndex - startIndex ) // 2
             self.scatterRemains(startIndex, startIndex + nodesPerSide - 1, leftNode, gapNode)
             self.scatterRemains(startIndex + nodesPerSide, endIndex, gapNode, rightNode)
 
@@ -124,9 +128,9 @@ class Carousel :
         
     # average position and scale between two points
     def calculateLocation(self, leftLoc, rightLoc) :
-        x = (rightLoc[0] - leftLoc[0]) / 2
-        y = (rightLoc[1] - leftLoc[1]) / 2
-        s = (rightLoc[2] - leftLoc[2]) / 2
+        x = leftLoc[0] + (rightLoc[0] - leftLoc[0]) / 2 
+        y = leftLoc[1] + (rightLoc[1] - leftLoc[1]) / 2
+        s = leftLoc[2] + (rightLoc[2] - leftLoc[2]) / 2
         return (x, y, s)
 
     def insertInFrontOf(self, frontNode, newNode) :
@@ -154,7 +158,8 @@ class Carousel :
         while not(circumnavigated) :
             if not(t.isEmpty()) : # found a location that has an index to an icon
                 path =  self.tracePath(t, traceFunc)
-                self.scoreboards[t.getIndex()][ScoreboardPicker.INDEX_ICON].moveTo(path)
+                group = self.bg if path[len(path)-1][1] > self.bg_group_y else self.fg
+                self.scoreboards[t.getIndex()][ScoreboardPicker.INDEX_ICON].moveTo(path, group)
             t = t.getFront()
             if t == self.listFront :
                 circumnavigated = True
@@ -170,11 +175,12 @@ class Carousel :
     # after one call to initialize, just use the move functions
     def initialize(self) :
         t = self.listFront
-        circumnavigated = False
+        circumnavigated = False 
         if not(t is None) :
             while not(circumnavigated) :
                 if not(t.isEmpty()) :
-                    self.scoreboards[t.getIndex()][ScoreboardPicker.INDEX_ICON].setCenterAndScale(t.getLocation())
+                    group = self.bg if t.getLocation()[1] > self.bg_group_y else self.fg
+                    self.scoreboards[t.getIndex()][ScoreboardPicker.INDEX_ICON].setCenterAndScale(t.getLocation(), group)
                 t = t.getFront()
                 if t == self.listFront : 
                     circumnavigated = True
@@ -193,7 +199,7 @@ class Carousel :
         return self.listFront.getIndex()
     
 
-
+####################################################################
 class ScoreboardPicker(KeyHandler) :
     INDEX_SCOREBOARD = 1
     INDEX_ICON = 2
@@ -208,7 +214,7 @@ class ScoreboardPicker(KeyHandler) :
 
         self.controlPoints = ( (400, 240, 0.9),   # 0: front, center
                                (220, 260, 0.6),   # 1: front, left of center
-                               (100, 320, 0.4),     # 2: front, just before apex
+                               (100, 300, 0.4),     # 2: front, just before apex
                                (80, 330, 0.4),     # 3: left apex
                                (100, 340, 0.35),    # 4: back, just after apex
                                (260, 380, 0.3),    # 5: back, left of center
@@ -216,7 +222,7 @@ class ScoreboardPicker(KeyHandler) :
                                (540, 380, 0.3),    # 7: back, right of center
                                (700, 340, 0.35),   # 8: back, just before apex
                                (720, 330, 0.4),    # 9: right apex
-                               (700, 320, 0.4),    # 10: right, front, just after apex
+                               (700, 300, 0.4),    # 10: right, front, just after apex
                                (580, 260, 0.6),    # 11: front, right of center
                                )
 
@@ -330,7 +336,6 @@ def on_draw():
 ##########################################################
 
 font.add_directory('.') 
-font.add_file('sports.otf') 
 picker = ScoreboardPicker()
 pyglet.clock.schedule_interval(picker.update, 1/30.0)
 pyglet.app.run()
