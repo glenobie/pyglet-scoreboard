@@ -25,12 +25,20 @@ class ScoreboardIconSprite :
         self.speed = 20
         self.scale_speed = 4
         self.moving = False
+        self.icon.x = 300
+        self.icon.y = 200
 
-    def setCenterAndScale(self, tuple, group) :
+    def setVisible(self, value) :
+        self.icon.visible = value
+
+    def setCenterAndScale(self, tuple) :
         self.icon.scale = tuple[2]
         self.icon.x = tuple[0] - self.icon.width / 2
         self.icon.y = tuple[1] - self.icon.height / 2
-        self.icon.group = group        
+
+        # larger scales are drawn in front of smaller scales so use scale to create groups
+        groupNum = math.floor(self.icon.scale * 1000000000) 
+        self.icon.group = pyglet.graphics.OrderedGroup(groupNum)
 
     def setPath(self, path) :
         self.path = path
@@ -46,12 +54,11 @@ class ScoreboardIconSprite :
 
     # path is a list of location tuples (x, y, scale) where (x,y) is center
     # last element of path is final destination
-    def moveTo(self, path, group) :
+    def moveTo(self, path) :
         self.pathIndex = 0
         self.path = path
         self.currentDest = self.path[self.pathIndex]
         self.moving = True
-        self.group = group
 
     def getDistance(self, dest_x, dest_y) :
         return math.sqrt((self.centerX() - dest_x) ** 2 + (self.centerY() - dest_y) ** 2)
@@ -69,17 +76,19 @@ class ScoreboardIconSprite :
             change_x = math.cos(angle) * speed
             change_y = math.sin(angle) * speed
             change_scale =  scale_d / self.scale_speed
-            self.setCenterAndScale((self.centerX()+change_x, self.centerY() + change_y, self.icon.scale + change_scale), self.group)
+            self.setCenterAndScale((self.centerX()+change_x, self.centerY() + change_y, self.icon.scale + change_scale))
             distance = self.getDistance(self.currentDest[0], self.currentDest[1]) 
 
             # close enough?
             if distance <= self.speed:
-                self.setCenterAndScale(self.path[self.pathIndex], self.group)
+                self.setCenterAndScale(self.path[self.pathIndex])
                 self.pathIndex += 1
                 if (self.pathIndex >= len(self.path)) :
                     self.moving= False
                 else :
                     self.currentDest = self.path[self.pathIndex]
+
+
 
 
 ########################################
@@ -228,7 +237,7 @@ class ConfigScreen(KeyHandler) :
 
     LINES_PER_GAME = 4
     END_OF_FILE = 'EOF'
-    ALL_GAMES_FILE = 'games-w-icons.txt'
+    ALL_GAMES_FILE = 'games.txt'
     CHOSEN_GAMES_FILE = 'config.txt'
     ICON_DIR = 'icons'
 

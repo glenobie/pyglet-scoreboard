@@ -1,103 +1,65 @@
-Cold Snap
-football
-CFLScoreboard
-y
-Go Go Sports
-COLD SNAP
-Hockey Blast
-hockey
-HockeyScoreboard
-l
-Go Go Sports
-HOCKEY BLAST
 Inside Pitch
 baseball
 BaseballScoreboard
-e
-Go Go Sports
-INSIDE PITCH
-Second Season
-football
-FootballScoreboard
-y
-Go Go Sports
-FOOTBALL
-Inside the Paint
-basketball
-BasketballScoreboard
-P
-Go Go Sports
-BASKETBALL
-Legends of Boxing
-boxing
-BoxingScoreboard
-L
-Go Go Sports
-BOXING
-International Cricket
-cricket
-CricketScoreboard
-2
-England
-CRICKET
-Centre Court Tennis
-tennis
-TennisScoreboard
-v
-Go Go Sports
-TENNIS
-Bowl-O-Rama
-bowling
-BowlingScoreboard
-A
-Go Go Sports
-BOWLING
-History Maker Golf
-golf
-GolfScoreboard
-B
-Go Go Sports
-GOLF
+inside-pitch.png
 Payoff Pitch
 baseball
 BaseballScoreboard
-e
-Go Go Sports
-PAYOFF PITCH
-History Maker Baseball
-baseball
-BaseballScoreboard
-e
-Go Go Sports
-HMB
-APBA Baseball
-baseball
-BaseballScoreboard
-e
-Go Go Sports
-APBA Baseball
-Strat-o-matic Baseball
-baseball
-BaseballScoreboard
-e
-Go Go Sports
-Strat-o-matic Baseball
+payoff-pitch.png
 Statis-Pro Baseball
 baseball
 BaseballScoreboard
-e
-Go Go Sports
-STATIS-PRO BASEBALL
-Dugout Steps Baseball
+statis-pro-baseball.png
+APBA Baseball
 baseball
 BaseballScoreboard
-e
-Go Go Sports
-DUGOUT STEPS
-Fall Classic Baseball
+apba_baseball.png
+History Maker Baseball
 baseball
 BaseballScoreboard
-e
-Go Go Sports
-FALL CLASSIC
+hmb.png
+Cold Snap
+football
+CFLScoreboard
+cold-snap.png
+Second Season
+football
+FootballScoreboard
+second-season.png
+Inside Blitz
+football
+FootballScoreboard
+inside-blitz.png
+Legends of Boxing
+boxing
+BoxingScoreboard
+legends_of_boxing.png
+International Cricket
+cricket
+CricketScoreboard
+cricket.png
+History Maker Golf
+golf
+GolfScoreboard
+hmg.png
+Inside the Crease
+hockey
+HockeyScoreboard
+inside-crease.png
+Hockey Blast
+hockey
+HockeyScoreboard
+hockey_blast.png
+Bowl-O-Rama
+bowling
+BowlingScoreboard
+bowl-o-rama.png
+Inside the Paint
+basketball
+BasketballScoreboard
+inside-paint.png
+Centre Court Tennis
+tennis
+TennisScoreboard
+centre-court.png
 EOF

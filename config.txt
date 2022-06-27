@@ -1,11 +1,11 @@
-History Maker Golf
-golf
-GolfScoreboard
-hmg.png
-International Cricket
-cricket
-CricketScoreboard
-cricket.png
+Hockey Blast
+hockey
+HockeyScoreboard
+hockey_blast.png
+APBA Baseball
+baseball
+BaseballScoreboard
+apba_baseball.png
 Second Season
 football
 FootballScoreboard
@@ -14,6 +14,34 @@ Inside Blitz
 football
 FootballScoreboard
 inside-blitz.png
+History Maker Golf
+golf
+GolfScoreboard
+hmg.png
+Inside the Crease
+hockey
+HockeyScoreboard
+inside-crease.png
+Centre Court Tennis
+tennis
+TennisScoreboard
+centre-court.png
+Bowl-O-Rama
+bowling
+BowlingScoreboard
+bowl-o-rama.png
+Inside the Paint
+basketball
+BasketballScoreboard
+inside-paint.png
+Payoff Pitch
+baseball
+BaseballScoreboard
+payoff-pitch.png
+International Cricket
+cricket
+CricketScoreboard
+cricket.png
 Inside Pitch
 baseball
 BaseballScoreboard

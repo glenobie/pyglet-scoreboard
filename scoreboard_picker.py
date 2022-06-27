@@ -4,6 +4,8 @@ from pyglet import font
 from key_handler import KeyHandler
 from config_screen import ConfigScreen
 from fast_action_window import FastActionWindow
+import sys
+
 
 class MenuLocationNode :
     IS_EMPTY = -1
@@ -45,6 +47,7 @@ class MenuLocationNode :
     def getBack(self) :
         return self.back
 
+
 ################################################
 class Carousel :
     def __init__(self, controlPoints, scoreboards)  :
@@ -52,9 +55,6 @@ class Carousel :
         self.conotrlPoints = controlPoints
         self.listFront = None
         self.build()
-        self.bg = pyglet.graphics.OrderedGroup(0)
-        self.fg = pyglet.graphics.OrderedGroup(1)
-        self.bg_group_y = 330 # icons above this are background
 
     def build(self) :
         tempFront = None
@@ -71,6 +71,9 @@ class Carousel :
         for i in range(0, len(self.conotrlPoints) // 2) :
             self.backCenter = self.backCenter.getFront()
         
+
+        # assign index into icon list to each node 
+        # and add more nodes if needed
         size = len(self.scoreboards)
         end = size # position of final item to be placed
         if size > 0 :
@@ -125,7 +128,9 @@ class Carousel :
         location = self.calculateLocation(leftNode.getLocation(), rightNode.getLocation())
         newNode = MenuLocationNode(location)
         self.insertInFrontOf(leftNode, newNode)
-        
+
+    def calculateGroup(self, leftGroup, rightGroup) :
+        return leftGroup + (rightGroup - leftGroup) // 2
         
     # average position and scale between two points
     def calculateLocation(self, leftLoc, rightLoc) :
@@ -159,8 +164,7 @@ class Carousel :
         while not(circumnavigated) :
             if not(t.isEmpty()) : # found a location that has an index to an icon
                 path =  self.tracePath(t, traceFunc)
-                group = self.bg if path[len(path)-1][1] > self.bg_group_y else self.fg
-                self.scoreboards[t.getIndex()][ScoreboardPicker.INDEX_ICON].moveTo(path, group)
+                self.scoreboards[t.getIndex()][ScoreboardPicker.INDEX_ICON].moveTo(path)
             t = t.getFront()
             if t == self.listFront :
                 circumnavigated = True
@@ -180,13 +184,16 @@ class Carousel :
         if not(t is None) :
             while not(circumnavigated) :
                 if not(t.isEmpty()) :
-                    group = self.bg if t.getLocation()[1] > self.bg_group_y else self.fg
-                    self.scoreboards[t.getIndex()][ScoreboardPicker.INDEX_ICON].setCenterAndScale(t.getLocation(), group)
+                    icon = self.scoreboards[t.getIndex()][ScoreboardPicker.INDEX_ICON]
+                    path = []
+                    path.append(t.getLocation())
+                    icon.moveTo(path)
                 t = t.getFront()
                 if t == self.listFront : 
                     circumnavigated = True
 
 
+    # debugging help
     def printList(self) :
         t = self.listFront
         print ("Start of List")
@@ -198,6 +205,8 @@ class Carousel :
 
     def getSelection(self) :
         return self.listFront.getIndex()
+
+    
     
 
 ####################################################################
@@ -215,32 +224,33 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
 
         self.controlPoints = ( (400, 240, 0.9),   # 0: front, center
                                (220, 260, 0.6),   # 1: front, left of center
-                               (100, 300, 0.4),     # 2: front, just before apex
+                               (100, 300, 0.44),     # 2: front, just before apex
                                (80, 330, 0.4),     # 3: left apex
                                (100, 340, 0.35),    # 4: back, just after apex
-                               (260, 380, 0.3),    # 5: back, left of center
+                               (280, 380, 0.3),    # 5: back, left of center
                                (400, 400, 0.20),   # 6: back center
-                               (540, 380, 0.3),    # 7: back, right of center
+                               (520, 380, 0.3),    # 7: back, right of center
                                (700, 340, 0.35),   # 8: back, just before apex
                                (720, 330, 0.4),    # 9: right apex
-                               (700, 300, 0.4),    # 10: right, front, just after apex
+                               (700, 300, 0.44),    # 10: right, front, just after apex
                                (580, 260, 0.6),    # 11: front, right of center
                                )
 
         self.handleEntry()
 
-        
+
+
 
     def handleEntry(self) :
         # (title for config screen, scoreboard, icon, FUTURE: FAC)
         self.scoreboardTuples = self.configScreen.getScoreboards()
+
         self.options = Carousel(self.controlPoints, self.scoreboardTuples)
         self.options.initialize()
-
-        self.options.printList()
-
+        
         if len(self.scoreboardTuples) > 0 :
             self.activeScreen = self
+
         else :
             self.activeScreen = self.configScreen
     
@@ -299,8 +309,7 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
             self.close()
 
     def handle_P(self, modified=False) :
-        f = FastActionWindow(400,400)
-
+        f = FastActionWindow(800,480)
 
     def on_key_press(self, symbol, modifiers):
         if symbol == pyglet.window.key.D :

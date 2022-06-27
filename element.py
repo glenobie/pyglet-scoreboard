@@ -336,7 +336,7 @@ class ClockElement(ScoreboardElement) :
             self.label.anchor_y = 'top'
     
             self.label.position = (x, y)
-            y = y - self.labelHeight - ScoreboardElement.VERTICAL_SPACING
+            y = y - self.label.content_height - ScoreboardElement.VERTICAL_SPACING
 
         x = x - totalWidth // 2
             
