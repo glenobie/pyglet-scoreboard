@@ -1,8 +1,3 @@
-from curses import start_color
-from pydoc import doc
-from re import L
-from telnetlib import GA
-from xmlrpc.server import DocXMLRPCRequestHandler
 import pyglet
 from pyglet import resource
 from pyglet import shapes
@@ -22,6 +17,7 @@ def listDifference(list1, list2) :
         i = i + 1
     return result
     
+###############################
 class ScoreboardIconSprite :
     def __init__(self, dir, imageFile, batch):
         image = pyglet.image.load(dir + '/' + imageFile)
@@ -84,45 +80,7 @@ class ScoreboardIconSprite :
                     self.moving= False
                 else :
                     self.currentDest = self.path[self.pathIndex]
-                  
 
-    
-
-
-#############################
-# Ultimately this will become a sprite
-class ScoreboardIcon:
-
-    VERTICAL_SPACING = -24
-    TEXT_FONT = 'Built Titling'
-    SELECTED_COLOR = (255,255,255,255) #white
-    DEFAULT_COLOR = (255,255,255,40) #white, opaque
-    DINGBAT_SIZE = 80
-    TEXT_SIZE = 28
-
-    def __init__(self, dingbatChar, dingbatFont, titleText, batch):
-        self.dingbat = pyglet.text.Label(text=dingbatChar, font_name=dingbatFont, 
-                        font_size=ScoreboardIcon.DINGBAT_SIZE, color=ScoreboardIcon.DEFAULT_COLOR, batch=batch)
-        self.title = pyglet.text.Label(text=titleText, font_name=ScoreboardIcon.TEXT_FONT, 
-                        font_size=ScoreboardIcon.TEXT_SIZE, color=ScoreboardIcon.DEFAULT_COLOR, batch=batch)
- 
-    def setCenterTop(self, x, y) :
-        self.dingbat.anchor_x = 'center'
-        self.dingbat.anchor_y = 'top'
-        self.dingbat.position = (x, y)
-
-        self.title.anchor_x = 'center'
-        self.title.anchor_y = 'top'
-        self.title.position = (x, y - self.dingbat.content_height - ScoreboardIcon.VERTICAL_SPACING)
-
-    def setSelected(self, isSelected) :
-        self.isSelected = isSelected
-        if self.isSelected :
-            c = ScoreboardIcon.SELECTED_COLOR
-        else :
-            c = ScoreboardIcon.DEFAULT_COLOR
-        self.dingbat.color = c
-        self.title.color = c
 
 ########################################
 class GameList() :

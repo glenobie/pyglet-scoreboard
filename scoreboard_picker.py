@@ -3,6 +3,7 @@ import pyglet
 from pyglet import font
 from key_handler import KeyHandler
 from config_screen import ConfigScreen
+from fast_action_window import FastActionWindow
 
 class MenuLocationNode :
     IS_EMPTY = -1
@@ -200,13 +201,13 @@ class Carousel :
     
 
 ####################################################################
-class ScoreboardPicker(KeyHandler) :
+class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
     INDEX_SCOREBOARD = 1
     INDEX_ICON = 2
 
-    ICON_WIDTH = 122
-
-    def __init__(self) :
+    def __init__(self, width, height, fullscreen = False) :
+        pyglet.window.Window.__init__(self, width, height, fullscreen=fullscreen)
+        font.add_directory('.') 
         self.batch = pyglet.graphics.Batch()
         self.configScreen = ConfigScreen(self.batch)
 
@@ -218,7 +219,7 @@ class ScoreboardPicker(KeyHandler) :
                                (80, 330, 0.4),     # 3: left apex
                                (100, 340, 0.35),    # 4: back, just after apex
                                (260, 380, 0.3),    # 5: back, left of center
-                               (400, 400, 0.25),   # 6: back center
+                               (400, 400, 0.20),   # 6: back center
                                (540, 380, 0.3),    # 7: back, right of center
                                (700, 340, 0.35),   # 8: back, just before apex
                                (720, 330, 0.4),    # 9: right apex
@@ -250,13 +251,14 @@ class ScoreboardPicker(KeyHandler) :
     def getBatch(self) :
         return self.batch
 
-    def draw(self) :
+    def on_draw(self) :
+        self.clear()
         self.activeScreen.getBatch().draw()
  
     def update(self, dt) :
         for t in self.scoreboardTuples :
             t[2].update(dt)
-        self.draw()
+        self.activeScreen.getBatch().draw()
    
  
    # keyboard event handlers
@@ -294,48 +296,37 @@ class ScoreboardPicker(KeyHandler) :
 
     def handle_C(self, modified=False) :
         if modified :
-            window.close()
+            self.close()
+
+    def handle_P(self, modified=False) :
+        f = FastActionWindow(400,400)
+
+
+    def on_key_press(self, symbol, modifiers):
+        if symbol == pyglet.window.key.D :
+            self.activeScreen.handle_D(modifiers & pyglet.window.key.LSHIFT)
+        elif symbol == pyglet.window.key.A :
+            self.activeScreen.handle_A(modifiers & pyglet.window.key.LSHIFT)
+        elif symbol == pyglet.window.key.S : #special case
+            self.handle_S(modifiers & pyglet.window.key.LSHIFT)
+        elif symbol == pyglet.window.key.Z :
+            self.activeScreen.handle_Z(modifiers & pyglet.window.key.LSHIFT)
+        elif symbol == pyglet.window.key.C :
+            self.activeScreen.handle_C(modifiers & pyglet.window.key.LSHIFT)
+        elif symbol == pyglet.window.key.X :
+            self.activeScreen.handle_X(modifiers & pyglet.window.key.LSHIFT)
+        elif symbol == pyglet.window.key.Q :
+            self.activeScreen.handle_Q(modifiers & pyglet.window.key.LSHIFT)
+        elif symbol == pyglet.window.key.E :
+            self.activeScreen.handle_E(modifiers & pyglet.window.key.LSHIFT)
+        elif symbol == pyglet.window.key.P :
+            self.activeScreen.handle_P(modifiers & pyglet.window.key.LSHIFT)
 
 
 ##################################################
 # start me up!
 
-# Make full screen on Raspberry Pi as long as its hostname = raspberrypi
 isPi = socket.gethostname() == "raspberrypi"
-window = pyglet.window.Window(800, 480, fullscreen=isPi)
-
-
-#####################################################################
-# Pyglet Window Events
-
-@window.event
-def on_key_press(symbol, modifiers):
-    if symbol == pyglet.window.key.D :
-        picker.activeScreen.handle_D(modifiers & pyglet.window.key.LSHIFT)
-    elif symbol == pyglet.window.key.A :
-        picker.activeScreen.handle_A(modifiers & pyglet.window.key.LSHIFT)
-    elif symbol == pyglet.window.key.S : #special case
-        picker.handle_S(modifiers & pyglet.window.key.LSHIFT)
-    elif symbol == pyglet.window.key.Z :
-        picker.activeScreen.handle_Z(modifiers & pyglet.window.key.LSHIFT)
-    elif symbol == pyglet.window.key.C :
-        picker.activeScreen.handle_C(modifiers & pyglet.window.key.LSHIFT)
-    elif symbol == pyglet.window.key.X :
-        picker.activeScreen.handle_X(modifiers & pyglet.window.key.LSHIFT)
-    elif symbol == pyglet.window.key.Q :
-        picker.activeScreen.handle_Q(modifiers & pyglet.window.key.LSHIFT)
-    elif symbol == pyglet.window.key.E :
-        picker.activeScreen.handle_E(modifiers & pyglet.window.key.LSHIFT)
-
-
-@window.event
-def on_draw():
-    window.clear()    
-    picker.draw()
-
-##########################################################
-
-font.add_directory('.') 
-picker = ScoreboardPicker()
+picker = ScoreboardPicker(800, 480, fullscreen=isPi)
 pyglet.clock.schedule_interval(picker.update, 1/30.0)
 pyglet.app.run()

@@ -1,4 +1,5 @@
 from curses.ascii import NUL
+from re import L
 from weakref import getweakrefcount
 from scoreboard import Scoreboard
 from element import ScoreboardElement
@@ -60,6 +61,9 @@ class Golfer() :
 
     def incrementHole(self) :
         self.hole += 1
+
+    def decrementHole(self) :
+        self.hole -= 1
     
         
 class GolfGameState(GameState) :
@@ -97,6 +101,10 @@ class GolfGameState(GameState) :
     def incrementHoles(self) :
         for g in self.golfers :
             g.incrementHole()
+
+    def decrementHoles(self) :
+        for g in self.golfers :
+            g.decrementHole()
 
     def getGolfer(self, id) :
         for g in self.golfers :
@@ -319,7 +327,10 @@ class GolfScoreboard(Scoreboard) :
         self.updateElements()
 
     def handle_X(self, modified=False) :
-        self.state.incrementHoles()
+        if modified :
+            self.state.decrementHoles()
+        else :
+            self.state.incrementHoles()
         self.updateElements()
 
     def handle_S(self, modified=False) :
