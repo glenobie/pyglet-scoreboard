@@ -2,8 +2,8 @@ Inside Pitch
 baseball
 BaseballScoreboard
 inside-pitch.png
-hmg_FAC
-HistoryMakerGolfSet
+inside_pitch_FAC
+InsidePitchSet
 Payoff Pitch
 baseball
 BaseballScoreboard

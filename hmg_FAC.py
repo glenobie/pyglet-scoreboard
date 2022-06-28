@@ -31,7 +31,7 @@ class HistoryMakerGolfSet() :
         d.append(self.decider)
         self.deciderSet = DiceSet(d, self.batch)
         self.deciderSet.setTitle('Decision #' + str(self.decisionNumber) + ':  ')
-        self.deciderSet.setPosition(400,400, 20)
+        self.deciderSet.setPosition(470,400, 20)
 
         for d in dice :
             d.scale(0.6)
@@ -43,6 +43,7 @@ class HistoryMakerGolfSet() :
         d.append(self.white.makeClone())
         self.controlSet = DiceSet(d, self.batch)
         self.controlSet.attachValueLabel((6, 'Go For It?'))
+        self.controlSet.attachValueLabel((4, 'Extra Control?'))
         self.controlSet.setPosition(40, 400, 30)
     
         d = []

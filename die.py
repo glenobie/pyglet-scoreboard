@@ -25,13 +25,14 @@ class Die :
         self.value = 1
         self.dieLabels = []
         self.colorConditions = []
+        self.center = (0,0)
 
         self.baseTextSize = Die.TEXT_SIZE
         self.interiorSpacingPct = Die.INTERIOR_SPACING_PCT
 
         self.border = pyglet.shapes.BorderedRectangle(0, 0, Die.WIDTH, Die.HEIGHT, 1, 
                             border_color = (255,255,255), color=color, batch=self.batch, group = self.bg)
-        self.document = pyglet.text.document.UnformattedDocument(str(self.getValue()) )
+        self.document = pyglet.text.document.UnformattedDocument(str(self.sides) )
         self.document.set_style(0, len(self.document.text), dict( dict(font_name = Die.FONT,  font_size = self.baseTextSize, color=text_color)))
         self.layout = pyglet.text.layout.TextLayout(self.document, batch=self.batch, group = self.fg)
         self.layout.anchor_x = 'center'
@@ -40,22 +41,25 @@ class Die :
         self.adjustBaseTextSize()
         self.roll()
 
-        
-
+  
     def addColorCondition(self, pair) :
         self.colorConditions.append(pair)
         self.update()
 
     def setInteriorSpacingPct(self, value) :
         self.interiorSpacingPct = value
+        self.adjustBaseTextSize()
+        self.update()
 
     def adjustBaseTextSize(self) :
-        testString =  str(self.sides)
+        # find longest possible string
+        testString = str(self.sides)
         for t in self.dieLabels :
             if len(t) > len(testString) :
                 testString = t
 
         desiredSpacing = self.border.width * self.interiorSpacingPct
+        self.document.text = testString
         while self.border.width - self.layout.content_width < desiredSpacing :
             self.baseTextSize -= 1
             self.document.set_style(0, len(self.document.text), dict(font_size=self.baseTextSize))
@@ -101,7 +105,7 @@ class Die :
         self.border.width = Die.WIDTH * value
         self.border.height = Die.HEIGHT * value
         self.adjustBaseTextSize()
-
+        self.setCenter(self.center[0], self.center[1])
 
     def setCenter(self, x, y) :
         self.center = (x, y)
