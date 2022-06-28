@@ -216,7 +216,6 @@ class GameList() :
                                                          multiline=True, 
                                                          batch=self.batch, group=self.textGroup)
         layout.anchor_x = 'left'
-        #layout.anchor_y = 'bottom'
         layout.y = GameList.BOTTOM
         layout.x = self.xPos
         layout.view_y = scroll_y
@@ -281,7 +280,6 @@ class ConfigScreen(KeyHandler) :
             scoreboardClass = getattr(importlib.import_module(g[1]), g[2])
             s.append(scoreboardClass())
             s.append(ScoreboardIconSprite(ConfigScreen.ICON_DIR, g[3], self.iconBatch))
-            #s.append(ScoreboardIcon(g[3], g[4], g[5], self.iconBatch  ) )
             objectList.append(s)
         return objectList
 

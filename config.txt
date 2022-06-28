@@ -2,6 +2,18 @@ Inside Pitch
 baseball
 BaseballScoreboard
 inside-pitch.png
+Legends of Boxing
+boxing
+BoxingScoreboard
+legends_of_boxing.png
+International Cricket
+cricket
+CricketScoreboard
+cricket.png
+History Maker Golf
+golf
+GolfScoreboard
+hmg.png
 Payoff Pitch
 baseball
 BaseballScoreboard

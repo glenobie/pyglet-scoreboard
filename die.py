@@ -89,31 +89,62 @@ class DieClone(Die) :
     def roll(self) :
         0 # don't roll the clones
 
+
+
+########################################################
 class DiceSet :
 
     # pass me a list of Die objects
-    def __init__(self, dice) :
+    def __init__(self, dice, batch) :
+        
+        self.fg = pyglet.graphics.OrderedGroup(59)
         self.dice = dice
-    
+
+        for d in self.dice :
+            d.addValueChangedListener(self)
+        self.valueLabels = []
+
+        self.labelDoc = pyglet.text.document.UnformattedDocument('')  
+        self.labelDoc.set_style(0, len(self.labelDoc.text), dict( dict(font_name = Die.FONT, 
+                                                                       font_size = 22, 
+                                                                       color=(255,255,255,255))))
+        self.labelLayout = pyglet.text.layout.TextLayout(self.labelDoc, batch=batch, group = self.fg)
+        self.labelLayout.anchor_y = 'center'
+        
+    # assuming one die
+    # TODO more dice
+    def valueChanged(self, value) :
+        newLabel = ''
+        for p in self.valueLabels :
+            if p[0] == value :
+                newLabel = p[1]
+        self.labelDoc.text = newLabel
+        ##self.labelDoc.delete_text(0, len(self.labelDoc.text))
+        #self.labelDoc.insert_text(0, newLabel)
+
     def setPosition(self, left, center, spacing) :
         for d in self.dice :
             x = left + d.getWidth() // 2
             d.setCenter(x, center)
             left = x + d.getWidth() // 2 + spacing
+
+        self.labelLayout.position = (left, center)
+
+    # a list of labels that will show to right of dice set when certain value occur
+    def attachValueLabel(self, pair) :
+        self.valueLabels.append(pair)
         
     def roll(self) :
         for d in self.dice :
             d.roll()
         
-
+#################################################
 class SortedDiceSet(DiceSet) :
 
     # pass me a list of Die objects
-    def __init__(self, dice) :
-        DiceSet.__init__(self, dice)
+    def __init__(self, dice, batch) :
+        DiceSet.__init__(self, dice, batch)
         self.sortedList = sorted(self.dice, key=lambda die: die.value)
-        for d in self.dice :
-            d.addValueChangedListener(self)
     
     def setPosition(self, left, center, spacing) :
         self.left = left

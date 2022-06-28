@@ -26,17 +26,29 @@ class HistoryMakerGolfSet(FastActionSet) :
         dice.append(self.gray)
 
         for d in dice :
-            d.scale(0.8)
+            d.scale(0.6)
 
-        self.allDice = DiceSet(dice)
-        self.allDice.setPosition(100, 100, 30)
+        self.allDice = DiceSet(dice, self.batch)
+        self.allDice.setPosition(480, 60, 16)
+
+        d = []
+        d.append(self.white.makeClone())
+        self.controlSet = DiceSet(d, self.batch)
+        self.controlSet.attachValueLabel((6, 'Go For It?'))
+        self.controlSet.setPosition(60, 420, 30)
+    
+        d = []
+        d.append(self.gray.makeClone())
+        d.append(self.black.makeClone())
+        self.courseSet = SortedDiceSet(d, self.batch)
+        self.courseSet.setPosition(60,300,30)
 
         d = []
         d.append(self.gray.makeClone())
         d.append(self.black.makeClone())
-        self.holeSet = SortedDiceSet(d)
-        self.holeSet.setPosition(100,300,30)
-
+        d.append(self.green.makeClone())
+        self.golferSet = SortedDiceSet(d, self.batch)
+        self.golferSet.setPosition(60, 180, 30)
 
 
 
