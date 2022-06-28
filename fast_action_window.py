@@ -32,4 +32,9 @@ class FastActionWindow(pyglet.window.Window) :
         if not(self.fac is None) :
             self.fac.handle_L()
 
-
+    def handle_K(self) :
+        if not(self.fac is None) :
+            self.fac.handle_K()
+    
+    def clearFACSet(self) :
+        self.fac = None

@@ -144,6 +144,7 @@ class GolfHole() :
         self.position = position
         self.leftGolfer = leftGolfer
         self.rightGolfer = rightGolfer
+        self.group = pyglet.graphics.OrderedGroup(23)
         
         self.leftScore = ScoreboardElement(text=str(leftGolfer), textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=partial(state.getScoreAsString, leftGolfer), digitFont=Scoreboard.DIGIT_FONT,
@@ -198,19 +199,19 @@ class GolfHole() :
         # bottom left to top left
         lines.append(pyglet.shapes.Line(self.position[0] - width // 2, self.position[1] - height, 
                                         self.position[0] - width // 2, self.position[1], 
-                                        width=2, color=color, batch=self.batch))
+                                        width=2, color=color, batch=self.batch, group=self.group))
         #top left to top right
         lines.append(pyglet.shapes.Line(self.position[0] - width // 2, self.position[1], 
                                         self.position[0] + width // 2, self.position[1],
-                                        width=2, color=color, batch=self.batch))
+                                        width=2, color=color, batch=self.batch, group=self.group))
         #top right to bottom right
         lines.append(pyglet.shapes.Line(self.position[0] + width // 2, self.position[1],
                                         self.position[0] + width // 2, self.position[1] - height,
-                                        width=2, color=color, batch=self.batch))
+                                        width=2, color=color, batch=self.batch, group=self.group))
         #bottom right to bottom left
         lines.append(pyglet.shapes.Line(self.position[0] + width // 2, self.position[1] - height,
                                         self.position[0] - width // 2, self.position[1] - height, 
-                                        width=2, color=color, batch=self.batch))
+                                        width=2, color=color, batch=self.batch, group=self.group))
         return lines
 
     def update(self) :

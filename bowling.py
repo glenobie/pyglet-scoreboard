@@ -182,6 +182,7 @@ class FrameDisplay() :
         self.scoreFunc = scoreFunc
         self.batch = batch
         self.state = state
+        self.group = pyglet.graphics.OrderedGroup(23)
 
         self.pins = []
 
@@ -205,10 +206,10 @@ class FrameDisplay() :
         x2 = x + self.getWidth() + 2 # right
         y2 = y - self.getHeight() - 3 # bottom
 
-        self.border.append(pyglet.shapes.Line(x, y, x2, y, 1, batch = self.batch)) #top
-        self.border.append(pyglet.shapes.Line(x2, y, x2, y2, 1, batch = self.batch)) #right
-        self.border.append(pyglet.shapes.Line(x2, y2, x, y2, 1, batch = self.batch)) #bottom
-        self.border.append(pyglet.shapes.Line(x, y2, x, y, 1, batch = self.batch)) #left
+        self.border.append(pyglet.shapes.Line(x, y, x2, y, 1, batch = self.batch, group=self.group)) #top
+        self.border.append(pyglet.shapes.Line(x2, y, x2, y2, 1, batch = self.batch, group=self.group)) #right
+        self.border.append(pyglet.shapes.Line(x2, y2, x, y2, 1, batch = self.batch, group=self.group)) #bottom
+        self.border.append(pyglet.shapes.Line(x, y2, x, y, 1, batch = self.batch, group=self.group)) #left
         
     def update(self) :
         for p in self.pins :

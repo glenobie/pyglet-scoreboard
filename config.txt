@@ -1,3 +1,9 @@
+History Maker Golf
+golf
+GolfScoreboard
+hmg.png
+hmg_FAC
+HistoryMakerGolfSet
 History Maker Baseball
 baseball
 BaseballScoreboard

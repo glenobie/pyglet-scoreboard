@@ -93,6 +93,7 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
         if self.activeScreen == self :
             self.processSelection()
         elif modified :
+            self.windowFAC.clearFACSet()
             if self.activeScreen.handleExit(self) > 0 :
                 self.activeScreen = self
 
@@ -104,6 +105,7 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
 
     def handle_C(self, modified=False) :
         if modified :
+            self.windowFAC.close()
             self.close()
 
     def on_key_press(self, symbol, modifiers):
@@ -125,6 +127,8 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
             self.activeScreen.handle_E(modifiers & pyglet.window.key.LSHIFT)
         elif symbol == pyglet.window.key.L :
             self.windowFAC.handle_L()
+        elif symbol == pyglet.window.key.K :
+            self.windowFAC.handle_K()
 
     def on_close(self):
         self.windowFAC.close()

@@ -24,6 +24,7 @@ class Die :
         self.text_color = text_color
         self.value = 1
         self.dieLabels = []
+        self.colorConditions = []
 
         self.baseTextSize = Die.TEXT_SIZE
         self.interiorSpacingPct = Die.INTERIOR_SPACING_PCT
@@ -39,6 +40,11 @@ class Die :
         self.adjustBaseTextSize()
         self.roll()
 
+        
+
+    def addColorCondition(self, pair) :
+        self.colorConditions.append(pair)
+        self.update()
 
     def setInteriorSpacingPct(self, value) :
         self.interiorSpacingPct = value
@@ -83,8 +89,13 @@ class Die :
             text = self.dieLabels[self.value-1]
         else :
             text = str(self.value)
+        for c in self.colorConditions :
+            if c[0] == self.value :
+                self.border.color = c[1]
+
         self.document.delete_text(0,len(self.document.text))
         self.document.insert_text(0, text)
+
 
     def scale(self, value) :
         self.border.width = Die.WIDTH * value
