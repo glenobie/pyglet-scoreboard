@@ -26,7 +26,7 @@ class HistoryMakerGolfSet() :
         self.decider = Die((255,255,255), sides=2, batch = self.batch)
         self.decider.setInteriorSpacingPct(0.2)
         self.decider.setDieLabels(('YES', 'NO'))
-        self.decider.addColorCondition((1, (0,255,0)))
+        self.decider.addColorCondition((1, (0,255,50)))
         self.decider.addColorCondition((2, (255,0,0)))
         d.append(self.decider)
         self.deciderSet = DiceSet(d, self.batch)
