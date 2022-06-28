@@ -309,9 +309,13 @@ class ConfigScreen(KeyHandler) :
         return self.scoreboards
 
     # on exit, write to file and save scoraboards to list for picker
-    def handleExit(self) :        
-        self.recordToFile(self.chosenGameLayout.getGames())
-        self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
+    def handleExit(self, menuScreen) :   
+        if (len(self.chosenGameLayout.getGames()) > 0) :
+            self.recordToFile(self.chosenGameLayout.getGames())
+            self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
+            menuScreen.createMenu()
+            return 1
+        return 0
 
     # keyboard handlers
 

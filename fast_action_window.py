@@ -3,41 +3,30 @@ from key_handler import KeyHandler
 from die import Die
 from random import seed
 import time
+import importlib
 
 ####################################################################
-class FastActionWindow(KeyHandler, pyglet.window.Window) :
+class FastActionWindow(pyglet.window.Window) :
 
     def __init__(self, width, height, fullscreen = False) :
         pyglet.window.Window.__init__(self, width, height, fullscreen=fullscreen)
-        
+
         self.batch = pyglet.graphics.Batch()
+        self.bg = pyglet.graphics.OrderedGroup(0)
 
-        self.dice = []
-
-        d1 = Die((255,0,0), sides=6, batch=self.batch)
-        d1.setCenter(300,300)
-        self.dice.append(d1)
-        d1 = Die((255,255,0), sides=8, batch=self.batch)
-        d1.setCenter(500,300)
-        self.dice.append(d1)
-
+        self.background = pyglet.shapes.Rectangle(0,0,800,480, (18,18,18), self.batch, self.bg)
 
         seed(time.time_ns())
+        self.fac = None
 
     def on_draw(self) :
         self.clear()
         self.batch.draw()
 
-    def setFACSet(self, fac):
-        self.fac = fac
-
-    def handle_L(self, modified = False) :
-        for d in self.dice :
-            d.roll()
+    def setFACSet(self, facModule, facClass):
+        class_ = getattr(importlib.import_module(facModule), facClass)
+        self.fac = class_(self.batch)
 
     def on_key_press(self, symbol, modifiers):
         if symbol == pyglet.window.key.L :
-            self.handle_L(modifiers & pyglet.window.key.LSHIFT)
-        elif symbol == pyglet.window.key.K :
-            self.handle_K(modifiers & pyglet.window.key.LSHIFT)
-
+            self.fac.handle_L(modifiers & pyglet.window.key.LSHIFT)

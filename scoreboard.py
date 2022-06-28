@@ -106,8 +106,8 @@ class Scoreboard(KeyHandler) :
         e.setCenterTop(Scoreboard.CENTER, height)
         self.elements.append(e)
 
-    def handleExit(self):
-        0
+    def handleExit(self, menuScreen):
+        return 1
 
     # handle keys
 

@@ -1,11 +1,11 @@
 import socket
 import pyglet
 from pyglet import font
+from fast_action_set import FastActionSet
 from key_handler import KeyHandler
 from config_screen import ConfigScreen
 from fast_action_window import FastActionWindow
-import sys
-
+from fast_action_set import HistoryMakerGolfSet
 
 class MenuLocationNode :
     IS_EMPTY = -1
@@ -204,9 +204,7 @@ class Carousel :
         print("End of List")
 
     def getSelection(self) :
-        return self.listFront.getIndex()
-
-    
+        return self.listFront.getIndex()    
     
 
 ####################################################################
@@ -235,24 +233,21 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
                                (700, 300, 0.44),    # 10: right, front, just after apex
                                (580, 260, 0.6),    # 11: front, right of center
                                )
-
-        self.handleEntry()
-
-
-
-
-    def handleEntry(self) :
+        self.createMenu()
+        
+        if len(self.scoreboardTuples) > 0 :
+            self.activeScreen = self
+        else :
+            self.activeScreen = self.configScreen
+    
+    # try to create menu, if no games, send to config screen
+    def createMenu(self) :
         # (title for config screen, scoreboard, icon, FUTURE: FAC)
         self.scoreboardTuples = self.configScreen.getScoreboards()
 
         self.options = Carousel(self.controlPoints, self.scoreboardTuples)
-        self.options.initialize()
-        
-        if len(self.scoreboardTuples) > 0 :
-            self.activeScreen = self
-
-        else :
-            self.activeScreen = self.configScreen
+        self.options.initialize()      
+ 
     
     # open the selected scoreboard
     def processSelection(self) :
@@ -276,27 +271,22 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
     def handle_A(self, modified = False) :
         if self.activeScreen == self :
             self.options.rotate(1)
-            #self.options.printList()
         else :
             self.activeScreen.handle_A(modified)
 
  
     def handle_D(self, modified = False) :
         if self.activeScreen == self :
-            self.options.rotate(-1)    
-            #self.options.printList()      
+            self.options.rotate(-1)        
         else :
             self.activeScreen.handle_D(modified) 
 
     def handle_S(self, modified = False) :
         if self.activeScreen == self :
             self.processSelection()
-        else :
-            if (modified) : # 'kill' other screen
-                self.activeScreen.handleExit()
-                self.handleEntry()
-            else :
-                self.activeScreen.handle_S(modified)
+        elif modified :
+            if self.activeScreen.handleExit(self) > 0 :
+                self.activeScreen = self
 
     def handle_Q(self, modified=False) :
         if modified :
@@ -309,7 +299,9 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
             self.close()
 
     def handle_P(self, modified=False) :
+
         f = FastActionWindow(800,480)
+        f.setFACSet('fast_action_set', 'HistoryMakerGolfSet')
 
     def on_key_press(self, symbol, modifiers):
         if symbol == pyglet.window.key.D :

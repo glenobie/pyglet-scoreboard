@@ -1,6 +1,3 @@
-from curses.ascii import NUL
-from re import L
-from weakref import getweakrefcount
 from scoreboard import Scoreboard
 from element import ScoreboardElement
 from element import HorizontalElement
