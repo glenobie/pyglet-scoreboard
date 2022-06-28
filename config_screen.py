@@ -1,10 +1,8 @@
 import pyglet
 from pyglet import resource
 from pyglet import shapes
-import importlib
 from key_handler import KeyHandler
 import math
-
 
 # helper function to subtract one list from another
 def listDifference(list1, list2) :
@@ -234,7 +232,7 @@ class GameList() :
 ######################################
 class ConfigScreen(KeyHandler) :
 
-    LINES_PER_GAME = 4
+    LINES_PER_GAME = 6
     END_OF_FILE = 'EOF'
     ALL_GAMES_FILE = 'games.txt'
     CHOSEN_GAMES_FILE = 'config.txt'
@@ -259,6 +257,7 @@ class ConfigScreen(KeyHandler) :
         self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
 
     def recordToFile(self, gameList) :
+        print("writing")
         f = open(ConfigScreen.CHOSEN_GAMES_FILE, 'w')
         for g in gameList :
             for e in g :
@@ -271,15 +270,18 @@ class ConfigScreen(KeyHandler) :
         self.iconBatch = batch
 
     # create objects from text descriptions in games
-    # (game name, scoreboard, icon/sprite)
+    # (game name, scoreboard module, scoreboard class, icon/sprite, fac module, fac class)
     def objectsFromGames(self, gameList) :
+        print("generating")
         objectList = []
         for g in gameList :    
             s = []
             s.append(g[0])   
-            scoreboardClass = getattr(importlib.import_module(g[1]), g[2])
-            s.append(scoreboardClass())
+            s.append(g[1])
+            s.append(g[2])
             s.append(ScoreboardIconSprite(ConfigScreen.ICON_DIR, g[3], self.iconBatch))
+            s.append(g[4])
+            s.append(g[5])
             objectList.append(s)
         return objectList
 

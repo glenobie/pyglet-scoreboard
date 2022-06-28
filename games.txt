@@ -2,64 +2,96 @@ Inside Pitch
 baseball
 BaseballScoreboard
 inside-pitch.png
+hmg_FAC
+HistoryMakerGolfSet
 Payoff Pitch
 baseball
 BaseballScoreboard
 payoff-pitch.png
+hmg_FAC
+HistoryMakerGolfSet
 Statis-Pro Baseball
 baseball
 BaseballScoreboard
 statis-pro-baseball.png
+hmg_FAC
+HistoryMakerGolfSet
 APBA Baseball
 baseball
 BaseballScoreboard
 apba_baseball.png
+hmg_FAC
+HistoryMakerGolfSet
 History Maker Baseball
 baseball
 BaseballScoreboard
 hmb.png
+hmg_FAC
+HistoryMakerGolfSet
 Cold Snap
 football
 CFLScoreboard
 cold-snap.png
+hmg_FAC
+HistoryMakerGolfSet
 Second Season
 football
 FootballScoreboard
 second-season.png
+hmg_FAC
+HistoryMakerGolfSet
 Inside Blitz
 football
 FootballScoreboard
 inside-blitz.png
+hmg_FAC
+HistoryMakerGolfSet
 Legends of Boxing
 boxing
 BoxingScoreboard
 legends_of_boxing.png
+hmg_FAC
+HistoryMakerGolfSet
 International Cricket
 cricket
 CricketScoreboard
 cricket.png
+hmg_FAC
+HistoryMakerGolfSet
 History Maker Golf
 golf
 GolfScoreboard
 hmg.png
+hmg_FAC
+HistoryMakerGolfSet
 Inside the Crease
 hockey
 HockeyScoreboard
 inside-crease.png
+hmg_FAC
+HistoryMakerGolfSet
 Hockey Blast
 hockey
 HockeyScoreboard
 hockey_blast.png
+hmg_FAC
+HistoryMakerGolfSet
 Bowl-O-Rama
 bowling
 BowlingScoreboard
 bowl-o-rama.png
+hmg_FAC
+HistoryMakerGolfSet
 Inside the Paint
 basketball
 BasketballScoreboard
 inside-paint.png
+hmg_FAC
+HistoryMakerGolfSet
 Centre Court Tennis
 tennis
 TennisScoreboard
 centre-court.png
+hmg_FAC
+HistoryMakerGolfSet
 EOF

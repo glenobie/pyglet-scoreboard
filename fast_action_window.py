@@ -21,12 +21,15 @@ class FastActionWindow(pyglet.window.Window) :
 
     def on_draw(self) :
         self.clear()
-        self.batch.draw()
+        if not(self.fac is None) :
+            self.fac.draw()
 
     def setFACSet(self, facModule, facClass):
         class_ = getattr(importlib.import_module(facModule), facClass)
-        self.fac = class_(self.batch)
+        self.fac = class_()
 
-    def on_key_press(self, symbol, modifiers):
-        if symbol == pyglet.window.key.L :
-            self.fac.handle_L(modifiers & pyglet.window.key.LSHIFT)
+    def handle_L(self) :
+        if not(self.fac is None) :
+            self.fac.handle_L()
+
+

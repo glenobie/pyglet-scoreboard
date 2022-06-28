@@ -1,19 +1,16 @@
+
 import pyglet
-from die import Die, DiceSet, SortedDiceSet
+from die import Die
+from dice_set import DiceSet, SortedDiceSet
 
-class FastActionSet :
-    def __init__(self, batch) :
-        self.batch = batch
+class HistoryMakerGolfSet() :
 
-    def handle_L(self, modified = False) :
-        for d in self.dice :
-            d.roll()
-        
-class HistoryMakerGolfSet(FastActionSet) :
+    def __init__(self) :
+        self.decisionNumber = 1
+        self.batch = pyglet.graphics.Batch()
+        self.createDice()
 
-    def __init__(self, batch) :
-        FastActionSet.__init__(self, batch)
-        
+    def createDice(self) :
         dice = []
 
         self.white = Die((255,255,255), sides=6, batch=self.batch)
@@ -25,6 +22,15 @@ class HistoryMakerGolfSet(FastActionSet) :
         self.gray = Die((100,100,100), sides=6, text_color=(255,255,255,255),batch=self.batch)
         dice.append(self.gray)
 
+        d = []
+        self.decider = Die((255,255,255), sides=2, batch = self.batch)
+        self.decider.setInteriorSpacingPct(0.2)
+        self.decider.setDieLabels(('YES', 'NO'))
+        d.append(self.decider)
+        self.deciderSet = DiceSet(d, self.batch)
+        self.deciderSet.setTitle('Decision #' + str(self.decisionNumber) + ':')
+        self.deciderSet.setPosition(400,400, 20)
+
         for d in dice :
             d.scale(0.6)
 
@@ -35,22 +41,31 @@ class HistoryMakerGolfSet(FastActionSet) :
         d.append(self.white.makeClone())
         self.controlSet = DiceSet(d, self.batch)
         self.controlSet.attachValueLabel((6, 'Go For It?'))
-        self.controlSet.setPosition(60, 420, 30)
+        self.controlSet.setPosition(40, 400, 30)
     
         d = []
         d.append(self.gray.makeClone())
         d.append(self.black.makeClone())
         self.courseSet = SortedDiceSet(d, self.batch)
-        self.courseSet.setPosition(60,300,30)
+        self.courseSet.setPosition(40,280,30)
 
         d = []
         d.append(self.gray.makeClone())
         d.append(self.black.makeClone())
         d.append(self.green.makeClone())
         self.golferSet = SortedDiceSet(d, self.batch)
-        self.golferSet.setPosition(60, 180, 30)
+        self.golferSet.setPosition(40, 160, 30)
 
 
+    def draw(self) :
+        self.batch.draw()
 
-    def handle_L(self, modified) :
+    def handle_L(self) :
         self.allDice.roll()
+        self.decisionNumber = 1
+        self.deciderSet.setTitle('Decision #' + str(self.decisionNumber) + ': ')
+
+    def handle_K(self) :
+        self.decisionNumber += 1
+        self.deciderSet.roll()
+        self.deciderSet.setTitle('Decision #' + str(self.decisionNumber)+ ':')
