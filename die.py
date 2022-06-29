@@ -9,8 +9,8 @@ class Die :
     D_GREEN = (0, 153,0)
     D_BLUE = (0,0,204)
     D_WHITE = (255,255,255)
-    D_GRAY = (128,128,128)
-    D_BLACK = (30,30,30)
+    D_GRAY = (160,160,160)
+    D_BLACK = (20,20,20)
     D_PINK = (153, 0, 76)
     D_ORANGE = (204, 102, 0)
     D_RED = (204, 0, 0)
@@ -20,6 +20,7 @@ class Die :
     D_PURPLE = (76,0, 153)
     D_BROWN = (102, 51, 0 )
     D_AQUA = (0,150,150)
+    D_DARK_GREEN = (0,80,0)
 
     T_WHITE = (255,255,255,255)
     T_BLACK = (0,0,0,255)

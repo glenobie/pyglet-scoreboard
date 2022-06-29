@@ -13,21 +13,21 @@ class HistoryMakerGolfSet() :
     def createDice(self) :
         dice = []
 
-        self.white = Die((255,255,255), sides=6, batch=self.batch)
+        self.white = Die(Die.D_WHITE, sides=6, batch=self.batch)
         dice.append(self.white)
-        self.green = Die((40,200,40), sides=6, text_color=(255,255,255,255),batch=self.batch)
+        self.green = Die(Die.D_GREEN, sides=6, text_color=Die.T_WHITE,batch=self.batch)
         dice.append(self.green)
-        self.black = Die((0,0,0), sides=6, text_color=(255,255,255,255),batch=self.batch)
+        self.black = Die(Die.D_BLACK, sides=6, text_color=Die.T_WHITE,batch=self.batch)
         dice.append(self.black)
-        self.gray = Die((100,100,100), sides=6, text_color=(255,255,255,255),batch=self.batch)
+        self.gray = Die(Die.D_ORANGE, sides=6, text_color=Die.T_WHITE,batch=self.batch)
         dice.append(self.gray)
 
         d = []
-        self.decider = Die((255,255,255), sides=2, batch = self.batch)
+        self.decider = Die(Die.D_WHITE, text_color=Die.T_WHITE, sides=2, batch = self.batch)
         self.decider.setInteriorSpacingPct(0.2)
         self.decider.setDieLabels(('YES', 'NO'))
-        self.decider.addColorCondition((1, (0,255,50)))
-        self.decider.addColorCondition((2, (255,0,0)))
+        self.decider.addColorCondition((1, Die.D_DARK_GREEN))
+        self.decider.addColorCondition((2, Die.D_RED))
         d.append(self.decider)
         self.deciderSet = DiceSet(d, self.batch)
         self.deciderSet.setTitle('Decision #' + str(self.decisionNumber) + ':  ')
