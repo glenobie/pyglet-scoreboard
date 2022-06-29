@@ -44,7 +44,7 @@ class DiceSet :
         for d in self.dice :
             x = left + d.getWidth() // 2
             d.setCenter(x, center)
-            left = x + d.getWidth() // 2 + spacing
+            left += d.getWidth() + spacing
 
         self.labelLayout.position = (left, center)
 

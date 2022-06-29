@@ -26,8 +26,8 @@ History Maker Baseball
 baseball
 BaseballScoreboard
 hmb.png
-hmg_FAC
-HistoryMakerGolfSet
+hmb_FAC
+HistoryMakerBaseballSet
 Cold Snap
 football
 CFLScoreboard

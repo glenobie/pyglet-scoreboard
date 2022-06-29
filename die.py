@@ -126,6 +126,7 @@ class Die :
         self.border.height = Die.HEIGHT * value
         self.adjustBaseTextSize()
         self.setCenter(self.center[0], self.center[1])
+        self.update()
 
     def setCenter(self, x, y) :
         self.center = (x, y)

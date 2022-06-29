@@ -4,24 +4,12 @@ BaseballScoreboard
 inside-pitch.png
 inside_pitch_FAC
 InsidePitchSet
-Payoff Pitch
+History Maker Baseball
 baseball
 BaseballScoreboard
-payoff-pitch.png
-hmg_FAC
-HistoryMakerGolfSet
-Statis-Pro Baseball
-baseball
-BaseballScoreboard
-statis-pro-baseball.png
-hmg_FAC
-HistoryMakerGolfSet
-APBA Baseball
-baseball
-BaseballScoreboard
-apba_baseball.png
-hmg_FAC
-HistoryMakerGolfSet
+hmb.png
+hmb_FAC
+HistoryMakerBaseballSet
 Cold Snap
 football
 CFLScoreboard
@@ -32,12 +20,6 @@ Second Season
 football
 FootballScoreboard
 second-season.png
-hmg_FAC
-HistoryMakerGolfSet
-Inside Blitz
-football
-FootballScoreboard
-inside-blitz.png
 hmg_FAC
 HistoryMakerGolfSet
 Legends of Boxing
@@ -80,12 +62,6 @@ History Maker Golf
 golf
 GolfScoreboard
 hmg.png
-hmg_FAC
-HistoryMakerGolfSet
-History Maker Baseball
-baseball
-BaseballScoreboard
-hmb.png
 hmg_FAC
 HistoryMakerGolfSet
 Hockey Blast
