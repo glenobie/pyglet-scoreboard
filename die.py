@@ -6,6 +6,25 @@ import random
 ##########################################
 class Die :
 
+    D_GREEN = (0, 153,0)
+    D_BLUE = (0,0,204)
+    D_WHITE = (255,255,255)
+    D_GRAY = (128,128,128)
+    D_BLACK = (30,30,30)
+    D_PINK = (153, 0, 76)
+    D_ORANGE = (204, 102, 0)
+    D_RED = (204, 0, 0)
+    D_WHITE = (230,230,230)
+    D_LIGHT_GREEN = (100,255,100)
+    D_LIGHT_BLUE = (102, 178, 255)
+    D_PURPLE = (76,0, 153)
+    D_BROWN = (102, 51, 0 )
+    D_AQUA = (0,150,150)
+
+    T_WHITE = (255,255,255,255)
+    T_BLACK = (0,0,0,255)
+
+
     WIDTH = 100
     HEIGHT = 100
     TEXT_SIZE = 80
