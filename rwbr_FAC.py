@@ -50,6 +50,7 @@ class RWBRSet() :
     def handle_L(self) :
         self.trackSet.roll()
         self.challengeDice.roll()
+        self.courseDice.roll()
         self.challengeNumber = 1
         self.challengeDice.setTitle('Challenge #' + str(self.challengeNumber) + ': ')
 
