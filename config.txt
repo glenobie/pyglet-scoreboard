@@ -10,6 +10,12 @@ BaseballScoreboard
 hmb.png
 hmb_FAC
 HistoryMakerBaseballSet
+Red, White & Blue Racing
+racing
+RacingScoreboard
+rwbr.png
+rwbr_FAC
+RWBRSet
 Cold Snap
 football
 CFLScoreboard
@@ -68,12 +74,6 @@ Hockey Blast
 hockey
 HockeyScoreboard
 hockey_blast.png
-hmg_FAC
-HistoryMakerGolfSet
-Red, White & Blue Racing
-racing
-RacingScorebaord
-rwbr.png
 hmg_FAC
 HistoryMakerGolfSet
 EOF

@@ -94,4 +94,10 @@ TennisScoreboard
 centre-court.png
 hmg_FAC
 HistoryMakerGolfSet
+Red, White & Blue Racing
+racing
+RacingScoreboard
+rwbr.png
+rwbr_FAC
+RWBRSet
 EOF
