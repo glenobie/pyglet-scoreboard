@@ -11,7 +11,7 @@ class HistoryMakerBaseballSet() :
         self.createDice()
 
     def createDice(self) :
-        self.red = Die(Die.D_RED, sides=6, batch=self.batch)
+        self.red = Die(Die.D_RED, text_color = Die.T_WHITE, sides=6, batch=self.batch)
         self.blue = Die(Die.D_BLUE, sides=6, text_color=Die.T_WHITE,batch=self.batch)
         self.black = Die(Die.D_BLACK, sides=6, text_color=Die.T_WHITE,batch=self.batch)
         dice = [self.red, self.blue, self.black]
