@@ -13,6 +13,7 @@ class DiceSet :
         for d in self.dice :
             d.addValueChangedListener(self)
         self.valueLabels = []
+        self.booleanFunctionLabels = []
 
         self.labelDoc = pyglet.text.document.UnformattedDocument('')  
         self.labelDoc.set_style(0, len(self.labelDoc.text), dict( dict(font_name = Die.FONT, 
@@ -28,13 +29,26 @@ class DiceSet :
         self.titleLayout = pyglet.text.layout.TextLayout(self.titleDoc, batch=batch, group = self.fg)
         self.titleLayout.anchor_y = 'center'
 
-    # assuming one die for right now
-    # TODO more dice
+    
+    def allEqual(self) :
+        d1 = self.dice[0].getValue()
+        for d in self.dice :
+            if d.getValue() != d1 :
+                return False
+        return True
+
+    def totalEquals(self, value) :
+        return True if self.total == value else False
+
     def valueChanged(self, value) :
         newLabel = ''
-        for p in self.valueLabels :
-            if p[0] == value :
-                newLabel = p[1]
+        self.total = 0
+        for d in self.dice :
+            self.total += d.getValue()
+
+        for b in self.booleanFunctionLabels :
+            if b[0]() : 
+                newLabel += b[1]
         self.labelDoc.text = newLabel
 
 
@@ -49,8 +63,13 @@ class DiceSet :
         self.labelLayout.position = (left, center)
 
     # a list of labels that will show to right of dice set when certain value occur
-    def attachValueLabel(self, pair) :
+    # pair is a (value, text)
+    def attachTotalLabel(self, pair) :
         self.valueLabels.append(pair)
+
+    # pair is a (booleanFunction, text) pair
+    def attachBooleanFunctionLabel(self, pair) :
+        self.booleanFunctionLabels.append(pair)
         
     # label to left of dice set
     def setTitle(self, title) :

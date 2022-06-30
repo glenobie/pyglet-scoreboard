@@ -2,6 +2,7 @@
 import pyglet
 from die import Die
 from dice_set import DiceSet, SortedDiceSet
+from functools import partial
 
 class RWBRSet() :
 
@@ -11,50 +12,48 @@ class RWBRSet() :
         self.createDice()
 
     def createDice(self) :
-        dice = []
 
-        self.white = Die(Die.D_WHITE, sides=6, batch=self.batch)
-        dice.append(self.white)
-        self.green = Die(Die.D_GREEN, sides=6, text_color=Die.T_WHITE,batch=self.batch)
-        dice.append(self.green)
+        self.challengeNumber = 1
+        
+        self.track = Die(Die.D_ORANGE, sides=6, text_color=Die.T_WHITE, batch=self.batch)
+        self.trackSet = DiceSet([self.track], self.batch)
+
+        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 1), 'TOP'))
+        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 2), 'TOP'))
+        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 3), 'MIDDLE'))
+        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 4), 'MIDDLE'))
+        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 5), 'BOTTOM'))
+        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 6), 'DUEL!'))
+        self.trackSet.setPosition(20, 420, 16)
+
         self.black = Die(Die.D_BLACK, sides=6, text_color=Die.T_WHITE,batch=self.batch)
-        dice.append(self.black)
-        self.gray = Die(Die.D_ORANGE, sides=6, text_color=Die.T_WHITE,batch=self.batch)
-        dice.append(self.gray)
+        self.gray = Die(Die.D_GRAY, sides=6, text_color=Die.T_WHITE,batch=self.batch)
+        self.course = [self.gray, self.black]
 
+        self.courseDice = DiceSet(self.course, self.batch)
+        self.courseDice.setPosition(20, 300, 16)
 
-        for d in dice :
-            d.scale(0.6)
+        self.red = Die(Die.D_RED, text_color=Die.T_WHITE, sides=6, batch=self.batch)
+        self.white = Die(Die.D_WHITE, sides=6, batch=self.batch)
+        self.blue = Die(Die.D_BLUE, sides=6, text_color=Die.T_WHITE, batch=self.batch)
+        self.challenge = [self.red, self.white, self.blue]
 
-        self.allDice = DiceSet(dice, self.batch)
-        self.allDice.setPosition(480, 60, 16)
-
-        d = []
-        d.append(self.white.makeClone())
-        self.controlSet = DiceSet(d, self.batch)
-        self.controlSet.attachValueLabel((6, 'Go For It?'))
-        self.controlSet.attachValueLabel((4, 'Extra Control?'))
-        self.controlSet.setPosition(40, 400, 30)
-    
-        d = []
-        d.append(self.gray.makeClone())
-        d.append(self.black.makeClone())
-        self.courseSet = SortedDiceSet(d, self.batch)
-        self.courseSet.setPosition(40,280,30)
-
-        d = []
-        d.append(self.gray.makeClone())
-        d.append(self.black.makeClone())
-        d.append(self.green.makeClone())
-        self.golferSet = SortedDiceSet(d, self.batch)
-        self.golferSet.setPosition(40, 160, 30)
+        self.challengeDice = DiceSet(self.challenge, self.batch)
+        self.challengeDice.attachBooleanFunctionLabel((self.challengeDice.allEqual, 'Problem!'))
+        self.challengeDice.setTitle('Challenge #' + str(self.challengeNumber) + ':  ')
+        self.challengeDice.setPosition(20, 120, 16)
 
 
     def draw(self) :
         self.batch.draw()
 
     def handle_L(self) :
-        self.allDice.roll()
+        self.trackSet.roll()
+        self.challengeDice.roll()
+        self.challengeNumber = 1
+        self.challengeDice.setTitle('Challenge #' + str(self.challengeNumber) + ': ')
 
     def handle_K(self) :
-        0
+        self.challengeDice.roll()
+        self.challengeNumber += 1
+        self.challengeDice.setTitle('Challenge #' + str(self.challengeNumber) + ': ')

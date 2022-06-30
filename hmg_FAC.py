@@ -1,4 +1,4 @@
-
+from functools import partial
 import pyglet
 from die import Die
 from dice_set import DiceSet, SortedDiceSet
@@ -42,8 +42,8 @@ class HistoryMakerGolfSet() :
         d = []
         d.append(self.white.makeClone())
         self.controlSet = DiceSet(d, self.batch)
-        self.controlSet.attachValueLabel((6, 'Go For It?'))
-        self.controlSet.attachValueLabel((4, 'Extra Control?'))
+        self.controlSet.attachBooleanFunctionLabel((partial(self.controlSet.totalEquals, 6), 'Go For It?'))
+        self.controlSet.attachBooleanFunctionLabel((partial(self.controlSet.totalEquals, 4), 'Extra Control?'))
         self.controlSet.setPosition(40, 400, 30)
     
         d = []
