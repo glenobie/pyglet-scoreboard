@@ -70,4 +70,10 @@ HockeyScoreboard
 hockey_blast.png
 hmg_FAC
 HistoryMakerGolfSet
+Red, White & Blue Racing
+racing
+RacingScorebaord
+rwbr.png
+hmg_FAC
+HistoryMakerGolfSet
 EOF
