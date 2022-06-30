@@ -1,7 +1,5 @@
-import math
 import pyglet
 import random
-
 
 ##########################################
 class Die :
@@ -24,7 +22,6 @@ class Die :
 
     T_WHITE = (255,255,255,255)
     T_BLACK = (0,0,0,255)
-
 
     WIDTH = 100
     HEIGHT = 100

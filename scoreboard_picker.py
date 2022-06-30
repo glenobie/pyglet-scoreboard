@@ -16,7 +16,6 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
         pyglet.window.Window.__init__(self, width, height, fullscreen=fullscreen)
         
         self.windowFAC = FastActionWindow(800,480)
-  
         
         font.add_directory('.') 
         self.batch = pyglet.graphics.Batch()
@@ -51,7 +50,6 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
 
         self.options = Carousel(self.controlPoints, self.scoreboardTuples)
         self.options.initialize()      
- 
     
     # open the selected scoreboard
     def processSelection(self) :
@@ -59,7 +57,6 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
         scoreboardClass = getattr(importlib.import_module(picked[1]), picked[2])
         self.activeScreen = scoreboardClass()
         self.windowFAC.setFACSet(picked[4], picked[5])
-
 
     def getBatch(self) :
         return self.batch
@@ -102,6 +99,7 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
             self.batch = pyglet.graphics.Batch()
             self.configScreen.setIconBatch(self.batch)
             self.activeScreen = self.configScreen
+        
 
     def handle_C(self, modified=False) :
         if modified :
