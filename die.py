@@ -142,7 +142,6 @@ class DieClone(Die) :
         self.value = value
         for ear in self.listeners :
             ear.valueChanged(self.value)
-
         self.update()
 
 

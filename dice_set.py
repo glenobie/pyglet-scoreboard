@@ -9,9 +9,11 @@ class DiceSet :
         
         self.fg = pyglet.graphics.OrderedGroup(59)
         self.dice = dice
+        self.computeTotal()
 
         for d in self.dice :
             d.addValueChangedListener(self)
+
         self.valueLabels = []
         self.booleanFunctionLabels = []
 
@@ -30,6 +32,7 @@ class DiceSet :
         self.titleLayout.anchor_y = 'center'
 
     
+    # are all the dice equal in value
     def allEqual(self) :
         d1 = self.dice[0].getValue()
         for d in self.dice :
@@ -37,39 +40,49 @@ class DiceSet :
                 return False
         return True
 
+    # does the total of the dice equal the value passed
     def totalEquals(self, value) :
         return True if self.total == value else False
 
+    def anyDieEquals(self, value) :
+        for d in self.dice :
+            if d.getValue() == value :
+                return True
+        return False
+
     def valueChanged(self, value) :
-        newLabel = ''
+        self.computeTotal()
+        self.updateLabels()
+
+    def computeTotal(self) :
         self.total = 0
         for d in self.dice :
             self.total += d.getValue()
 
+    def updateLabels(self) :
+        newLabel = ''
         for b in self.booleanFunctionLabels :
             if b[0]() : 
                 newLabel += b[1]
         self.labelDoc.text = newLabel
 
-
-    def setPosition(self, left, center, spacing) :
+    def setPositionActual(self, left, center, spacing, list) :
         self.titleLayout.position = (left, center)
         left += self.titleLayout.content_width
-        for d in self.dice :
+        for d in list :
             x = left + d.getWidth() // 2
             d.setCenter(x, center)
             left += d.getWidth() + spacing
-
         self.labelLayout.position = (left, center)
 
-    # a list of labels that will show to right of dice set when certain value occur
-    # pair is a (value, text)
-    def attachTotalLabel(self, pair) :
-        self.valueLabels.append(pair)
+
+    def setPosition(self, left, center, spacing) :
+        self.setPositionActual(left, center, spacing, self.dice)
 
     # pair is a (booleanFunction, text) pair
     def attachBooleanFunctionLabel(self, pair) :
         self.booleanFunctionLabels.append(pair)
+        self.updateLabels()
         
     # label to left of dice set
     def setTitle(self, title) :
@@ -92,11 +105,9 @@ class SortedDiceSet(DiceSet) :
         self.left = left
         self.center = center
         self.spacing = spacing
-        for d in self.sortedList :
-            x = left + d.getWidth() // 2
-            d.setCenter(x, center)
-            left = x + d.getWidth() // 2 + spacing
+        self.setPositionActual(left, center, spacing, self.sortedList)
 
     def valueChanged(self, value) :
+        DiceSet.valueChanged(self, value)
         self.sortedList = sorted(self.dice, key=lambda die: die.value)
         self.setPosition(self.left, self.center, self.spacing)

@@ -18,11 +18,11 @@ class RWBRSet() :
         self.track = Die(Die.D_ORANGE, sides=6, text_color=Die.T_WHITE, batch=self.batch)
         self.trackSet = DiceSet([self.track], self.batch)
 
-        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 1), 'TOP'))
-        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 2), 'TOP'))
-        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 3), 'MIDDLE'))
-        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 4), 'MIDDLE'))
-        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 5), 'BOTTOM'))
+        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 1), 'TOP Group'))
+        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 2), 'TOP Group'))
+        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 3), 'MIDDLE Group'))
+        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 4), 'MIDDLE Group'))
+        self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 5), 'BOTTOM Group'))
         self.trackSet.attachBooleanFunctionLabel((partial(self.trackSet.totalEquals, 6), 'DUEL!'))
         self.trackSet.setPosition(20, 420, 16)
 

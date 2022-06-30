@@ -43,8 +43,15 @@ class HistoryMakerBaseballSet() :
 
         d3 = [self.red.makeClone(), self.blue.makeClone(), self.black.makeClone()]
         self.threeSet = SortedDiceSet(d3, self.batch)
-        self.threeSet.setPosition(40, 160, 30)
+        self.threeSet.attachBooleanFunctionLabel((self.isRarePlayRoll, 'RARE PLAY!'))
+        self.threeSet.setPosition(40, 160, 20)
 
+
+    def isRarePlayRoll(self) :
+        if self.threeSet.anyDieEquals(1) and self.threeSet.anyDieEquals(3) and self.threeSet.anyDieEquals(5) :
+            return True
+        return False
+        
 
     def draw(self) :
         self.batch.draw()
