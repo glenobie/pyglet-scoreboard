@@ -8,8 +8,8 @@ import importlib
 ####################################################################
 class FastActionWindow(pyglet.window.Window) :
 
-    def __init__(self, width, height, fullscreen = False) :
-        pyglet.window.Window.__init__(self, width, height, fullscreen=fullscreen)
+    def __init__(self, width, height) :
+        pyglet.window.Window.__init__(self, width, height, fullscreen=False)
 
         self.batch = pyglet.graphics.Batch()
         self.bg = pyglet.graphics.OrderedGroup(0)

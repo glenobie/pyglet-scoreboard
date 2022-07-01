@@ -15,9 +15,17 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
     INDEX_ICON = 2
 
     def __init__(self, width, height, fullscreen = False) :
-        pyglet.window.Window.__init__(self, width, height, fullscreen=fullscreen)
-        
-        self.windowFAC = FastActionWindow(800,480)
+        display = pyglet.canvas.get_display()
+        screens = display.get_screens()
+
+        if len(screens) >= 2 and fullscreen:
+            pyglet.window.Window.__init__(self, width, height)
+            self.set_fullscreen(True, screens[0])
+            self.windowFAC = FastActionWindow(800, 480)
+            self.windowFAC.set_fullscreen(True, screens[1])
+        else :
+            pyglet.window.Window.__init__(self, width, height, fullscreen=False)
+            self.windowFAC = FastActionWindow(800, 480)
         
         font.add_directory('.') 
         self.batch = pyglet.graphics.Batch()
@@ -146,3 +154,6 @@ picker = ScoreboardPicker(800, 480, fullscreen=isPi)
 picker.activate() # should work on Linux, won't on windows
 pyglet.clock.schedule_interval(picker.update, 1/30.0)
 pyglet.app.run()
+
+
+
