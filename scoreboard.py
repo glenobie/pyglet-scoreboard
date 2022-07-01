@@ -36,14 +36,17 @@ class Scoreboard(KeyHandler) :
     TEXT_FONT = 'Built Titling'
 
     def __init__(self) :
-        #self.x = 0
         self.batch = pyglet.graphics.Batch()
         self.bg = pyglet.graphics.OrderedGroup(0)
+        self.attachedFAC = None
 
         self.background = pyglet.shapes.Rectangle(0,0,800,480, (18,18,18), self.batch, self.bg)
 
         self.elements = []
         self.state = None
+
+    def attachFAC(self, fac) :
+        self.attachedFAC = fac
 
     def getBatch(self) :
         return self.batch

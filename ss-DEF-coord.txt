@@ -1,0 +1,11 @@
+from ast import Pass
+
+
+1
+Safe [+1234 Run],Safe [+1234 Run],Safe [+234 Run],Safe [-1234 Pass],Safe [-1234 Pass],Safe,Pass,Pass
+2
+Safe [+234 Run],Safe [-1234 Pass],Safe [+4 Run],Safe [+1234 Run],Safe [-234 Pass],Pass,Pass,Pass
+3
+Safe [+34 Run],Safe [-234 Pass],Run [- Safe],Safe,Safe [-4 Pass],Pass,Pass,Pass
+4
+

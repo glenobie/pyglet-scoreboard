@@ -4,12 +4,18 @@ from die import Die
 from dice_set import DiceSet
 from functools import partial
 
-class RWBRSet() :
+class SecondSeasonSet() :
 
     def __init__(self) :
-        self.challengeNumber = 1
         self.batch = pyglet.graphics.Batch()
         self.createDice()
+
+        self.down = 1
+        self.distance = 10
+        self.quarter = 1
+        self.secondsLeft = 0
+        self.guestScore = 0
+        self.homeScore = 0
 
     def createDice(self) :
         
@@ -37,10 +43,24 @@ class RWBRSet() :
         self.challenge = [self.red, self.white, self.blue]
 
         self.challengeDice = DiceSet(self.challenge, self.batch)
-        self.challengeDice.attachBooleanFunctionLabel((self.challengeDice.allEqual, 'Problem!'))
-        self.challengeDice.setTitle('Challenge #' + str(self.challengeNumber) + ':  ')
         self.challengeDice.setPosition(20, 120, 16)
 
+
+    def downChanged(self, down) :
+        self.down = down
+
+    def distanceChanged(self, distance):
+        self.distance = distance
+
+    def scoreChanged(self, guestScore, homeScore) :
+        self.guestScore = guestScore
+        self.homeScore = homeScore
+        
+    def quarterChanged(self, quarter) :
+        self.quarter = quarter
+
+    def timeChanged(self, secondsLeftInQuarter) :
+        self.secondsLeft = secondsLeftInQuarter
 
     def draw(self) :
         self.batch.draw()
@@ -49,10 +69,6 @@ class RWBRSet() :
         self.trackSet.roll()
         self.challengeDice.roll()
         self.courseDice.roll()
-        self.challengeNumber = 1
-        self.challengeDice.setTitle('Challenge #' + str(self.challengeNumber) + ': ')
 
     def handle_K(self) :
         self.challengeDice.roll()
-        self.challengeNumber += 1
-        self.challengeDice.setTitle('Challenge #' + str(self.challengeNumber) + ': ')

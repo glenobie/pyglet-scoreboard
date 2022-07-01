@@ -156,6 +156,9 @@ class FootballScoreboard(Scoreboard) :
             self.state.resetDownAndDistance()
         else :
             self.state.modifyDown()
+
+        if not(self.attachedFAC is None) :
+            self.attachedFAC.downChanged(self.state.getDown())
         self.updateElements()
  
     def handle_Q(self, modified = False) :

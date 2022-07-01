@@ -17,15 +17,36 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
     def __init__(self, width, height, fullscreen = False) :
         display = pyglet.canvas.get_display()
         screens = display.get_screens()
+        defaultScreen = display.get_default_screen()
+        pyglet.window.Window.__init__(self, width, height, fullscreen=fullscreen, screen = defaultScreen)
 
-        if len(screens) >= 2 and fullscreen:
-            pyglet.window.Window.__init__(self, width, height)
-            self.set_fullscreen(True, screens[0])
-            self.windowFAC = FastActionWindow(800, 480)
-            self.windowFAC.set_fullscreen(True, screens[1])
-        else :
-            pyglet.window.Window.__init__(self, width, height, fullscreen=False)
-            self.windowFAC = FastActionWindow(800, 480)
+        # Ideally, you jsut find both screens and assign a fullscreen window to each screen. But this was not consistent.
+        # So, I find the other screen using its virtual x coordinate
+        # Then continue to create the other window, make it full screen, and check that it is sufficiently far away to be on the other screen.
+        # If not far enough away, close the window and create it again.
+        otherScreen = None
+        for s in screens :
+            if not(s.x == defaultScreen.x) :
+                otherScreen = s
+                print('found at x = ' + str(s.x))
+        
+        if len(screens) >= 2:
+            positionedCorrectly = False
+            while not(positionedCorrectly) :
+                self.set_location(0,0)
+                self.set_fullscreen(True)
+                self.windowFAC = FastActionWindow(760, 440, fullscreen=False)
+                ourX = 900 if otherScreen.x >= 800 else 100
+
+                self.windowFAC.set_location(ourX, 0) # best chances if create far away, then set fullscreen
+                self.windowFAC.set_fullscreen(True, otherScreen)
+                
+                if abs(self.windowFAC.get_location()[0] - self.get_location()[0]) > 700 :
+                    positionedCorrectly = True
+                else :
+                    self.windowFAC.close()
+        else : # Windows OS, just make two windows on same screen
+            self.windowFAC = FastActionWindow(800, 480, fullscreen=False)
         
         font.add_directory('.') 
         self.batch = pyglet.graphics.Batch()
@@ -35,17 +56,17 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
 
         self.controlPoints = ( (400, 240, 0.9),   # 0: front, center
                                (220, 260, 0.6),   # 1: front, left of center
-                               (100, 300, 0.44),     # 2: front, just before apex
-                               (80, 330, 0.4),     # 3: left apex
-                               (100, 340, 0.35),    # 4: back, just after apex
-                               (280, 380, 0.3),    # 5: back, left of center
-                               (400, 400, 0.20),   # 6: back center
-                               (520, 380, 0.3),    # 7: back, right of center
-                               (700, 340, 0.35),   # 8: back, just before apex
-                               (720, 330, 0.4),    # 9: right apex
-                               (700, 300, 0.44),    # 10: right, front, just after apex
-                               (580, 260, 0.6),    # 11: front, right of center
-                               )
+                               (100, 300, 0.44),  # 2: front, just before apex
+                               (80, 330, 0.4),    # 3: left apex
+                               (100, 340, 0.35),  # 4: back, just after apex
+                               (280, 380, 0.3),   # 5: back, left of center
+                               (400, 400, 0.20),  # 6: back center
+                               (520, 380, 0.3),   # 7: back, right of center
+                               (700, 340, 0.35),  # 8: back, just before apex
+                               (720, 330, 0.4),   # 9: right apex
+                               (700, 300, 0.44),  # 10: right, front, just after apex
+                               (580, 260, 0.6),   # 11: front, right of center
+                             )
         self.createMenu()
         
         if len(self.scoreboardTuples) > 0 :
@@ -67,6 +88,7 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
         scoreboardClass = getattr(importlib.import_module(picked[1]), picked[2])
         self.activeScreen = scoreboardClass()
         self.windowFAC.setFACSet(picked[4], picked[5])
+
 
     def getBatch(self) :
         return self.batch
