@@ -35,11 +35,11 @@ class HistoryMakerBaseballSet() :
 
         d1 = [self.red.makeClone()]
         self.oneSet = DiceSet(d1, self.batch)
-        self.oneSet.setPosition(40, 400, 30)
+        self.oneSet.setPosition(40, 400, 20)
     
         d2 = [self.black.makeClone(), self.blue.makeClone()]
         self.twoSet = SortedDiceSet(d2, self.batch)
-        self.twoSet.setPosition(40,280,30)
+        self.twoSet.setPosition(40,280,20)
 
         d3 = [self.red.makeClone(), self.blue.makeClone(), self.black.makeClone()]
         self.threeSet = SortedDiceSet(d3, self.batch)

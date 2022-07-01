@@ -7,6 +7,8 @@ from fast_action_window import FastActionWindow
 from carousel import Carousel
 import importlib
 
+from soccer import SoccerScoreboard
+
 
 ####################################################################
 class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
@@ -93,12 +95,16 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
             self.windowFAC.clearFACSet()
             if self.activeScreen.handleExit(self) > 0 :
                 self.activeScreen = self
+        else :
+            self.activeScreen.handle_S(modified)
 
     def handle_Q(self, modified=False) :
         if modified :
             self.batch = pyglet.graphics.Batch()
             self.configScreen.setIconBatch(self.batch)
             self.activeScreen = self.configScreen
+        else :
+            self.activeScreen = SoccerScoreboard()
         
 
     def handle_C(self, modified=False) :

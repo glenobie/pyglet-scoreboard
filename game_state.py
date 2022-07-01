@@ -1,8 +1,8 @@
 from team_state import TeamState, TeamStateWithTimeouts
 
 class GameState :
-    HOME_INDEX = 0
-    GUEST_INDEX = 1
+    HOME_INDEX = 1
+    GUEST_INDEX = 0
     
     def __init__(self) : 
         self.maxScore = 99

@@ -74,8 +74,8 @@ class BoxingScoreboard(Scoreboard) :
         Scoreboard.__init__(self)
         self.state = BoxingGameState()
         
-        self.addLargeElement(2, Scoreboard.LEFT_CENTER, 460, 'RED', partial(self.state.getScore, 0), Scoreboard.RED)
-        self.addLargeElement(2, Scoreboard.RIGHT_CENTER, 460, 'BLUE', partial(self.state.getScore, 1), Scoreboard.BLUE)
+        self.addLargeElement(2, Scoreboard.LEFT_CENTER, 470, 'RED', partial(self.state.getScore, 0), Scoreboard.RED)
+        self.addLargeElement(2, Scoreboard.RIGHT_CENTER, 470, 'BLUE', partial(self.state.getScore, 1), Scoreboard.BLUE)
         self.addClock(440)
         self.addPeriod(300, maxDigits=2)
 
