@@ -14,39 +14,36 @@ from soccer import SoccerScoreboard
 class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
     INDEX_ICON = 2
 
-    def __init__(self, width, height, fullscreen = False) :
+    def __init__(self, width, height, isPi = False) :
         display = pyglet.canvas.get_display()
         screens = display.get_screens()
-        defaultScreen = display.get_default_screen()
-        pyglet.window.Window.__init__(self, width, height, fullscreen=fullscreen, screen = defaultScreen)
 
-        # Ideally, you jsut find both screens and assign a fullscreen window to each screen. But this was not consistent.
+        self.displayingFAC = False #(isPi and len(screens) > 1) or not(isPi)
+
+        pyglet.window.Window.__init__(self, width, height, fullscreen=isPi, screen=screens[0])
+        # Ideally, you just find both screens and assign a fullscreen window to each screen. But this was not consistent.
         # So, I find the other screen using its virtual x coordinate
-        # Then continue to create the other window, make it full screen, and check that it is sufficiently far away to be on the other screen.
+        # Then continue to create the other window, far away enough to be on the other screen.
         # If not far enough away, close the window and create it again.
-        otherScreen = None
-        for s in screens :
-            if not(s.x == defaultScreen.x) :
-                otherScreen = s
-                print('found at x = ' + str(s.x))
-        
-        if len(screens) >= 2:
-            positionedCorrectly = False
-            while not(positionedCorrectly) :
-                self.set_location(0,0)
-                self.set_fullscreen(True)
-                self.windowFAC = FastActionWindow(760, 440, fullscreen=False)
-                ourX = 900 if otherScreen.x >= 800 else 100
+        if self.displayingFAC :
+            if isPi :
+                positionedCorrectly = False
+                self.set_exclusive_mouse(True)
+                while not(positionedCorrectly) :           
+                    
+                    self.windowFAC = FastActionWindow(800, 480, fullscreen=False)
+                    self.windowFAC.switch_to()
+                    otherX = 800 if self.get_location()[0] == 0 else 0
+                    self.windowFAC.set_location(otherX, 0)
 
-                self.windowFAC.set_location(ourX, 0) # best chances if create far away, then set fullscreen
-                self.windowFAC.set_fullscreen(True, otherScreen)
-                
-                if abs(self.windowFAC.get_location()[0] - self.get_location()[0]) > 700 :
-                    positionedCorrectly = True
-                else :
-                    self.windowFAC.close()
-        else : # Windows OS, just make two windows on same screen
-            self.windowFAC = FastActionWindow(800, 480, fullscreen=False)
+                    if not(self.windowFAC.get_location()[0] == self.get_location()[0]) :
+                            positionedCorrectly = True
+                    else :
+                        self.windowFAC.close()
+
+            elif not(isPi) : 
+                self.windowFAC = FastActionWindow(800, 480, fullscreen=False)
+
         
         font.add_directory('.') 
         self.batch = pyglet.graphics.Batch()
@@ -87,7 +84,8 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
         picked = self.scoreboardTuples[self.options.getSelection()]
         scoreboardClass = getattr(importlib.import_module(picked[1]), picked[2])
         self.activeScreen = scoreboardClass()
-        self.windowFAC.setFACSet(picked[4], picked[5])
+        if self.displayingFAC :
+            self.windowFAC.setFACSet(picked[4], picked[5])
 
 
     def getBatch(self) :
@@ -122,7 +120,8 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
         if self.activeScreen == self :
             self.processSelection()
         elif modified :
-            self.windowFAC.clearFACSet()
+            if self.displayingFAC :
+                self.windowFAC.clearFACSet()
             if self.activeScreen.handleExit(self) > 0 :
                 self.activeScreen = self
         else :
@@ -139,7 +138,8 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
 
     def handle_C(self, modified=False) :
         if modified :
-            self.windowFAC.close()
+            if self.displayingFAC :
+                self.windowFAC.close()
             self.close()
 
     def on_key_press(self, symbol, modifiers):
@@ -160,19 +160,22 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
         elif symbol == pyglet.window.key.E :
             self.activeScreen.handle_E(modifiers & pyglet.window.key.LSHIFT)
         elif symbol == pyglet.window.key.L :
-            self.windowFAC.handle_L()
+            if self.displayingFAC :
+                self.windowFAC.handle_L()
         elif symbol == pyglet.window.key.K :
-            self.windowFAC.handle_K()
+            if self.displayingFAC :
+                self.windowFAC.handle_K()
 
     def on_close(self):
-        self.windowFAC.close()
+        if self.displayingFAC :
+            self.windowFAC.close()
         return super().on_close()
 
 ##################################################
 # start me up!
 
 isPi = socket.gethostname() == "raspberrypi"
-picker = ScoreboardPicker(800, 480, fullscreen=isPi)
+picker = ScoreboardPicker(800, 480, isPi)
 picker.activate() # should work on Linux, won't on windows
 pyglet.clock.schedule_interval(picker.update, 1/30.0)
 pyglet.app.run()

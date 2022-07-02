@@ -170,10 +170,10 @@ class BowlingGameState(GameState) :
 
 ###########################################################
 class FrameDisplay() :
-    SPACING_X = 8
+    SPACING_X = 0
     SPACING_Y = 4
-    BALL_FONT_SIZE = 24
-    SCORE_FONT_SIZE = 24
+    BALL_FONT_SIZE = 23
+    SCORE_FONT_SIZE = 23
     DIMMED_OPACITY = 60
     FULL_OPACITY = 230
 
@@ -202,9 +202,9 @@ class FrameDisplay() :
     def drawBorder(self) :
         self.border = []
         x = self.topLeft[0] - 1 # left
-        y = self.topLeft[1] + 11 # top : Why 8 extra?  Don't know
+        y = self.topLeft[1] + 6 # top 
         x2 = x + self.getWidth() + 2 # right
-        y2 = y - self.getHeight() - 3 # bottom
+        y2 = y - self.getHeight() - 8 # bottom
 
         self.border.append(pyglet.shapes.Line(x, y, x2, y, 1, batch = self.batch, group=self.group)) #top
         self.border.append(pyglet.shapes.Line(x2, y, x2, y2, 1, batch = self.batch, group=self.group)) #right
@@ -237,7 +237,7 @@ class FrameDisplay() :
             line.opacity = opacity
 
 class TenthFrameDisplay(FrameDisplay) :
-    SPACING_X = 2
+    SPACING_X = 1
     def __init__(self, state, frameID, bowlerID, pinsFunc, scoreFunc, batch) :
         FrameDisplay.__init__(self, state, frameID, bowlerID, pinsFunc, scoreFunc, batch)
         self.pins.append(ScoreboardElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
@@ -255,7 +255,7 @@ class TenthFrameDisplay(FrameDisplay) :
         self.topLeft = (x, y)
         self.score.setCenterTop(x + self.getWidth() // 2, 
                                 y - self.pins[0].getHeight() - FrameDisplay.SPACING_Y)
-        x += TenthFrameDisplay.SPACING_X + 4
+        x += TenthFrameDisplay.SPACING_X 
         for p in self.pins :
             p.setLeftTop(x, y)
             x += p.getWidth() + TenthFrameDisplay.SPACING_X

@@ -65,7 +65,7 @@ class TennisScoreboard(Scoreboard) :
     P1_Y = 360
     P2_Y = 240
 
-    COLS = [194, 418, 498, 578, 658, 738]
+    COLS = [198, 428, 508, 588, 668, 748]
   
     def __init__(self) :
         Scoreboard.__init__(self)
@@ -79,8 +79,8 @@ class TennisScoreboard(Scoreboard) :
         self.addPoints(TennisScoreboard.COLS[0], TennisScoreboard.P1_Y, 0, 'Player 1')
         self.addPoints(TennisScoreboard.COLS[0], TennisScoreboard.P2_Y, 1, 'Player 2')
 
-        self.addBall(12, TennisScoreboard.P1_Y-20, 0)
-        self.addBall(12, TennisScoreboard.P2_Y-20, 1)
+        self.addBall(8, TennisScoreboard.P1_Y-20, 0)
+        self.addBall(4, TennisScoreboard.P2_Y-20, 1)
 
         for i in range(0, len(self.state.getPlayerSets(0)) ) :
             self.P1_sets.append(self.addGames(TennisScoreboard.COLS[i+1], TennisScoreboard.P1_Y, 0, i))

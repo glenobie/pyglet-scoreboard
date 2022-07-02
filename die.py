@@ -53,7 +53,8 @@ class Die :
         self.document.set_style(0, len(self.document.text), dict( dict(font_name = Die.FONT,  font_size = self.baseTextSize, color=text_color)))
         self.layout = pyglet.text.layout.TextLayout(self.document, batch=self.batch, group = self.fg)
         self.layout.anchor_x = 'center'
-        self.layout.anchor_y = 'center'
+        self.layout.anchor_y = 'bottom'
+        self.layout.content_valign = 'center'
 
         self.adjustBaseTextSize()
         self.roll()
@@ -128,7 +129,10 @@ class Die :
     def setCenter(self, x, y) :
         self.center = (x, y)
         self.border.position = (x - self.border.width // 2 , y - self.border.height // 2)
-        self.layout.position = (x,y)
+
+        layout_y = self.border.y + (self.border.height  - self.layout.content_height) // 2
+
+        self.layout.position = (x, layout_y)
 
     def getWidth(self) :
         return self.border.width

@@ -1,5 +1,4 @@
 import pyglet
-from key_handler import KeyHandler
 from die import Die
 from random import seed
 import time
@@ -19,9 +18,12 @@ class FastActionWindow(pyglet.window.Window) :
         seed(time.time_ns())
         self.fac = None
 
+
     def on_draw(self) :
         self.clear()
-        if not(self.fac is None) :
+        if self.fac is None :
+            self.displayMessage('Choose a Scoreboard')
+        else:
             self.fac.draw()
 
     def setFACSet(self, facModule, facClass):
@@ -38,3 +40,11 @@ class FastActionWindow(pyglet.window.Window) :
     
     def clearFACSet(self) :
         self.fac = None
+
+    def displayMessage(self, text) :
+        msgDoc = pyglet.text.document.UnformattedDocument(text)
+        msgDoc.set_style(0,len(msgDoc.text), dict(color=(255,255,255,255), font_name = Die.FONT,  font_size = 24 ))
+        self.msgLayout = pyglet.text.layout.TextLayout(msgDoc)
+        self.msgLayout.anchor_x = 'center'
+        self.msgLayout.position = (400, 300)
+        self.msgLayout.draw()

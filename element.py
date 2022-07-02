@@ -5,15 +5,15 @@ from pyglet import font
 
 class ShadowBorder() :
 
-    BORDER_SPACING = (5, 8)
+    BORDER_SPACING = 3
     BG_COLOR = (18,18,18)
 
     def __init__(self, width, height, batch, bg, fg) :
         self.batch = batch
         self.fg = fg
         self.bg = bg
-        self.width = width + ShadowBorder.BORDER_SPACING[0] * 2
-        self.height = height + ShadowBorder.BORDER_SPACING[1] * 2 + 3 # why 3? don't know
+        self.width = width + ShadowBorder.BORDER_SPACING * 2
+        self.height = height + ShadowBorder.BORDER_SPACING * 2 
 
     def drawLines(self) :
         self.border = shapes.Rectangle(0, 0, self.width, self.height, color=ShadowBorder.BG_COLOR, batch=self.batch, group=self.bg  )
@@ -51,11 +51,13 @@ class ShadowBorder() :
         self.drawLines()
         #self.border.position = pos
 
-
+############################################
+# A border around a layout with digits filled by a function that returns an inteter
+# maybe with a laberl above it
 class ScoreboardElement :
 
     DIGIT_KERNING = 6
-    VERTICAL_SPACING = 2
+    VERTICAL_SPACING = -2
 
     def __init__(self, text=None, textFont='', textSize=44, textColor=None, 
                    updateFunc=None, digitFont='', digitSize=80, digitColor=None, 
@@ -74,32 +76,38 @@ class ScoreboardElement :
         self.width = 0
 
         if not(text is None) :
-            self.label = pyglet.text.Label(text, font_name=textFont, 
-                                        font_size=textSize, color=textColor, batch=batch, group=self.fg)
+            self.label = pyglet.text.Label(text, font_name=textFont, font_size=textSize, color=textColor, batch=batch, group=self.fg)
 
         self.docs = self.createDocuments(digitFont, digitSize, digitColor, maxDigits)
-
         self.layouts = []
         for d in self.docs :
-            self.layouts.append(self.createLayout(d, batch, self.fg))
+            layout = pyglet.text.layout.TextLayout(d, batch=batch, group=self.fg)
+            self.layouts.append(layout)
+            # store max Height and max Width in the document
+            d.set_style(0, len(d.text), dict(maxWidth=layout.content_width, maxHeight = layout.content_height))
 
         self.borders = []
         for l in self.layouts :
-            self.borders.append(ShadowBorder( l.width, l.height-(l.height//10), batch, self.bg, self.fg))        
+            width = l.document.get_style('maxWidth', 0)
+            height = l.document.get_style('maxHeight', 0)
+            self.borders.append(ShadowBorder( width, height, batch, self.bg, self.fg))        
         
+
         self.computeHeight()
         self.update()
 
     # base class just creates a single document
     def createDocuments(self, fontName, fontSize, fontColor, maxDigits) :
         docs = []
-        document = pyglet.text.document.UnformattedDocument('0')
+        text = ''
+        for i in range(0, maxDigits) :
+            text += '0'
+        document = pyglet.text.document.UnformattedDocument(text)
         document.set_style(0, len(document.text), dict(font_name = fontName, 
                                                        font_size = fontSize, 
                                                        color=fontColor,
                                                        align='right',
-                                                       kerning=ScoreboardElement.DIGIT_KERNING,
-                                                       maxDigits=maxDigits))
+                                                       kerning=ScoreboardElement.DIGIT_KERNING))# ,                               maxDigits=maxDigits))
         docs.append(document)
         return docs
 
@@ -107,20 +115,7 @@ class ScoreboardElement :
         self.isOn = value
         self.update()
 
-    def createLayout(self, doc, batch, group) :
-        # find  width of a character at this size            
-        #                                              
-            maxDigits = doc.get_style('maxDigits')
-            charWidth = doc.get_font(0).get_glyphs('0')[0].advance
-            self.numberWidth = self.numberWidth = charWidth*maxDigits + ScoreboardElement.DIGIT_KERNING*(maxDigits-1)
-                
-            self.numberHeight = self.docs[0].get_font(0).ascent #fudge
-        
-            layout = pyglet.text.layout.TextLayout(doc, width=self.numberWidth, height=self.numberHeight, 
-                                                        batch=batch, multiline=True, group=group)
-            return layout
-
-    # base class assumes a single document
+   # base class assumes a single document
     def update(self) :
         self.docs[0].delete_text(0, len(self.docs[0].text))
         if self.isOn :
@@ -163,37 +158,30 @@ class ScoreboardElement :
     
             self.label.position = (x, y)
             y = y - self.label.content_height - ScoreboardElement.VERTICAL_SPACING
+
+        self.positionBorderAndLayoutFromBottomLeft(x - self.borders[0].getWidth() // 2, y - self.borders[0].getHeight())
         
-        self.layouts[0].anchor_x = 'center'
-        self.layouts[0].anchor_y = 'top'
-        self.layouts[0].position = (x, y)
- 
-        y = y - self.numberHeight - ShadowBorder.BORDER_SPACING[1]
-        x = x - self.numberWidth // 2 - ShadowBorder.BORDER_SPACING[0]
-        self.borders[0].setPosition((x, y))
     
    # base class assumes a single layout
+   # right justify
     def setRightTop(self, x, y) :
         self.top = y
+        self.center = x - self.borders[0].getWidth() // 2
         if self.label != None :
             self.label.anchor_x = 'right'
             self.label.anchor_y = 'top'
     
             self.label.position = (x, y)
             y = y - self.label.content_height - ScoreboardElement.VERTICAL_SPACING
-        
-        self.layouts[0].anchor_x = 'right'
-        self.layouts[0].anchor_y = 'top'
-        self.layouts[0].position = (x, y)
-        
-        y = y - self.numberHeight - ShadowBorder.BORDER_SPACING[1]
-        x = x - self.numberWidth  - ShadowBorder.BORDER_SPACING[0]
-        self.borders[0].setPosition((x, y))
+
+        self.positionBorderAndLayoutFromBottomLeft(x - self.borders[0].getWidth(), y - self.borders[0].getHeight())
 
 
    # base class assumes a single layout
     def setLeftTop(self, x, y) :
         self.top = y
+        self.center = x + self.borders[0].getWidth() // 2
+
         if self.label != None :
             self.label.anchor_x = 'left'
             self.label.anchor_y = 'top'
@@ -201,19 +189,31 @@ class ScoreboardElement :
             self.label.position = (x, y)
             y = y - self.label.content_height - ScoreboardElement.VERTICAL_SPACING
         
-        self.layouts[0].anchor_x = 'left'
-        self.layouts[0].anchor_y = 'top'
-        self.layouts[0].position = (x, y)
-        
-        y = y - self.numberHeight - ShadowBorder.BORDER_SPACING[1]
-        x = x  - ShadowBorder.BORDER_SPACING[0]
+        self.positionBorderAndLayoutFromBottomLeft(x, y - self.borders[0].getHeight())
+
+
+    def positionBorderAndLayoutFromBottomLeft(self, x, y) :
         self.borders[0].setPosition((x, y))
+
+        self.layouts[0].anchor_x = 'right'
+        self.layouts[0].anchor_y = 'bottom'
+        width = self.layouts[0].document.get_style('maxWidth', 0)
+        height = self.layouts[0].document.get_style('maxHeight', 0)
+        self.layouts[0].position = ( x + self.borders[0].getWidth() - (self.borders[0].getWidth() - width) // 2,
+                                     y + 2 + (self.borders[0].getHeight()  - height ) // 2) # added a fudge of 2
+ 
+
 
     def getHeight(self) :
         return self.height
 
     def getWidth(self) :
         return self.borders[0].getWidth()
+
+    def setVisible(self, value) :
+        for l in self.layouts :
+            l.visible = value
+        
 
 
 
@@ -233,104 +233,66 @@ class HorizontalElement(ScoreboardElement) :
 
     
     def setCenterTop(self, x, y) :
-        totalWidth = self.layouts[0].width 
         self.layouts[0].anchor_x = 'left'
         self.layouts[0].anchor_y = 'top'
-        
- 
+
+
+        layoutWidth = self.layouts[0].document.get_style('maxWidth', 0)
+        totalWidth = layoutWidth
         if not(self.label is None) :
             self.label.anchor_x = 'left'
             self.label.anchor_y = 'top'
-            totalWidth = totalWidth + HorizontalElement.SPACING + self.label.content_width
-            x = x - totalWidth // 2
+            totalWidth += HorizontalElement.SPACING + self.label.content_width
+            x -= totalWidth // 2
             self.label.position = (x, y)
-            x = x + HorizontalElement.SPACING + self.label.content_width
-            self.layouts[0].position = (x,y)
+            x += HorizontalElement.SPACING + self.label.content_width
         else :
-            x = x - self.numberWidth // 2
-            self.layouts[0].position = (x,y)
-            
-        y = y - self.numberHeight - ShadowBorder.BORDER_SPACING[1]
-        x = x - ShadowBorder.BORDER_SPACING[0]
-        self.borders[0].setPosition((x, y))
+            x -= totalWidth // 2
 
-        self.height = self.borders[0].getHeight()
-        if (self.label.content_height > self.height) :
-            self.height = self.label.content_height 
+        self.positionBorderAndLayoutFromBottomLeft(x, y - self.borders[0].getHeight())   
+
+        self.height = self.borders[0].getHeight() if self.label.content_height > self.height else  self.label.content_height 
 
 ################################
-# Creates two layouts to fill via one function that gets seconds
+# Creates two ScoreboardElements to fill via one function that gets seconds
 # maxDigits only refers to minutes
 # adds colon label between layouts
 
 class ClockElement(ScoreboardElement) :
 
-    SPACE_AROUND_COLON = -6
+    SPACE_AROUND_COLON = -4
     
     def __init__(self, text=None, textFont='', textSize=44, textColor=None, 
                    updateFunc=None, digitFont='', digitSize=80, digitColor=None, 
                    maxDigits=2, displayLeadingZeroes=False, batch=None) :
 
-        ScoreboardElement.__init__(self, text=text, textFont=textFont, textSize=textSize, 
-                                    textColor=textColor, updateFunc=updateFunc, digitFont=digitFont,
-                                    digitSize=digitSize, digitColor=digitColor, maxDigits=maxDigits,
-                                    displayLeadingZeroes=displayLeadingZeroes, batch=batch)
-        
-        f = font.load(digitFont, digitSize)
-       
+        self.minutesElement = None
+        self.secondsElement = None
+        ScoreboardElement.__init__(self, text, textFont, textSize, textColor, updateFunc, digitFont, digitSize, digitColor, maxDigits, displayLeadingZeroes, batch)
+        self.setVisible(False)
+
+        self.minutesElement = ScoreboardElement(None, textFont, textSize, textColor, self.getMinutes, digitFont, digitSize, digitColor, maxDigits, displayLeadingZeroes, batch)
+        self.secondsElement = ScoreboardElement(None, textFont, textSize, textColor, self.getSeconds, digitFont, digitSize, digitColor, 2, True, batch)
+
         self.colon = pyglet.text.Label(':', font_name=digitFont, font_size=digitSize, color=textColor, batch=batch, group=self.fg)
 
- 
 
-    # uses update function to get total seconds, then inserts seconds and minutes into the 2 layouts
+
+    def getMinutes(self) :
+        seconds = self.updateFunc()
+        return seconds // 60
+
+    def getSeconds(self) :
+        seconds = self.updateFunc()
+        return seconds % 60
+
     def update(self) :
-
-        totalSeconds = self.updateFunc()
-        self.docs[0].delete_text(0, len(self.docs[0].text))
-        self.docs[1].delete_text(0, len(self.docs[1].text))
-
-        seconds = str(totalSeconds % 60)
-        minutes = str(totalSeconds // 60)
-
-        if  len(seconds) < 2 :
-            seconds = '0' + seconds
-
-        self.docs[0].insert_text(0, seconds)
-
-        self.docs[1].insert_text(0, minutes)
-
-    # override base class to create two documents, docs[0] for seconds and docs[1] for minutes
-    def createDocuments(self, fontName, fontSize, fontColor, maxDigits) :
-        docs = []
-        secondsDoc = pyglet.text.document.UnformattedDocument('00')
-        secondsDoc.set_style(0, len(secondsDoc.text), dict(font_name = fontName, 
-                                                           font_size = fontSize, 
-                                                           color=fontColor,
-                                                           align='right',
-                                                           kerning=ScoreboardElement.DIGIT_KERNING,
-                                                           maxDigits=2))
-        docs.append(secondsDoc)
-        
-        minutesDoc = pyglet.text.document.UnformattedDocument('0')
-        minutesDoc.set_style(0, len(minutesDoc.text), dict(font_name = fontName, 
-                                                           font_size = fontSize, 
-                                                           color=fontColor,
-                                                           align='right',
-                                                           kerning=ScoreboardElement.DIGIT_KERNING,
-                                                           maxDigits=maxDigits))
-        docs.append(minutesDoc)
-        return docs
-
+        if not(self.minutesElement is None) :
+            self.minutesElement.update()
+            self.secondsElement.update()
 
     def setCenterTop(self, x, y) :
-        self.top = y
-        self.center = x
 
-        colon_width = self.colon.content_width + ClockElement.SPACE_AROUND_COLON * 2
-        totalWidth = colon_width 
-        for l in self.layouts :
-            totalWidth = totalWidth + l.width
- 
         if not (self.label is None) :
             self.label.anchor_x = 'center'
             self.label.anchor_y = 'top'
@@ -338,29 +300,13 @@ class ClockElement(ScoreboardElement) :
             self.label.position = (x, y)
             y = y - self.label.content_height - ScoreboardElement.VERTICAL_SPACING
 
-        x = x - totalWidth // 2
-            
-        # minutes
-        self.layouts[1].anchor_x = 'left'
-        self.layouts[1].anchor_y = 'top'
-        self.layouts[1].position = (x, y)
-
-        colon_x = x + self.layouts[1].width
-        x = colon_x +ClockElement.SPACE_AROUND_COLON
-        
-
         self.colon.anchor_x = 'left'
         self.colon.anchor_y = 'top'
-        self.colon.position = (x,y)
 
-        x = x + self.colon.content_width + ClockElement.SPACE_AROUND_COLON
+        totalWidth = self.minutesElement.getWidth() + self.secondsElement.getWidth() + self.colon.content_width + ClockElement.SPACE_AROUND_COLON * 2
+        colon_x = (x - totalWidth // 2) + self.minutesElement.getWidth() + ClockElement.SPACE_AROUND_COLON
+        self.colon.position = (colon_x,  y)  
 
-        #seconds
-        self.layouts[0].anchor_x = 'left'
-        self.layouts[0].anchor_y = 'top'
-        self.layouts[0].position = (x, y)
+        self.minutesElement.setRightTop(colon_x - ClockElement.SPACE_AROUND_COLON, y)
+        self.secondsElement.setLeftTop(colon_x + self.colon.content_width + ClockElement.SPACE_AROUND_COLON, y)
 
-
-        y = y - self.numberHeight - ShadowBorder.BORDER_SPACING[1]
-        self.borders[0].setPosition((colon_x + colon_width - ShadowBorder.BORDER_SPACING[0], y))
-        self.borders[1].setPosition((colon_x - self.layouts[1].width - ShadowBorder.BORDER_SPACING[0], y))

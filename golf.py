@@ -129,8 +129,8 @@ class GolfHole() :
     # position passed is center
 
     WIDTH = 200
-    INTERIOR_SPACING = (4, 8)
-    EXTERIOR_SPACING = (2,4)
+    INTERIOR_SPACING = (4, 0)
+    EXTERIOR_SPACING = (2,8)
     DEFAULT_OPACITY = 100
     HIGHLIGHT_OPACITY = 255
     DEFAULT_LABEL = (255,255, 255, 255)

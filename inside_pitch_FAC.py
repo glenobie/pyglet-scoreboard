@@ -1,7 +1,6 @@
-
 import pyglet
 from die import Die
-from dice_set import DiceSet, SortedDiceSet
+from dice_set import DiceSet
 
 class IP_DiceSet :
     SPACE = 8
