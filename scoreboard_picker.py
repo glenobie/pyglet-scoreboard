@@ -18,7 +18,7 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
         display = pyglet.canvas.get_display()
         screens = display.get_screens()
 
-        self.displayingFAC = False #(isPi and len(screens) > 1) or not(isPi)
+        self.displayingFAC = (isPi and len(screens) > 1) or not(isPi)
 
         pyglet.window.Window.__init__(self, width, height, fullscreen=isPi, screen=screens[0])
         # Ideally, you just find both screens and assign a fullscreen window to each screen. But this was not consistent.

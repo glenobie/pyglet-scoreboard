@@ -2,10 +2,42 @@ from ast import Pass
 
 
 1
-Safe [+1234 Run],Safe [+1234 Run],Safe [+234 Run],Safe [-1234 Pass],Safe [-1234 Pass],Safe,Pass,Pass
+Safe [+1234 Run],Safe [+1234 Run],Safe [+234 Run],Safe [-1234 Pass],Safe [-1234 Pass],Safe,Pass,Pass,Safe,Safe,Pass,Pass
 2
-Safe [+234 Run],Safe [-1234 Pass],Safe [+4 Run],Safe [+1234 Run],Safe [-234 Pass],Pass,Pass,Pass
+Safe [+234 Run],Safe [-1234 Pass],Safe [+4 Run],Safe [+1234 Run],Safe [-234 Pass],Pass,Pass,Pass,Safe,Pass,Pass,Run
 3
-Safe [+34 Run],Safe [-234 Pass],Run [- Safe],Safe,Safe [-4 Pass],Pass,Pass,Pass
+Safe [+34 Run],Safe [-234 Pass],Run [- Safe],Safe,Safe [-34 Pass],Pass,Pass,Pass,Safe,Pass,Pass,Run
 4
-
+Safe [+4 Run],Safe [-1234 Pass],Run [-234 Safe],Safe,Safe [-4 Pass],Pass,Pass,Pass,Safe,Pass,Pass,Run
+5
+Safe,Safe [-34 Pass],Run [-34 Safe],Safe,Pass,Pass,Pass,Pass,Safe,Pass,Pass,Run
+6
+Safe [-1234 Pass],Safe [-34 Pass],Run [-4 Pass],Safe,Pass,Pass,Pass,Pass,Safe,Pass,Pass,Run
+7
+Safe [-234 Pass],Safe [-4 Pass],Run [- Safe],Safe,Pass,Pass,Pass,Pass,Run,Pass,Pass,Run
+8
+Safe [-34 Pass],Safe,Run,Safe,Pass [+1234 Safe],Pass,Pass,Pass,Pass,Pass,Pass,Run
+9
+Safe [-4 Pass],Run [-1234 Pass],Run,Safe,Pass [+1234 Safe],Pass,Pass,Pass,Pass,Pass,Pass,Run
+10
+Safe [-4 Pass],Run [-34 Pass],Run,Safe,Pass [+234 Safe],Pass,Pass,Pass,Pass,Pass,Pass,Run
+11
+Safe,Pass [+1234 Safe],Run,Run [-234 Pass],Pass [+234 Run],Pass,Pass,Pass,Pass,Pass,Pass,Run
+12
+Run [-34 Safe],Pass [+234 Safe],Run,Run [-34 Pass],Pass [+34 Safe],Pass,Pass,Pass,Pass,Pass,Pass,Run
+13
+Run [-4 Pass],Pass [+234 Run],Run,Run [-4 Pass],Pass [+34 Run],Pass,Pass,Pass,Pass,Pass,Pass,Run
+14
+Run,Pass [+34 Safe],Run,Run,Pass [+4 Safe],Pass,Pass,Pass,Pass,Pass,Pass,Run
+15
+Pass [+234 Safe],Pass [+34 Run],Run,Pass [+234 Run],Pass [+4 Run],Pass,Pass,Pass,Pass,Pass,Pass,Run
+16
+Pass [+34 Run],Pass [+4 Run],Blitz,Pass [+34 Run],Pass,Blitz,Blitz,Pass,Pass,Pass,Pass,Blitz
+17
+Pass [+4 Run],Pass [+4 Run],Blitz,Pass [+4 Run],Pass,Blitz,Blitz,Pass,Pass,Pass,Pass,Blitz
+18
+Blitz,Pass,Blitz,Pass,Pass,Blitz,Blitz,Pass,Blitz,Blitz,Pass,Blitz
+19
+Blitz,Blitz,Blitz,Blitz,Blitz,Blitz,Blitz,Blitz,Blitz,Blitz,Blitz,Blitz
+20
+Blitz,Blitz,Blitz,Blitz,Blitz,Blitz,Blitz,Blitz,Blitz,Blitz,Blitz,Blitz
