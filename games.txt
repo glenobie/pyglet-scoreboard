@@ -38,13 +38,13 @@ Second Season
 football
 FootballScoreboard
 second-season.png
-hmg_FAC
-HistoryMakerGolfSet
+second-season_FAC
+SecondSeasonSet
 Inside Blitz
 football
 FootballScoreboard
 inside-blitz.png
-hmg_FAC
+_FAC
 HistoryMakerGolfSet
 Legends of Boxing
 boxing

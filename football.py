@@ -48,6 +48,13 @@ class FootballGameState(TimedGameState) :
         else :
             return self.yardsToGain
 
+    def getRawYardsToGain(self) :
+        if self.yardsToGain < 0 :
+            return 0
+        else :
+            return self.yardsToGain
+
+
     def modifyDown(self) :
         self.down += 1
         if (self.down > self.MaxDowns) :
@@ -147,23 +154,31 @@ class FootballScoreboard(Scoreboard) :
         e.setCenterTop(Scoreboard.CENTER, height)
         self.elements.append(e)
 
+    def reportFieldChange(self) :
+        if not(self.attachedFAC is None) :
+            self.attachedFAC.distanceChanged(self.state.getRawYardsToGain()) 
+        self.updateElements()
+
     def handle_A(self, modified = False) :
         self.state.modifyLineOfScrimmage(1, modified)
         self.updateElements()
+        self.reportFieldChange()
+ 
 
     def handle_D(self, modified = False) :
         if modified :
             self.state.resetDownAndDistance()
+            self.reportFieldChange()
         else :
             self.state.modifyDown()
-
         if not(self.attachedFAC is None) :
-            self.attachedFAC.downChanged(self.state.getDown())
+            self.attachedFAC.downChanged(self.state.getDown()) 
         self.updateElements()
  
     def handle_Q(self, modified = False) :
         self.state.modifyLineOfScrimmage(10, modified)
         self.updateElements()
+        self.reportFieldChange()
 
     def handle_E(self, modified = False) :
         self.state.changePossessingTeam()

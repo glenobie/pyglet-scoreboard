@@ -4,6 +4,12 @@ BaseballScoreboard
 inside-pitch.png
 inside_pitch_FAC
 InsidePitchSet
+Second Season
+football
+FootballScoreboard
+second-season.png
+second-season_FAC
+SecondSeasonSet
 History Maker Baseball
 baseball
 BaseballScoreboard
@@ -20,12 +26,6 @@ Cold Snap
 football
 CFLScoreboard
 cold-snap.png
-hmg_FAC
-HistoryMakerGolfSet
-Second Season
-football
-FootballScoreboard
-second-season.png
 hmg_FAC
 HistoryMakerGolfSet
 Legends of Boxing

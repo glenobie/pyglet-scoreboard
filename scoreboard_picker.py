@@ -85,7 +85,10 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
         scoreboardClass = getattr(importlib.import_module(picked[1]), picked[2])
         self.activeScreen = scoreboardClass()
         if self.displayingFAC :
-            self.windowFAC.setFACSet(picked[4], picked[5])
+            class_ = getattr(importlib.import_module(picked[4]), picked[5])
+            fac = class_()
+            self.windowFAC.setFACSet(fac)
+            self.activeScreen.attachFAC(fac)
 
 
     def getBatch(self) :

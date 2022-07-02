@@ -26,9 +26,8 @@ class FastActionWindow(pyglet.window.Window) :
         else:
             self.fac.draw()
 
-    def setFACSet(self, facModule, facClass):
-        class_ = getattr(importlib.import_module(facModule), facClass)
-        self.fac = class_()
+    def setFACSet(self, fac):
+        self.fac = fac
 
     def handle_L(self) :
         if not(self.fac is None) :
