@@ -1,5 +1,4 @@
 import pyglet
-from pyglet import resource
 from pyglet import shapes
 from key_handler import KeyHandler
 import math
@@ -17,8 +16,7 @@ def listDifference(list1, list2) :
     
 ###############################
 class ScoreboardIconSprite :
-    def __init__(self, dir, imageFile, batch):
-        image = pyglet.image.load(dir + '/' + imageFile)
+    def __init__(self, image, batch):
         self.icon = pyglet.sprite.Sprite(image, batch=batch)
         self.speed = 20
         self.scale_speed = 4
@@ -238,7 +236,9 @@ class ConfigScreen(KeyHandler) :
     CHOSEN_GAMES_FILE = 'config.txt'
     ICON_DIR = 'icons'
 
-    def __init__(self, iconBatch) :
+    def __init__(self, loader, iconBatch) :
+        self.loader = loader
+
         self.batch = pyglet.graphics.Batch()
         self.scoreboards = []
         self.iconBatch = iconBatch
@@ -258,7 +258,7 @@ class ConfigScreen(KeyHandler) :
 
     def recordToFile(self, gameList) :
         print("writing")
-        f = open(ConfigScreen.CHOSEN_GAMES_FILE, 'w')
+        f = self.loader.file(ConfigScreen.CHOSEN_GAMES_FILE, 'w')
         for g in gameList :
             for e in g :
                 f.write(e)
@@ -279,7 +279,7 @@ class ConfigScreen(KeyHandler) :
             s.append(g[0])   
             s.append(g[1])
             s.append(g[2])
-            s.append(ScoreboardIconSprite(ConfigScreen.ICON_DIR, g[3], self.iconBatch))
+            s.append(ScoreboardIconSprite(self.loader.image(g[3]), self.iconBatch))
             s.append(g[4])
             s.append(g[5])
             objectList.append(s)
@@ -287,8 +287,8 @@ class ConfigScreen(KeyHandler) :
 
     # (Menu Name in config screen, scoreboard module name, scoreboard class name, dingbat char, dingbat font, menu text )
     def processGamesFile(self, filename) :
-        loader = resource.Loader()
-        lines = loader.file(filename, mode='r').read().splitlines()
+        
+        lines = self.loader.file(filename, mode='r').read().splitlines()
         games = []
 
         if len(lines) > 0 :

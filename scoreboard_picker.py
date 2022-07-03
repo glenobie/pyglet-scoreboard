@@ -6,12 +6,16 @@ from config_screen import ConfigScreen
 from fast_action_window import FastActionWindow
 from carousel import Carousel
 import importlib
+from pyglet import resource
+from scoreboard import Scoreboard
 
 from soccer import SoccerScoreboard
 
 
 ####################################################################
 class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
+    
+
     INDEX_ICON = 2
 
     def __init__(self, width, height, isPi = False) :
@@ -45,9 +49,17 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
                 self.windowFAC = FastActionWindow(800, 480, fullscreen=False)
 
         
-        font.add_directory('.') 
+        self.path = ['resources', 'resources/icons', 'resources/fonts']
+        self.loader = resource.Loader(self.path)
+        self.loader.add_font('digital-7.mono.ttf')
+        self.loader.add_font('title-sb.ttf')
+        font.load(Scoreboard.DIGIT_FONT)
+        font.load(Scoreboard.TEXT_FONT)
+        self.loader.add_font
+
+
         self.batch = pyglet.graphics.Batch()
-        self.configScreen = ConfigScreen(self.batch)
+        self.configScreen = ConfigScreen(self.loader, self.batch)
 
         # center points for the icons
 

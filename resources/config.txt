@@ -4,6 +4,12 @@ BaseballScoreboard
 inside-pitch.png
 inside_pitch_FAC
 InsidePitchSet
+Payoff Pitch
+baseball
+BaseballScoreboard
+payoff-pitch.png
+hmg_FAC
+HistoryMakerGolfSet
 Second Season
 football
 FootballScoreboard
