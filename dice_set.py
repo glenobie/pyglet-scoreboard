@@ -59,6 +59,10 @@ class DiceSet :
         for d in self.dice :
             self.total += d.getValue()
 
+    # instead of boolean function labels
+    def setLabel(self, text) :
+        self.labelDoc.text = text
+
     def updateLabels(self) :
         newLabel = ''
         for b in self.booleanFunctionLabels :
@@ -173,8 +177,21 @@ class BorderedDiceSet(DiceSet) :
            
 
         if len(self.labelDoc.text) > 0 :
-            label_x = x + (width - self.titleLayout.content_width) // 2
+            label_x = x + (width - self.labelLayout.content_width) // 2
+            self.labelLayout.position = (label_x, y)
+            self.lines.append(pyglet.shapes.Line(x, y, label_x - BorderedDiceSet.LABEL_SPACING, 
+                                    y, width=1, batch=self.batch))       
+            self.lines.append(pyglet.shapes.Line(label_x + self.labelLayout.content_width + BorderedDiceSet.LABEL_SPACING, 
+                                                   y, x+width, y, width=1, batch=self.batch))       
              
         else :
             self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch))       
 
+    def valueChanged(self, value):
+        super().valueChanged(value)
+        self.drawBorder(self.x, self.y, self.width, self.height)
+
+    # instead of boolean function labels
+    def setLabel(self, text) :
+        super().setLabel(text)
+        self.drawBorder(self.x, self.y, self.width, self.height)

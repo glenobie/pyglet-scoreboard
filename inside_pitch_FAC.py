@@ -3,9 +3,11 @@ from die import Die
 from dice_set import DiceSet, BorderedDiceSet
 
 class IP_DiceSet :
+    BORDER_SPACING = 24
+    LABEL_SPACING = 8
     SPACE = 8
 
-    def __init__(self, label = '', batch=None) :
+    def __init__(self, title = '', batch=None) :
         self.dice = []
         self.batch = batch
         
@@ -20,25 +22,48 @@ class IP_DiceSet :
         self.d20.scale(0.8)
         self.dice.append(self.d20)
 
-        self.label = pyglet.text.Label(label, 'Arial', 22, batch=self.batch)
-        self.label.anchor_x = 'left'
-        self.label.anchor_y = 'top'
+        self.title = pyglet.text.Label(title, 'Arial', 22, batch=self.batch)
+        self.title.anchor_x = 'left'
+        self.title.anchor_y = 'center'
 
 
     def setTopLeft(self, x, y) :
-        self.red.setCenter(x + self.white.getWidth() + self.red.getWidth() // 2 + IP_DiceSet.SPACE, y - self.red.getWidth() // 2)
-        self.white.setCenter(x + self.white.getWidth() // 2, y - self.red.getWidth() - self.white.getWidth() // 2 - IP_DiceSet.SPACE)
-        y -= (self.red.getWidth() + self.d20.getWidth()//2 + IP_DiceSet.SPACE)
-        self.d20.setCenter(x + self.white.getWidth() + self.d20.getWidth()//2 + IP_DiceSet.SPACE, y )
-        width = IP_DiceSet.SPACE + self.white.getWidth() + self.d20.getWidth()
-        self.label.position = (x + (width - self.label.content_width) // 2, y - self.d20.getWidth() // 2 - IP_DiceSet.SPACE)
-    
+        dice_x = x + IP_DiceSet.BORDER_SPACING
+        self.red.setCenter(dice_x + self.white.getWidth() + self.red.getWidth() // 2 + IP_DiceSet.SPACE, 
+                           y - IP_DiceSet.BORDER_SPACING - self.red.getWidth() // 2)
+
+        y2 = y - (self.red.getWidth() + self.d20.getWidth()//2 + IP_DiceSet.SPACE + IP_DiceSet.BORDER_SPACING)
+
+        self.white.setCenter(dice_x + self.white.getWidth() // 2, y2)
+        self.d20.setCenter(dice_x + self.white.getWidth() + self.d20.getWidth()//2 + IP_DiceSet.SPACE, y2 )
+        
+        width = IP_DiceSet.SPACE + self.white.getWidth() + self.d20.getWidth() + IP_DiceSet.BORDER_SPACING*2
+        
+        self.drawBorder(x, y - width, width, width)
 
     def roll(self) :
         self.red.roll()
         self.white.roll()
         self.d20.roll()
-       
+
+    def drawBorder(self, x, y, width, height) :
+        self.lines = []
+        self.lines.append(pyglet.shapes.Line(x, y, x, y + height, width=1, batch=self.batch))  
+        self.lines.append(pyglet.shapes.Line(x+width, y, x+width, y + height, width=1, batch=self.batch))  
+        self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch))  
+ 
+        if len(self.title.text) > 0 :
+            title_x = x + (width - self.title.content_width) // 2
+            title_y = y + height 
+            self.title.position = (title_x, title_y)
+            self.lines.append(pyglet.shapes.Line(x, y+height, title_x - IP_DiceSet.LABEL_SPACING, 
+                                                 y + height, width=1, batch=self.batch))       
+            self.lines.append(pyglet.shapes.Line(title_x + self.title.content_width + IP_DiceSet.LABEL_SPACING, y+height, x+width, 
+                                                 y + height, width=1, batch=self.batch))       
+        else :
+            self.lines.append(pyglet.shapes.Line(x, y+height, x+width, y+height, width=1, batch=self.batch))       
+           
+
 
 class InsidePitchSet() :
 
@@ -48,14 +73,14 @@ class InsidePitchSet() :
         self.createDice()
 
     def createDice(self) :
-        self.pitcher = IP_DiceSet(label= 'Pitcher', batch=self.batch)
-        self.pitcher.setTopLeft(20, 460)
+        self.pitcher = IP_DiceSet(title= 'Pitcher', batch=self.batch)
+        self.pitcher.setTopLeft(36, 460)
 
-        self.hitter = IP_DiceSet(label= 'Hitter',batch=self.batch)
-        self.hitter.setTopLeft(320, 460)
+        self.hitter = IP_DiceSet(title= 'Hitter',batch=self.batch)
+        self.hitter.setTopLeft(286, 460)
 
-        self.ballpark = IP_DiceSet(label= 'Ballpark',batch=self.batch)
-        self.ballpark.setTopLeft(620, 460)
+        self.ballpark = IP_DiceSet(title= 'Ballpark',batch=self.batch)
+        self.ballpark.setTopLeft(540, 460)
 
         range = Die(Die.D_GREEN, Die.T_WHITE, 6, self.batch)
         range.scale(0.8)

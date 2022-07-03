@@ -1,7 +1,7 @@
 from functools import partial
 import pyglet
 from die import Die
-from dice_set import DiceSet, SortedDiceSet
+from dice_set import DiceSet, SortedDiceSet, BorderedDiceSet
 
 class HistoryMakerGolfSet() :
 
@@ -22,16 +22,16 @@ class HistoryMakerGolfSet() :
         self.gray = Die(Die.D_ORANGE, sides=6, text_color=Die.T_WHITE,batch=self.batch)
         dice.append(self.gray)
 
-        d = []
         self.decider = Die(Die.D_WHITE, text_color=Die.T_WHITE, sides=2, batch = self.batch)
         self.decider.setInteriorSpacingPct(0.2)
         self.decider.setDieLabels(('YES', 'NO'))
         self.decider.addColorCondition((1, Die.D_DARK_GREEN))
         self.decider.addColorCondition((2, Die.D_RED))
-        d.append(self.decider)
-        self.deciderSet = DiceSet(d, self.batch)
-        self.deciderSet.setTitle('Decision #' + str(self.decisionNumber) + ':  ')
-        self.deciderSet.setPosition(470,400, 20)
+
+        self.deciderSet = BorderedDiceSet([self.decider], self.batch)
+        self.deciderSet.setTitle('Decider')
+        self.deciderSet.setPosition(570, 360, 20)
+        self.deciderSet.setLabel('Roll #' + str(self.decisionNumber))
 
         for d in dice :
             d.scale(0.6)
@@ -67,9 +67,9 @@ class HistoryMakerGolfSet() :
         self.allDice.roll()
         self.deciderSet.roll()
         self.decisionNumber = 1
-        self.deciderSet.setTitle('Decision #' + str(self.decisionNumber) + ': ')
+        self.deciderSet.setLabel('Roll #' + str(self.decisionNumber))
 
     def handle_K(self) :
         self.decisionNumber += 1
         self.deciderSet.roll()
-        self.deciderSet.setTitle('Decision #' + str(self.decisionNumber)+ ':')
+        self.deciderSet.setLabel('Roll #' + str(self.decisionNumber))

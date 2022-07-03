@@ -1,7 +1,7 @@
 
 import pyglet
 from die import Die
-from dice_set import DiceSet, SortedDiceSet
+from dice_set import DiceSet, BorderedDiceSet, SortedDiceSet
 
 class HistoryMakerBaseballSet() :
 
@@ -26,11 +26,11 @@ class HistoryMakerBaseballSet() :
         self.decider.setDieLabels(('YES', 'NO'))
         self.decider.addColorCondition((1, Die.D_DARK_GREEN))
         self.decider.addColorCondition((2, Die.D_RED))
-        d = [self.decider]
-        self.deciderSet = DiceSet(d, self.batch)
-        self.deciderSet.setTitle('Decision #' + str(self.decisionNumber) + ':  ')
-        self.deciderSet.setPosition(470,400, 20)
 
+        self.deciderSet = BorderedDiceSet([self.decider], self.batch)
+        self.deciderSet.setTitle('Decider')
+        self.deciderSet.setPosition(570, 360, 20)
+        self.deciderSet.setLabel('Roll #' + str(self.decisionNumber))
 
 
         d1 = [self.red.makeClone()]
@@ -60,9 +60,9 @@ class HistoryMakerBaseballSet() :
         self.allDice.roll()
         self.deciderSet.roll()
         self.decisionNumber = 1
-        self.deciderSet.setTitle('Decision #' + str(self.decisionNumber) + ': ')
+        self.deciderSet.setLabel('Roll #' + str(self.decisionNumber))
 
     def handle_K(self) :
         self.decisionNumber += 1
         self.deciderSet.roll()
-        self.deciderSet.setTitle('Decision #' + str(self.decisionNumber)+ ':')
+        self.deciderSet.setLabel('Roll #' + str(self.decisionNumber))

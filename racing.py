@@ -15,6 +15,9 @@ class RaceState(GameState) :
 
     def getTotalTurns(self) :
         return self.totalTurns
+
+    def modifyPeriod(self) :
+        0
  
     def modifyTime(self, doDecrement=False) :
         if doDecrement :
@@ -42,9 +45,8 @@ class RaceState(GameState) :
         else :
             return '  '
         
-
+#######################################
 class RacingScoreboard(Scoreboard) :
-
    
     def __init__(self) :
         Scoreboard.__init__(self)
@@ -54,10 +56,8 @@ class RacingScoreboard(Scoreboard) :
         self.addMediumElement(2, Scoreboard.RIGHT_CENTER, 240, 'Total Turns', self.state.getTotalTurns, Scoreboard.RED)
         self.addMediumElement(3, Scoreboard.LEFT_CENTER, 240, 'Message', self.state.getPitMessage, Scoreboard.YELLOW)
   
+  
     # handle keys
-
-
-
     def handle_Q(self, modified = False) :
         self.state.modifyTotalTurns(modified)
         self.updateElements()
