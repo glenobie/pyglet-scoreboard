@@ -88,10 +88,10 @@ class Scoreboard(KeyHandler) :
         self.elements.append(e)
 
 
-    def addClock(self, height) :
+    def addClock(self, height, maxMinutesDigits = 2) :
         e = ClockElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=0, textColor=Scoreboard.WHITE, 
                               updateFunc=self.state.getSeconds, digitFont=Scoreboard.DIGIT_FONT,
-                              digitSize=Scoreboard.CLOCK_SIZE, digitColor=Scoreboard.GREEN, maxDigits=2, batch=self.batch)
+                              digitSize=Scoreboard.CLOCK_SIZE, digitColor=Scoreboard.GREEN, maxDigits=maxMinutesDigits, batch=self.batch)
         e.setCenterTop(Scoreboard.CENTER, height)
         self.elements.append(e)
 

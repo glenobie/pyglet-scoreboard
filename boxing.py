@@ -76,7 +76,7 @@ class BoxingScoreboard(Scoreboard) :
         
         self.addLargeElement(2, Scoreboard.LEFT_CENTER, 470, 'RED', partial(self.state.getScore, 0), Scoreboard.RED)
         self.addLargeElement(2, Scoreboard.RIGHT_CENTER, 470, 'BLUE', partial(self.state.getScore, 1), Scoreboard.BLUE)
-        self.addClock(440)
+        self.addClock(440, 1)
         self.addPeriod(300, maxDigits=2)
 
         self.addMediumElement(2, Scoreboard.LEFT_CENTER, 300, 'Endurance', partial(self.state.getEndurance, 0), Scoreboard.RED)
