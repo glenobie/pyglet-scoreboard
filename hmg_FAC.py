@@ -2,10 +2,12 @@ from functools import partial
 import pyglet
 from die import Die
 from dice_set import DiceSet, SortedDiceSet, BorderedDiceSet
+from fac_set import FACSet
 
-class HistoryMakerGolfSet() :
+class HistoryMakerGolfSet(FACSet) :
 
-    def __init__(self) :
+    def __init__(self, loader) :
+        FACSet.__init__(self, loader)
         self.decisionNumber = 1
         self.batch = pyglet.graphics.Batch()
         self.createDice()

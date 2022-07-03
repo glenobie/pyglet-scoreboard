@@ -1,6 +1,7 @@
 import pyglet
 from die import Die
 from dice_set import DiceSet, BorderedDiceSet
+from fac_set import FACSet
 
 class IP_DiceSet :
     BORDER_SPACING = 24
@@ -65,9 +66,10 @@ class IP_DiceSet :
            
 
 
-class InsidePitchSet() :
+class InsidePitchSet(FACSet) :
 
-    def __init__(self) :
+    def __init__(self, loader) :
+        FACSet.__init__(self, loader)
         self.decisionNumber = 1
         self.batch = pyglet.graphics.Batch()
         self.createDice()

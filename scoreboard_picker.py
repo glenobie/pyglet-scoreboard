@@ -5,7 +5,7 @@ from key_handler import KeyHandler
 from config_screen import ConfigScreen
 from fast_action_window import FastActionWindow
 from carousel import Carousel
-import importlib
+import importlib    
 from pyglet import resource
 from scoreboard import Scoreboard
 
@@ -19,6 +19,14 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
     INDEX_ICON = 2
 
     def __init__(self, width, height, isPi = False) :
+
+        self.path = ['resources', 'resources/icons', 'resources/fonts']
+        self.loader = resource.Loader(self.path)
+        self.loader.add_font('digital-7.mono.ttf')
+        self.loader.add_font('title-sb.ttf')
+        font.load(Scoreboard.DIGIT_FONT)
+        font.load(Scoreboard.TEXT_FONT)
+
         display = pyglet.canvas.get_display()
         screens = display.get_screens()
 
@@ -47,16 +55,6 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
 
             elif not(isPi) : 
                 self.windowFAC = FastActionWindow(800, 480, fullscreen=False)
-
-        
-        self.path = ['resources', 'resources/icons', 'resources/fonts']
-        self.loader = resource.Loader(self.path)
-        self.loader.add_font('digital-7.mono.ttf')
-        self.loader.add_font('title-sb.ttf')
-        font.load(Scoreboard.DIGIT_FONT)
-        font.load(Scoreboard.TEXT_FONT)
-        self.loader.add_font
-
 
         self.batch = pyglet.graphics.Batch()
         self.configScreen = ConfigScreen(self.loader, self.batch)
@@ -98,7 +96,7 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
         self.activeScreen = scoreboardClass()
         if self.displayingFAC :
             class_ = getattr(importlib.import_module(picked[4]), picked[5])
-            fac = class_()
+            fac = class_(self.loader)
             self.windowFAC.setFACSet(fac)
             self.activeScreen.attachFAC(fac)
 

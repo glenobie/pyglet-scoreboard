@@ -1,10 +1,10 @@
 import pyglet
 from die import Die
 from dice_set import DiceSet, BorderedDiceSet
-from functools import partial
+from fac_set import FACSet
 from pyglet import resource
 
-class SecondSeasonSet() :
+class SecondSeasonSet(FACSet) :
 
     DD_NORMAL            = 0 # first 1-19, second 1-10
     DD_EARLY_LONG        = 1 # first more than 19, second more than 10
@@ -21,7 +21,8 @@ class SecondSeasonSet() :
 
     DEFENSE_COORD_FILE = 'ss-DEF-coord.txt'
 
-    def __init__(self) :
+    def __init__(self, loader) :
+        FACSet.__init__(self, loader)
         self.batch = pyglet.graphics.Batch()
         self.createDice()
 
@@ -38,8 +39,7 @@ class SecondSeasonSet() :
         self.processDefenseFile(SecondSeasonSet.DEFENSE_COORD_FILE)
 
     def processDefenseFile(self, filename) :
-        loader = resource.Loader()
-        f = loader.file(filename, mode='r')
+        f = self.loader.file(filename, mode='r')
         for j in range(0,20) :
             list = f.readline().split(',')
             self.defensiveCalls.append(list)
@@ -57,7 +57,12 @@ class SecondSeasonSet() :
         self.finderDie = Die(Die.D_BLUE, text_color=Die.T_WHITE, sides=20, batch=self.batch)
         self.playerSet = BorderedDiceSet([self.finderDie], self.batch)
         self.playerSet.setTitle("Finder")
-        self.playerSet.setPosition(490,380)            
+        self.playerSet.setPosition(490,380)        
+
+        self.defenseDie = Die(Die.D_AQUA, text_color=Die.T_WHITE, sides=20, batch=self.batch)
+        self.defenseSet = BorderedDiceSet([self.defenseDie], self.batch)
+        self.defenseSet.setTitle("Defense")
+        self.defenseSet.setPosition(40, 200)    
 
 
     def downChanged(self, down) :
@@ -83,7 +88,8 @@ class SecondSeasonSet() :
 
     def handle_L(self) :
         self.chartDice.roll()
-        self.finderDie.roll()
+        self.playerSet.roll()
+        self.defenseSet.roll()
 
         print(self.defensiveCalls[self.finderDie.getValue()-1][self.situation])
 

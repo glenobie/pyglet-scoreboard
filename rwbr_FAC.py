@@ -4,9 +4,12 @@ from die import Die
 from dice_set import DiceSet, BorderedDiceSet
 from functools import partial
 
-class RWBRSet() :
+from fac_set import FACSet
 
-    def __init__(self) :
+class RWBRSet(FACSet) :
+
+    def __init__(self, loader) :
+        FACSet.__init__(self, loader)
         self.challengeNumber = 1
         self.batch = pyglet.graphics.Batch()
         self.createDice()
