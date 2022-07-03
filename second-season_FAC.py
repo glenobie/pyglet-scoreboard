@@ -2,7 +2,7 @@ import pyglet
 from die import Die
 from dice_set import DiceSet, BorderedDiceSet
 from fac_set import FACSet
-from pyglet import resource
+from text
 
 class SecondSeasonSet(FACSet) :
 
