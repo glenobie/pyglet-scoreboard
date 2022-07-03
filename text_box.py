@@ -39,7 +39,7 @@ class BorderedTextBox :
             self.title.position = (title_x, y)
             self.lines.append(pyglet.shapes.Line(x, y+height, title_x - BorderedTextBox.LABEL_SPACING, 
                                     y + height, width=1, batch=self.batch))       
-            self.lines.append(pyglet.shapes.Line(title_x + self.titlels.content_width + BorderedTextBox.LABEL_SPACING, y+height, x+width, 
+            self.lines.append(pyglet.shapes.Line(title_x + self.title.content_width + BorderedTextBox.LABEL_SPACING, y+height, x+width, 
                                  y + height, width=1, batch=self.batch))       
         else :
             self.lines.append(pyglet.shapes.Line(x, y+height, x+width, y+height, width=1, batch=self.batch))       

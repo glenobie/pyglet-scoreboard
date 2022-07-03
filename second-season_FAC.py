@@ -2,7 +2,7 @@ import pyglet
 from die import Die
 from dice_set import DiceSet, BorderedDiceSet
 from fac_set import FACSet
-from text
+from text_box import BorderedTextBox
 
 class SecondSeasonSet(FACSet) :
 
@@ -25,6 +25,11 @@ class SecondSeasonSet(FACSet) :
         FACSet.__init__(self, loader)
         self.batch = pyglet.graphics.Batch()
         self.createDice()
+
+        self.defPlayCall = BorderedTextBox('Just testing', self.batch)
+        self.defPlayCall.setPosition(600, 100)
+        self.defPlayCall.setWidth(100)
+        self.defPlayCall.setHeight(50)
 
         self.down = 1
         self.distance = 10
