@@ -15,7 +15,6 @@ class DiceSet :
         for d in self.dice :
             d.addValueChangedListener(self)
 
-        self.valueLabels = []
         self.booleanFunctionLabels = []
 
         self.labelDoc = pyglet.text.document.UnformattedDocument('')  
@@ -31,9 +30,6 @@ class DiceSet :
                                                                          color=(255,255,255,255))))
         self.titleLayout = pyglet.text.layout.TextLayout(self.titleDoc, batch=batch, group = self.fg)
         self.titleLayout.anchor_y = 'center'
-
-
-
 
     # are all the dice equal in value
     def allEqual(self) :
@@ -53,7 +49,6 @@ class DiceSet :
             if d.getValue() == value :
                 return True
         return False
-
 
     def valueChanged(self, value) :
         self.computeTotal()
@@ -165,7 +160,7 @@ class BorderedDiceSet(DiceSet) :
         self.lines.append(pyglet.shapes.Line(x, y, x, y + height, width=1, batch=self.batch))  
         self.lines.append(pyglet.shapes.Line(x+width, y, x+width, y + height, width=1, batch=self.batch))  
  
-        if not(self.title is None) :
+        if len(self.titleDoc.text) > 0 :
             title_x = x + (width - self.titleLayout.content_width) // 2
             title_y = y + height 
             self.titleLayout.position = (title_x, title_y)
@@ -176,5 +171,10 @@ class BorderedDiceSet(DiceSet) :
         else :
             self.lines.append(pyglet.shapes.Line(x, y+height, x+width, y+height, width=1, batch=self.batch))       
            
-        self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch))       
+
+        if len(self.labelDoc.text) > 0 :
+            label_x = x + (width - self.titleLayout.content_width) // 2
+             
+        else :
+            self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch))       
 
