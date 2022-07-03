@@ -9,12 +9,8 @@ import importlib
 from pyglet import resource
 from scoreboard import Scoreboard
 
-from soccer import SoccerScoreboard
-
-
 ####################################################################
 class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
-    
 
     INDEX_ICON = 2
 
@@ -145,9 +141,6 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
             self.batch = pyglet.graphics.Batch()
             self.configScreen.setIconBatch(self.batch)
             self.activeScreen = self.configScreen
-        else :
-            self.activeScreen = SoccerScoreboard()
-        
 
     def handle_C(self, modified=False) :
         if modified :
