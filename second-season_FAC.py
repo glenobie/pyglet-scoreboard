@@ -26,8 +26,8 @@ class SecondSeasonSet(FACSet) :
         self.batch = pyglet.graphics.Batch()
         self.createDice()
 
-        self.defPlayCall = BorderedTextBox('Just testing', 200, 50, self.batch)
-        self.defPlayCall.setPosition(600, 100)
+        self.defPlayCall = BorderedTextBox('Defense', 300, 100, self.batch)
+        self.defPlayCall.setPosition(200, 160)
 
         self.down = 1
         self.distance = 10
@@ -40,6 +40,7 @@ class SecondSeasonSet(FACSet) :
         self.defensiveCalls = []
 
         self.processDefenseFile(SecondSeasonSet.DEFENSE_COORD_FILE)
+        self.callPlays()
 
     def processDefenseFile(self, filename) :
         f = self.loader.file(filename, mode='r')
@@ -51,22 +52,31 @@ class SecondSeasonSet(FACSet) :
     def createDice(self) :
         
         self.red = Die(Die.D_RED, text_color=Die.T_WHITE, sides=6, batch=self.batch)
+        self.red.scale(0.8)
         self.white = Die(Die.D_WHITE, sides=6, batch=self.batch)
+        self.white.scale(0.8)
 
         self.chartDice = BorderedDiceSet([self.red, self.white], self.batch)
         self.chartDice.setTitle('Chart Dice')
         self.chartDice.setPosition(20, 380, 16)
 
         self.finderDie = Die(Die.D_BLUE, text_color=Die.T_WHITE, sides=20, batch=self.batch)
+        self.finderDie.scale(0.8)
         self.playerSet = BorderedDiceSet([self.finderDie], self.batch)
         self.playerSet.setTitle("Finder")
         self.playerSet.setPosition(490,380)        
 
         self.defenseDie = Die(Die.D_AQUA, text_color=Die.T_WHITE, sides=20, batch=self.batch)
+        self.defenseDie.scale(0.8)
         self.defenseSet = BorderedDiceSet([self.defenseDie], self.batch)
         self.defenseSet.setTitle("Defense")
         self.defenseSet.setPosition(40, 200)    
 
+
+    def callPlays(self) :
+        defense = self.defensiveCalls[self.defenseDie.getValue()-1][self.situation]
+        self.defPlayCall.setText(defense)
+        print(defense)
 
     def downChanged(self, down) :
         self.down = down
@@ -93,8 +103,9 @@ class SecondSeasonSet(FACSet) :
         self.chartDice.roll()
         self.playerSet.roll()
         self.defenseSet.roll()
+        self.callPlays()
 
-        print(self.defensiveCalls[self.finderDie.getValue()-1][self.situation])
+
 
     def handle_K(self) :
         self.chartDice.roll()
@@ -103,7 +114,7 @@ class SecondSeasonSet(FACSet) :
         return -1
 
     def getSituation(self) :
-        if self.isSpecialSituation < 0 :
+        if self.isSpecialSituation() < 0 :
             return self.getDD_Situation()
 
     def getDD_Situation(self) :

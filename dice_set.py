@@ -19,14 +19,14 @@ class DiceSet :
 
         self.labelDoc = pyglet.text.document.UnformattedDocument('')  
         self.labelDoc.set_style(0, len(self.labelDoc.text), dict( dict(font_name = Die.FONT, 
-                                                                       font_size = 22, 
+                                                                       font_size = 20, 
                                                                        color=(255,255,255,255))))
         self.labelLayout = pyglet.text.layout.TextLayout(self.labelDoc, batch=batch, group = self.fg)
         self.labelLayout.anchor_y = 'center'
 
         self.titleDoc = pyglet.text.document.UnformattedDocument('')  
         self.titleDoc.set_style(0, len(self.titleDoc.text), dict( dict(font_name = Die.FONT, 
-                                                                         font_size = 22, 
+                                                                         font_size = 20, 
                                                                          color=(255,255,255,255))))
         self.titleLayout = pyglet.text.layout.TextLayout(self.titleDoc, batch=batch, group = self.fg)
         self.titleLayout.anchor_y = 'center'

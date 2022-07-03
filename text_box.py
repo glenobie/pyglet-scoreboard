@@ -7,23 +7,31 @@ class BorderedTextBox :
 
     def __init__(self, title='', width=100, height=100, batch=None) :
         self.batch = batch
-        self.x = self.y = self.width = self.height = 0
-        self.title = pyglet.text.Label(title, 'Arial', 22, batch=self.batch)
-        self.title.anchor_x = 'left'
-        self.title.anchor_y = 'center'
         self.width = width
         self.height = height
 
+        self.x = self.y = 0
+        self.title = pyglet.text.Label(title, 'Arial', 20, batch=self.batch)
+        self.title.anchor_x = 'left'
+        self.title.anchor_y = 'center'
 
+        self.contents = pyglet.text.Label('', 'Arial', 22, batch=self.batch)
+        self.contents.anchor_x = 'center'
+        self.contents.anchor_y = 'center'
 
     # label to left of dice set
     def setTitle(self, title) :
         self.title.text =  title
         self.drawBorder(self.x, self.y, self.width, self.height)
 
+    def setText(self, text) :
+        self.contents.text = text
+
     def setPosition(self, left, bottom) :
         self.x = left
         self.y = bottom
+        self.contents.position = (self.x + self.width // 2, self.y + self.height // 2)
+
         self.drawBorder(self.x, self.y, self.width, self.height)
  
     def drawBorder(self, x, y, width, height) :
