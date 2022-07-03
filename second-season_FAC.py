@@ -26,10 +26,8 @@ class SecondSeasonSet(FACSet) :
         self.batch = pyglet.graphics.Batch()
         self.createDice()
 
-        self.defPlayCall = BorderedTextBox('Just testing', self.batch)
+        self.defPlayCall = BorderedTextBox('Just testing', 200, 50, self.batch)
         self.defPlayCall.setPosition(600, 100)
-        self.defPlayCall.setWidth(100)
-        self.defPlayCall.setHeight(50)
 
         self.down = 1
         self.distance = 10
