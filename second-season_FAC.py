@@ -1,6 +1,6 @@
 import pyglet
 from die import Die
-from dice_set import DiceSet
+from dice_set import DiceSet, BorderedDiceSet
 from functools import partial
 from pyglet import resource
 
@@ -37,7 +37,6 @@ class SecondSeasonSet() :
 
         self.processDefenseFile(SecondSeasonSet.DEFENSE_COORD_FILE)
 
-
     def processDefenseFile(self, filename) :
         loader = resource.Loader()
         f = loader.file(filename, mode='r')
@@ -50,13 +49,15 @@ class SecondSeasonSet() :
         
         self.red = Die(Die.D_RED, text_color=Die.T_WHITE, sides=6, batch=self.batch)
         self.white = Die(Die.D_WHITE, sides=6, batch=self.batch)
-        self.chart = [self.red, self.white]
 
-        self.chartDice = DiceSet(self.chart, self.batch)
+        self.chartDice = BorderedDiceSet([self.red, self.white], self.batch)
+        self.chartDice.setTitle('Chart Dice')
         self.chartDice.setPosition(20, 380, 16)
 
         self.finderDie = Die(Die.D_BLUE, text_color=Die.T_WHITE, sides=20, batch=self.batch)
-        self.finderDie.setCenter(90,200)        
+        self.playerSet = BorderedDiceSet([self.finderDie], self.batch)
+        self.playerSet.setTitle("Finder")
+        self.playerSet.setPosition(490,380)            
 
 
     def downChanged(self, down) :
@@ -87,7 +88,7 @@ class SecondSeasonSet() :
         print(self.defensiveCalls[self.finderDie.getValue()-1][self.situation])
 
     def handle_K(self) :
-        0
+        self.chartDice.roll()
 
     def getDD_Situation(self) :
         situation = -1
