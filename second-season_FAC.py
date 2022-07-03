@@ -14,7 +14,7 @@ class SecondSeasonSet() :
     DD_LATE_LONG         = 5 # third, fourth, 10-14
     DD_LATE_VERY_LONG    = 6 # third, fourth, 15-19
     DD_LATE_SUPER_LONG   = 7 # third, fourth, 20 +
-    SS_A                 = 8
+    SS_A                 = 8 # Special situation A
     SS_B                 = 9
     SS_C                 = 10
     SS_D                 = 11
@@ -62,11 +62,11 @@ class SecondSeasonSet() :
 
     def downChanged(self, down) :
         self.down = down
-        self.situation = self.getDD_Situation()
+        self.situation = self.getSituation()
 
     def distanceChanged(self, distance):
         self.distance = distance
-        self.situation = self.getDD_Situation()
+        self.situation = self.getSituation()
 
     def scoreChanged(self, guestScore, homeScore) :
         self.guestScore = guestScore
@@ -89,6 +89,13 @@ class SecondSeasonSet() :
 
     def handle_K(self) :
         self.chartDice.roll()
+
+    def isSpecialSituation(self) :
+        return -1
+
+    def getSituation(self) :
+        if self.isSpecialSituation < 0 :
+            return self.getDD_Situation()
 
     def getDD_Situation(self) :
         situation = -1

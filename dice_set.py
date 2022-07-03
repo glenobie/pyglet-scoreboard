@@ -132,7 +132,6 @@ class BorderedDiceSet(DiceSet) :
         DiceSet.setTitle(self, title)
         self.drawBorder(self.x, self.y, self.width, self.height)
 
-
     def setPosition(self, left, center, spacing=12) :
         self.left = left
         self.center = center
