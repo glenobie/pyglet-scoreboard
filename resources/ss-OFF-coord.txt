@@ -4,4 +4,9 @@ Inside,Inside,Inside [-34 Screen],Inside,Outside [-1234 Screen],Outside,Screen,M
 Inside,Inside,Inside [-4 Screen],Inside,Outside [-234 Short],Screen,Screen,Medium,Outside,Screen,Medium,Inside
 Inside,Inside,Inside [-4 Short],Inside,Outside [-4 Medium],Screen,Short,Medium,Outside,Screen,Medium,Inside
 Inside,Outside,Inside,Inside/Outside,Outside,Short [+34 Inside],Short [+1234 Outside],Medium,Outside,Screen,Medium,Inside
-
+Inside,Outside [-34 Medium],Inside,Outside [-1234 Screen],Screen [+1234 Outside],Short,Medium [+234 Outside],Medium,Screen,Screen,Long,Inside
+Inside/Outside,Outside [-4 Short],Inside,Outside [-234 Screen],Screen [+234 Outside],Short,Medium [+34 Outside],Medium,Screen,Screen,Long,Inside
+Inside/Outside,Outside,Inside,Outside [-34 Screen],Screen [+34 Outside],Short [+1234 Outside],Medium [+4 Outside],Medium,Screen,Screen,Long,Inside
+Inside [-234 Medium],Outside,Inside,Outside [-4 Short],Screen,Short [+1234 Outside],Medium,Long,Screen,Short,Long,Inside
+Outside [-4 Screen],Outside,Inside,Outside,Screen,Short [+234 Outside],Medium,Long,Screen,Short,Long,Inside
+Outside,Outside/Inside,Inside,Outside,Screen,Short [+34 Outside],Medium,Long,Screen,Short,Long,Inside
