@@ -1,3 +1,4 @@
+from http.cookies import Morsel
 import pyglet
 from die import Die
 from bordered_dice_set import BorderedDiceSet
@@ -19,6 +20,21 @@ class SecondSeasonSet(FACSet) :
     SS_C                 = 10
     SS_D                 = 11
 
+    SITUATION_ROWS =  [-14, -10, -7, -3, 0, 18, 17, 100]
+        
+    # -SS values indicate that offense will use Down/Distance chart, but defense will use
+    SITUATION_GRID = [ [SS_C, SS_C, SS_C],
+                       [-SS_A, -SS_B, SS_C, SS_C],
+                       [-1, -SS_A, -SS_B, SS_C ],
+                       [-1, -1, -SS_A, SS_C],
+                       [-1, -1, -1, -SS_B],
+                       [-1, -1, -SS_D, SS_D],
+                       [-1, -SS_D, SS_D, SS_D],
+                       [-SS_D, SS_D, SS_D, SS_D]
+                      ]
+        
+    SITUATION_COLS = [9, 5, 3, 0] # minutes left in fourth quarter
+
     DEFENSE_COORD_FILE = 'ss-DEF-coord.txt'
 
     def __init__(self, loader) :
@@ -36,8 +52,8 @@ class SecondSeasonSet(FACSet) :
         self.distance = 10
         self.quarter = 1
         self.secondsLeft = 0
-        self.guestScore = 0
-        self.homeScore = 0
+
+        self.differential = 0 # score of team possessing minus score of other team
 
         self.situation = 1
         self.defensiveCalls = []
@@ -97,10 +113,9 @@ class SecondSeasonSet(FACSet) :
         self.distance = distance
         self.situation = self.getSituation()
 
-    def scoreChanged(self, guestScore, homeScore) :
-        self.guestScore = guestScore
-        self.homeScore = homeScore
-        
+    def differentialChanged(self, differential) :
+        self.differential = differential
+
     def quarterChanged(self, quarter) :
         self.quarter = quarter
 
@@ -119,8 +134,29 @@ class SecondSeasonSet(FACSet) :
     def handle_K(self) :
         self.chartDice.roll()
 
+    # based on team on offense, their lead(trail) points, and the time remaining
     def isSpecialSituation(self) :
-        return -1
+
+        minutesLeft = self.secondsLeft // 60
+
+        if (self.quarter == 3 and self.differential < 19) :
+            situation = -SecondSeasonSet.SS_A
+        elif self.quarter == 4 :
+            for row in range(0, len(SecondSeasonSet.SITUATION_ROWS)) :
+                if self.differential < SecondSeasonSet.SITUATION_ROWS[row] :
+                    break
+            # adding one because ultimately indexing into SITUATION
+            for column in range(0, len(SecondSeasonSet.SITUATION_COLS)) :
+                if self.minutesLeft > SecondSeasonSet.SITUATION_COLS[column] :
+                    break
+            
+        
+        situation = SecondSeasonSet.SITUATION_GRID[row][column]
+        if situation < -1 :
+            situation = -1 if self.down > 2 else -situation
+
+        return situation
+
 
     def getSituation(self) :
         if self.isSpecialSituation() < 0 :
@@ -153,3 +189,6 @@ class SecondSeasonSet(FACSet) :
                 situation = SecondSeasonSet.DD_LATE_SUPER_LONG
         
         return situation
+
+
+
