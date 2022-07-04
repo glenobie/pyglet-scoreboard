@@ -34,7 +34,7 @@ class FootballGameState(TimedGameState) :
         self.yardsToGain = 10
         self.fieldSize = fieldSize
 
-        self.teamPossessingBall = GameState.HOME_INDEX
+        self.teamPossessingBall = GameState.GUEST_INDEX
 
     def getDownAsString(self) :
         return FootballGameState.DOWN_STRINGS[self.down-1]
@@ -54,7 +54,6 @@ class FootballGameState(TimedGameState) :
         else :
             return self.yardsToGain
 
-
     def modifyDown(self) :
         self.down += 1
         if (self.down > self.MaxDowns) :
@@ -62,6 +61,14 @@ class FootballGameState(TimedGameState) :
         
     def getPossessingTeam(self) :
         return self.teamPossessingBall
+
+    # score of team with ball
+    def getOffenseScore(self) :
+        return self.teams[self.teamPossessingBall].getScore()
+
+    # score of team without ball
+    def getDefenseScore(self) :
+        return self.teams[(self.teamPossessingBall + 1) % 2].getScore()
 
     def changePossessingTeam(self) :
         self.teamPossessingBall = (self.teamPossessingBall + 1) % 2
@@ -126,7 +133,6 @@ class FootballScoreboard(Scoreboard) :
         self.addHorizontalElement(2, Scoreboard.CENTER, 162, 'Yards to Go:', self.state.getYardsToGain, Scoreboard.YELLOW )
         self.addYardsToEndzone(70)
         self.ballMarker = self.addBallLocation(250)
-
  
     def changePossessingTeam(self) :
         pos = self.ballMarker.getCenter()
@@ -154,36 +160,69 @@ class FootballScoreboard(Scoreboard) :
         e.setCenterTop(Scoreboard.CENTER, height)
         self.elements.append(e)
 
-    def reportFieldChange(self) :
+    def reportFieldPosition(self) :
         if not(self.attachedFAC is None) :
             self.attachedFAC.distanceChanged(self.state.getRawYardsToGain()) 
-        self.updateElements()
+
+    def reportDown(self) :
+        if not(self.attachedFAC is None) :
+            self.attachedFAC.downChanged(self.state.getDown()) 
+
+    def reportScoreDifferential(self):
+        if not(self.attachedFAC is None) :
+            differential = self.state.getOffenseScore() - self.state.getDefenseScore()
+            self.attachedFAC.differentialChanged(differential) 
+        
+    def reportQuarter(self) :
+        if not(self.attachedFAC is None) :
+            self.attachedFAC.quarterChanged(self.state.getPeriod()) 
+
+    def reportTime(self) :
+        if not(self.attachedFAC is None) :
+            self.attachedFAC.timeChanged(self.state.getSeconds()) 
 
     def handle_A(self, modified = False) :
         self.state.modifyLineOfScrimmage(1, modified)
         self.updateElements()
-        self.reportFieldChange()
+        self.reportFieldPosition()
  
-
     def handle_D(self, modified = False) :
         if modified :
             self.state.resetDownAndDistance()
-            self.reportFieldChange()
+            self.reportFieldPosition()
         else :
             self.state.modifyDown()
-        if not(self.attachedFAC is None) :
-            self.attachedFAC.downChanged(self.state.getDown()) 
+        
         self.updateElements()
  
     def handle_Q(self, modified = False) :
         self.state.modifyLineOfScrimmage(10, modified)
         self.updateElements()
-        self.reportFieldChange()
+        self.reportFieldPosition()
 
     def handle_E(self, modified = False) :
         self.state.changePossessingTeam()
         self.changePossessingTeam()
+        self.reportFieldPosition()
+        self.reportScoreDifferential()
         self.updateElements()
+
+    def handle_Z(self, modified=False) :
+        Scoreboard.handle_Z(self, modified)
+        self.reportScoreDifferential()
+
+    def handle_C(self, modified=False) :
+        Scoreboard.handle_C(self, modified)
+        self.reportScoreDifferential()
+
+    def handle_X(self, modified=False) :
+        Scoreboard.handle_X(self, modified)
+        self.reportTime()
+    
+    def handle_S(self, modified=False) :
+        Scoreboard.handle_S(self, modified)
+        self.reportQuarter()
+
  
 #################################
 class CFLScoreboard(FootballScoreboard) :

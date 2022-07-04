@@ -28,11 +28,9 @@ Short,Short,Screen,Short [+4 Outside],Short,Medium,Medium,Long,Medium,Medium,Lon
 Short,Short,Short,Short,Short,Medium,Medium,Long,Medium,Medium,Long,Outside
 Short,Medium [+34 Outside],Short,Short,Short,Medium,Medium,Long,Medium,Long,Long,Outside
 Short,Medium,Screen [+1234 Inside],Short,Short,Medium,Medium,Long,Medium,Long,Long,Outside
-
-
-61 Medium +234 OU Medium Screen +4 IN Short Medium Medium Long Long 61 Medium Long Long OU
-62 Medium Medium Screen Medium Medium Long Long Long 62 Medium Long Long OU
-63 Medium Medium Short +234 OU Medium +4 IN Medium +234 IN Long +4 IN Long Long 63 Long Long Long Screen
-64 Medium Long +4 OU Short Medium Medium Long Long Long 64 Long Long Long Short
-65 Long Long Medium Medium Medium Long Long Long 65 Long Long Long Medium
-66 Long Long Long +34 IN Long Long Trick Trick Trick 66 Long Long Trick Long
+Medium [+234 Outside],Medium,Screen [+4 Inside],Short,Medium,Medium,Long,Long,Medium,Long,Long,Outside
+Medium,Medium,Screen,Medium,Medium,Long,Long,Long,Medium,Long,Long,Outside
+Medium,Medium,Short [+234 Outside],Medium [+4 Inside],Medium [+234 Inside],Long [+4 Inside],Long,Long,Long,Long,Long,Screen
+Medium,Long [+4 Outside],Short,Medium,Medium,Long,Long,Long,Long,Long,Long,Short
+Long,Long,Medium,Medium,Medium,Long,Long,Long,Long,Long,Long,Medium
+Long,Long,Long [+34 Inside],Long,Long,Trick,Trick,Trick,Long,Long,Trick,Long

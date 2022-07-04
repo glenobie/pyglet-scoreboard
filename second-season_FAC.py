@@ -20,10 +20,10 @@ class SecondSeasonSet(FACSet) :
     SS_C                 = 10
     SS_D                 = 11
 
-    SITUATION_ROWS =  [-14, -10, -7, -3, 0, 18, 17, 100]
+    SITUATION_ROWS =  [-14, -10, -7, -3, 0, 8, 17, 100]
         
     # -SS values indicate that offense will use Down/Distance chart, but defense will use
-    SITUATION_GRID = [ [SS_C, SS_C, SS_C],
+    SITUATION_GRID = [ [-SS_B, SS_C, SS_C, SS_C],
                        [-SS_A, -SS_B, SS_C, SS_C],
                        [-1, -SS_A, -SS_B, SS_C ],
                        [-1, -1, -SS_A, SS_C],
@@ -31,7 +31,7 @@ class SecondSeasonSet(FACSet) :
                        [-1, -1, -SS_D, SS_D],
                        [-1, -SS_D, SS_D, SS_D],
                        [-SS_D, SS_D, SS_D, SS_D]
-                      ]
+                    ]
         
     SITUATION_COLS = [9, 5, 3, 0] # minutes left in fourth quarter
 
@@ -46,28 +46,27 @@ class SecondSeasonSet(FACSet) :
         self.defPlayCall = BorderedTextBox('Defense', 300, 110, self.batch)
         self.defPlayCall.setPosition(200, 184)
 
-        self.offPlayCall = BorderedTextBox('Offense', 300, 110, self.batch)
+        self.offPlayCall = BorderedTextBox('Offense', 400, 110, self.batch)
         self.offPlayCall.setPosition(280, 26)
 
         self.down = 1
         self.distance = 10
         self.quarter = 1
         self.secondsLeft = 0
-
         self.differential = 0 # score of team possessing minus score of other team
 
-        self.situation = 1
 
-        self.defensiveCalls = self.processCoordinatorFile(SecondSeasonSet.DEFENSE_COORD_FILE)
-        self.offensiveCalls = self.processCoordinatorFile(SecondSeasonSet.OFFENSE_COORD_FILE)
+        self.defensiveCalls = self.processCoordinatorFile(SecondSeasonSet.DEFENSE_COORD_FILE, 20)
+        self.offensiveCalls = self.processCoordinatorFile(SecondSeasonSet.OFFENSE_COORD_FILE, 36)
+        self.situation = self.getSituation()
         self.callPlays()
 
-    def processCoordinatorFile(self, filename) :
+    def processCoordinatorFile(self, filename, rows) :
         calls = []
         f = self.loader.file(filename, mode='r')
-        for j in range(0,20) :
+        for j in range(0,rows) :
             list = f.readline().split(',')
-            self.calls.append(list)
+            calls.append(list)
             print(list)
         return calls
 
@@ -105,9 +104,10 @@ class SecondSeasonSet(FACSet) :
 
     def callPlays(self) :
         defense = self.defensiveCalls[self.defenseDie.getValue()-1][self.situation]
+        row = self.getOffenseRowFromDice(self.o1, self.o2)
         offense = self.offensiveCalls[self.getOffenseRowFromDice(self.o1, self.o2)][self.situation]
-        self.defPlayCall.setText(defense)
-        self.offPlayCall.setText(offense)
+        self.defPlayCall.setText(defense.replace('\n', ''))
+        self.offPlayCall.setText(offense.replace('\n',''))
         print(defense)
 
     def downChanged(self, down) :
@@ -120,34 +120,28 @@ class SecondSeasonSet(FACSet) :
 
     def differentialChanged(self, differential) :
         self.differential = differential
+        self.situation = self.getSituation()
 
     def quarterChanged(self, quarter) :
         self.quarter = quarter
+        self.situation = self.getSituation()
 
     def timeChanged(self, secondsLeftInQuarter) :
         self.secondsLeft = secondsLeftInQuarter
+        self.situation = self.getSituation()
 
     def draw(self) :
         self.batch.draw()
-
-    def handle_L(self) :
-        self.chartDice.roll()
-        self.playerSet.roll()
-        self.defenseSet.roll()
-        self.callPlays()
-
-    def handle_K(self) :
-        self.chartDice.roll()
 
     def getOffenseRowFromDice(self, d1, d2) :
         return (d1.getValue() - 1) * 6 + (d2.getValue() - 1)
 
     # based on team on offense, their lead(trail) points, and the time remaining
     def isSpecialSituation(self) :
-
+        row=column=0
         minutesLeft = self.secondsLeft // 60
-
-        if (self.quarter == 3 and self.differential < 19) :
+        situation = -1
+        if (self.quarter == 3 and self.differential < -19) :
             situation = -SecondSeasonSet.SS_A
         elif self.quarter == 4 :
             for row in range(0, len(SecondSeasonSet.SITUATION_ROWS)) :
@@ -155,20 +149,20 @@ class SecondSeasonSet(FACSet) :
                     break
             # adding one because ultimately indexing into SITUATION
             for column in range(0, len(SecondSeasonSet.SITUATION_COLS)) :
-                if self.minutesLeft > SecondSeasonSet.SITUATION_COLS[column] :
+                if minutesLeft > SecondSeasonSet.SITUATION_COLS[column] :
                     break
             
         
-        situation = SecondSeasonSet.SITUATION_GRID[row][column]
-        if situation < -1 :
-            situation = -1 if self.down > 2 else -situation
+            situation = SecondSeasonSet.SITUATION_GRID[row][column]
+            if situation < -1 :
+                situation = -1 if self.down > 2 else -situation
 
         return situation
 
 
     def getSituation(self) :
-        if self.isSpecialSituation() < 0 :
-            return self.getDD_Situation()
+        situation = self.isSpecialSituation() 
+        return self.getDD_Situation() if situation < 0 else situation 
 
     def getDD_Situation(self) :
         situation = -1
@@ -199,4 +193,13 @@ class SecondSeasonSet(FACSet) :
         return situation
 
 
+    def handle_L(self) :
+        self.chartDice.roll()
+        self.playerSet.roll()
+        self.defenseSet.roll()
+        self.offenseSet.roll()
+        self.callPlays()
+
+    def handle_K(self) :
+        self.chartDice.roll()
 
