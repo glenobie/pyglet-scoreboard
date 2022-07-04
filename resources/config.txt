@@ -82,4 +82,10 @@ HockeyScoreboard
 hockey_blast.png
 hmg_FAC
 HistoryMakerGolfSet
+Soccer Blast
+soccer
+SoccerScoreboard
+soccer-blast.png
+hmg_FAC
+HistoryMakerGolfSet
 EOF

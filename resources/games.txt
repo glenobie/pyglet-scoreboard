@@ -100,4 +100,22 @@ RacingScoreboard
 rwbr.png
 rwbr_FAC
 RWBRSet
+Soccer Blast
+soccer
+SoccerScoreboard
+soccer-blast.png
+hmg_FAC
+HistoryMakerGolfSet
+Dice United
+soccer
+SoccerScoreboard
+dice-united.png
+hmg_FAC
+HistoryMakerGolfSet
+The Beautiful Game
+soccer
+SoccerScoreboard
+beautiful-game.png
+hmg_FAC
+HistoryMakerGolfSet
 EOF
