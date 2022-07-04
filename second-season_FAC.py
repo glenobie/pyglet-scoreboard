@@ -36,6 +36,7 @@ class SecondSeasonSet(FACSet) :
     SITUATION_COLS = [9, 5, 3, 0] # minutes left in fourth quarter
 
     DEFENSE_COORD_FILE = 'ss-DEF-coord.txt'
+    OFFENSE_COORD_FILE = 'ss-OFF-coord.txt'
 
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
@@ -56,17 +57,19 @@ class SecondSeasonSet(FACSet) :
         self.differential = 0 # score of team possessing minus score of other team
 
         self.situation = 1
-        self.defensiveCalls = []
 
-        self.processDefenseFile(SecondSeasonSet.DEFENSE_COORD_FILE)
+        self.defensiveCalls = self.processCoordinatorFile(SecondSeasonSet.DEFENSE_COORD_FILE)
+        self.offensiveCalls = self.processCoordinatorFile(SecondSeasonSet.OFFENSE_COORD_FILE)
         self.callPlays()
 
-    def processDefenseFile(self, filename) :
+    def processCoordinatorFile(self, filename) :
+        calls = []
         f = self.loader.file(filename, mode='r')
         for j in range(0,20) :
             list = f.readline().split(',')
-            self.defensiveCalls.append(list)
+            self.calls.append(list)
             print(list)
+        return calls
 
     def createDice(self) :
         self.red = Die(Die.D_RED, text_color=Die.T_WHITE, sides=6, batch=self.batch)
@@ -91,18 +94,20 @@ class SecondSeasonSet(FACSet) :
         self.defenseSet.setTitle("Defense")
         self.defenseSet.setPosition(40, 240)    
 
-        o1 = Die(Die.D_GREEN, text_color=Die.T_WHITE, sides=6, batch=self.batch)
-        o1.scale(0.7)
-        o2 = Die(Die.D_ORANGE, text_color=Die.T_WHITE, sides=6, batch=self.batch)
-        o2.scale(0.7)
-        self.offenseSet = BorderedDiceSet([o1,o2], 20, self.batch)
+        self.o1 = Die(Die.D_GREEN, text_color=Die.T_WHITE, sides=6, batch=self.batch)
+        self.o1.scale(0.7)
+        self.o2 = Die(Die.D_ORANGE, text_color=Die.T_WHITE, sides=6, batch=self.batch)
+        self.o2.scale(0.7)
+        self.offenseSet = BorderedDiceSet([self.o1,self.o2], 20, self.batch)
         self.offenseSet.setTitle('Offense')
         self.offenseSet.setTitleFontSize(16)
         self.offenseSet.setPosition(40, 80)
 
     def callPlays(self) :
         defense = self.defensiveCalls[self.defenseDie.getValue()-1][self.situation]
+        offense = self.offensiveCalls[self.getOffenseRowFromDice(self.o1, self.o2)][self.situation]
         self.defPlayCall.setText(defense)
+        self.offPlayCall.setText(offense)
         print(defense)
 
     def downChanged(self, down) :
@@ -133,6 +138,9 @@ class SecondSeasonSet(FACSet) :
 
     def handle_K(self) :
         self.chartDice.roll()
+
+    def getOffenseRowFromDice(self, d1, d2) :
+        return (d1.getValue() - 1) * 6 + (d2.getValue() - 1)
 
     # based on team on offense, their lead(trail) points, and the time remaining
     def isSpecialSituation(self) :
