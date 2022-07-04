@@ -84,11 +84,26 @@ class InsidePitchSet(FACSet) :
         self.ballpark = IP_DiceSet(title= 'Ballpark',batch=self.batch)
         self.ballpark.setTopLeft(540, 460)
 
+
+        starLine = Die(Die.D_AQUA, Die.T_WHITE, 6, self.batch)
+        starLine.scale(0.8)
+        self.starSet = BorderedDiceSet([starLine], batch=self.batch)
+        self.starSet.setTitle('**')
+        self.starSet.setPosition(28, 100, 10)
+
+
         range = Die(Die.D_GREEN, Die.T_WHITE, 6, self.batch)
         range.scale(0.8)
         self.rangeSet = BorderedDiceSet([range], batch=self.batch)
         self.rangeSet.setTitle('Range')
-        self.rangeSet.setPosition(100, 100, 10)
+        self.rangeSet.setPosition(172, 100, 10)
+
+
+        field = Die(Die.D_DARK_GREEN, Die.T_WHITE, 6, self.batch)
+        field.scale(0.8)
+        self.fieldSet = BorderedDiceSet([field], batch=self.batch)
+        self.fieldSet.setTitle('DP/SF')
+        self.fieldSet.setPosition(316, 100, 10)
 
         b1 = Die(Die.D_GRAY, Die.T_WHITE, 6, self.batch)
         b2 = Die(Die.D_ORANGE, Die.T_WHITE, 6, self.batch)
@@ -100,7 +115,7 @@ class InsidePitchSet(FACSet) :
 
         self.baseRunningSet = BorderedDiceSet(d, batch= self.batch)
         self.baseRunningSet.setTitle('Running')
-        self.baseRunningSet.setPosition(400, 100, 10)
+        self.baseRunningSet.setPosition(460, 100, 10)
 
 
 
@@ -112,6 +127,8 @@ class InsidePitchSet(FACSet) :
         self.hitter.roll()
         self.ballpark.roll()
         self.rangeSet.roll()
+        self.fieldSet.roll()
+        self.starSet.roll()
         self.baseRunningSet.roll()
 
 
