@@ -96,7 +96,6 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
             self.windowFAC.setFACSet(fac)
             self.activeScreen.attachFAC(fac)
 
-
     def getBatch(self) :
         return self.batch
 
@@ -108,7 +107,6 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
         for t in self.scoreboardTuples :
             t[3].update(dt)
         self.activeScreen.getBatch().draw()
-   
  
    # keyboard event handlers
   
@@ -117,7 +115,6 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
             self.options.rotate(1)
         else :
             self.activeScreen.handle_A(modified)
-
  
     def handle_D(self, modified = False) :
         if self.activeScreen == self :
