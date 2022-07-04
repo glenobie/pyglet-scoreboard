@@ -1,6 +1,6 @@
 import pyglet
 from die import Die
-from dice_set import DiceSet, BorderedDiceSet
+from bordered_dice_set import BorderedDiceSet
 from fac_set import FACSet
 from text_box import BorderedTextBox
 
@@ -26,8 +26,11 @@ class SecondSeasonSet(FACSet) :
         self.batch = pyglet.graphics.Batch()
         self.createDice()
 
-        self.defPlayCall = BorderedTextBox('Defense', 300, 100, self.batch)
-        self.defPlayCall.setPosition(200, 160)
+        self.defPlayCall = BorderedTextBox('Defense', 300, 110, self.batch)
+        self.defPlayCall.setPosition(200, 184)
+
+        self.offPlayCall = BorderedTextBox('Offense', 300, 110, self.batch)
+        self.offPlayCall.setPosition(280, 26)
 
         self.down = 1
         self.distance = 10
@@ -56,21 +59,31 @@ class SecondSeasonSet(FACSet) :
         self.white = Die(Die.D_WHITE, sides=6, batch=self.batch)
         self.white.scale(0.8)
 
-        self.chartDice = BorderedDiceSet([self.red, self.white], self.batch)
+        self.chartDice = BorderedDiceSet([self.red, self.white], 24 , self.batch)
         self.chartDice.setTitle('Chart Dice')
-        self.chartDice.setPosition(20, 380, 16)
+        self.chartDice.setPosition(40, 400, 16)
 
         self.finderDie = Die(Die.D_BLUE, text_color=Die.T_WHITE, sides=20, batch=self.batch)
         self.finderDie.scale(0.8)
-        self.playerSet = BorderedDiceSet([self.finderDie], self.batch)
+        self.playerSet = BorderedDiceSet([self.finderDie], 24, self.batch)
         self.playerSet.setTitle("Finder")
-        self.playerSet.setPosition(490,380)        
+        self.playerSet.setPosition(490,400)        
 
         self.defenseDie = Die(Die.D_AQUA, text_color=Die.T_WHITE, sides=20, batch=self.batch)
-        self.defenseDie.scale(0.8)
-        self.defenseSet = BorderedDiceSet([self.defenseDie], self.batch)
+        self.defenseDie.scale(0.7)
+        self.defenseSet = BorderedDiceSet([self.defenseDie], 20, self.batch)
+        self.defenseSet.setTitleFontSize(16)
         self.defenseSet.setTitle("Defense")
-        self.defenseSet.setPosition(40, 200)    
+        self.defenseSet.setPosition(40, 240)    
+
+        o1 = Die(Die.D_GREEN, text_color=Die.T_WHITE, sides=6, batch=self.batch)
+        o1.scale(0.7)
+        o2 = Die(Die.D_ORANGE, text_color=Die.T_WHITE, sides=6, batch=self.batch)
+        o2.scale(0.7)
+        self.offenseSet = BorderedDiceSet([o1,o2], 20, self.batch)
+        self.offenseSet.setTitle('Offense')
+        self.offenseSet.setTitleFontSize(16)
+        self.offenseSet.setPosition(40, 80)
 
 
     def callPlays(self) :
@@ -104,8 +117,6 @@ class SecondSeasonSet(FACSet) :
         self.playerSet.roll()
         self.defenseSet.roll()
         self.callPlays()
-
-
 
     def handle_K(self) :
         self.chartDice.roll()
