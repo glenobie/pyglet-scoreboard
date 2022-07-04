@@ -1,7 +1,8 @@
 from functools import partial
 import pyglet
 from die import Die
-from dice_set import DiceSet, SortedDiceSet, BorderedDiceSet
+from dice_set import DiceSet, SortedDiceSet 
+from bordered_dice_set import  BorderedDiceSet
 from fac_set import FACSet
 
 class HistoryMakerGolfSet(FACSet) :
@@ -30,7 +31,7 @@ class HistoryMakerGolfSet(FACSet) :
         self.decider.addColorCondition((1, Die.D_DARK_GREEN))
         self.decider.addColorCondition((2, Die.D_RED))
 
-        self.deciderSet = BorderedDiceSet([self.decider], self.batch)
+        self.deciderSet = BorderedDiceSet([self.decider], batch=self.batch)
         self.deciderSet.setTitle('Decider')
         self.deciderSet.setPosition(570, 360, 20)
         self.deciderSet.setLabel('Roll #' + str(self.decisionNumber))

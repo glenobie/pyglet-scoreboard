@@ -1,6 +1,6 @@
 import pyglet
 from die import Die
-from dice_set import DiceSet, BorderedDiceSet
+from bordered_dice_set import BorderedDiceSet
 from fac_set import FACSet
 
 class IP_DiceSet :
@@ -86,7 +86,7 @@ class InsidePitchSet(FACSet) :
 
         range = Die(Die.D_GREEN, Die.T_WHITE, 6, self.batch)
         range.scale(0.8)
-        self.rangeSet = BorderedDiceSet([range], self.batch)
+        self.rangeSet = BorderedDiceSet([range], batch=self.batch)
         self.rangeSet.setTitle('Range')
         self.rangeSet.setPosition(100, 100, 10)
 
@@ -98,7 +98,7 @@ class InsidePitchSet(FACSet) :
             br.scale(0.8)
 
 
-        self.baseRunningSet = BorderedDiceSet(d, self.batch)
+        self.baseRunningSet = BorderedDiceSet(d, batch= self.batch)
         self.baseRunningSet.setTitle('Running')
         self.baseRunningSet.setPosition(400, 100, 10)
 

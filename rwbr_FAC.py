@@ -1,7 +1,7 @@
-
 import pyglet
 from die import Die
-from dice_set import DiceSet, BorderedDiceSet
+from dice_set import DiceSet 
+from bordered_dice_set import BorderedDiceSet
 from functools import partial
 
 from fac_set import FACSet
@@ -17,7 +17,7 @@ class RWBRSet(FACSet) :
     def createDice(self) :
         
         self.group = Die(Die.D_ORANGE, sides=6, text_color=Die.T_WHITE, batch=self.batch)
-        self.groupSet = BorderedDiceSet([self.group], self.batch)
+        self.groupSet = BorderedDiceSet([self.group], batch=self.batch)
 
         self.groupSet.attachBooleanFunctionLabel((partial(self.groupSet.totalEquals, 1), 'TOP'))
         self.groupSet.attachBooleanFunctionLabel((partial(self.groupSet.totalEquals, 2), 'TOP'))
@@ -31,7 +31,7 @@ class RWBRSet(FACSet) :
         self.black = Die(Die.D_BLACK, sides=6, text_color=Die.T_WHITE,batch=self.batch)
         self.gray = Die(Die.D_GRAY, sides=6, text_color=Die.T_WHITE,batch=self.batch)
 
-        self.courseDice = BorderedDiceSet([self.gray, self.black], self.batch)
+        self.courseDice = BorderedDiceSet([self.gray, self.black], batch=self.batch)
         self.courseDice.setTitle('Track')
         self.courseDice.setPosition(440, 380, 16)
 
@@ -40,7 +40,7 @@ class RWBRSet(FACSet) :
         self.blue = Die(Die.D_BLUE, sides=6, text_color=Die.T_WHITE, batch=self.batch)
         self.challenge = [self.red, self.white, self.blue]
 
-        self.challengeDice = BorderedDiceSet(self.challenge, self.batch)
+        self.challengeDice = BorderedDiceSet(self.challenge, batch=self.batch)
         self.challengeDice.attachBooleanFunctionLabel((self.challengeDice.allEqual, 'PROBLEM!'))
         self.challengeDice.setTitle('Challenge #' + str(self.challengeNumber) )
         self.challengeDice.setPosition(200, 140, 16)
