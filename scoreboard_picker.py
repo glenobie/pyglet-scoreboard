@@ -10,6 +10,7 @@ from pyglet import resource
 from scoreboard import Scoreboard
 
 ####################################################################
+
 class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
 
     INDEX_ICON = 2

@@ -53,7 +53,6 @@ class SecondSeasonSet(FACSet) :
             print(list)
 
     def createDice(self) :
-        
         self.red = Die(Die.D_RED, text_color=Die.T_WHITE, sides=6, batch=self.batch)
         self.red.scale(0.8)
         self.white = Die(Die.D_WHITE, sides=6, batch=self.batch)
@@ -84,7 +83,6 @@ class SecondSeasonSet(FACSet) :
         self.offenseSet.setTitle('Offense')
         self.offenseSet.setTitleFontSize(16)
         self.offenseSet.setPosition(40, 80)
-
 
     def callPlays(self) :
         defense = self.defensiveCalls[self.defenseDie.getValue()-1][self.situation]
