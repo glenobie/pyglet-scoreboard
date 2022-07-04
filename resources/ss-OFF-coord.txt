@@ -16,4 +16,25 @@ Outside,Screen,Inside,Screen,Short [+1234 Outside],Medium,Medium,Long,Short,Shor
 Outside,Screen,Inside/Outside,Screen,Short [+234 Outside],Medium,Medium,Long,Short,Medium,Long,Inside
 Outside/Inside,Screen,Inside/Outside,Screen [+1234 Inside],Short [+234 Inside],Medium,Medium,Long,Short,Medium,Long,Inside
 Outside/Inside,Screen,Outside,Screen [+234 Outside],Short [+34 Inside],Medium,Medium,Long,Short,Medium,Long,Inside
+Screen +[34 Outside],Screen,Outside,Screen [+34 Inside],Short [+34 Outside],Medium,Medium,Long,Short,Medium,Long,Inside
+Screen,Short [+1234 Inside],Outside,Short [+34 Outside],Short [+4 Outside],Medium,Medium,Long,Short,Medium,Long,Inside
+Screen,Short [+234 Inside],Outside [-1234 Short],Short,Short,Medium,Medium,Long,Short,Medium,Long,Outside
+Screen,Short [+34 Inside],Outside [-234 Short],Short,Short,Medium,Medium,Long,Short,Medium,Long,Outside
+Screen,Short [+4 Inside],Outside [-34 Medium],Short,Short,Medium,Medium,Long,Short,Medium,Long,Outside
+Short [+1234 Inside],Short,Outside,Short,Short,Medium,Medium,Long,Medium,Medium,Long,Outside
 
+
+51 Short +34 IN Short OU IN Short +1234 OU Short Medium Medium +234 OU Long 51 Medium Medium Long OU
+52 Short +4 IN Short Screen Short +234 OU Short Medium Medium +4 OU Long 52 Medium Medium Long OU
+53 Short Short Screen Short +4 OU Short Medium Medium Long 53 Medium Medium Long OU
+54 Short Short Short Short Short Medium Medium Long 54 Medium Medium Long OU
+55 Short Medium +34 OU Short Short Short Medium Medium Long 55 Medium Long Long OU
+56 Short Medium Screen +1234 IN Short Short Medium Medium Long 56 Medium Long Long OU
+
+
+61 Medium +234 OU Medium Screen +4 IN Short Medium Medium Long Long 61 Medium Long Long OU
+62 Medium Medium Screen Medium Medium Long Long Long 62 Medium Long Long OU
+63 Medium Medium Short +234 OU Medium +4 IN Medium +234 IN Long +4 IN Long Long 63 Long Long Long Screen
+64 Medium Long +4 OU Short Medium Medium Long Long Long 64 Long Long Long Short
+65 Long Long Medium Medium Medium Long Long Long 65 Long Long Long Medium
+66 Long Long Long +34 IN Long Long Trick Trick Trick 66 Long Long Trick Long
