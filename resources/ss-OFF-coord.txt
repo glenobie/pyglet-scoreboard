@@ -10,3 +10,10 @@ Inside/Outside,Outside,Inside,Outside [-34 Screen],Screen [+34 Outside],Short [+
 Inside [-234 Medium],Outside,Inside,Outside [-4 Short],Screen,Short [+1234 Outside],Medium,Long,Screen,Short,Long,Inside
 Outside [-4 Screen],Outside,Inside,Outside,Screen,Short [+234 Outside],Medium,Long,Screen,Short,Long,Inside
 Outside,Outside/Inside,Inside,Outside,Screen,Short [+34 Outside],Medium,Long,Screen,Short,Long,Inside
+Outside,Screen [+1234 Outside],Inside,Outside,Outside,Short,Medium [+4 Outside],Medium,Long,Screen,Short,Long,Inside
+Outside,Screen [+234 Outside],Inside,Outside/Inside,Short,Medium,Medium,Long,Screen,Short,Long,Inside
+Outside,Screen,Inside,Screen,Short [+1234 Outside],Medium,Medium,Long,Short,Short,Long,Inside
+Outside,Screen,Inside/Outside,Screen,Short [+234 Outside],Medium,Medium,Long,Short,Medium,Long,Inside
+Outside/Inside,Screen,Inside/Outside,Screen [+1234 Inside],Short [+234 Inside],Medium,Medium,Long,Short,Medium,Long,Inside
+Outside/Inside,Screen,Outside,Screen [+234 Outside],Short [+34 Inside],Medium,Medium,Long,Short,Medium,Long,Inside
+
