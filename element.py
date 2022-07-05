@@ -6,7 +6,7 @@ from pyglet import font
 class ShadowBorder() :
 
     BORDER_SPACING = 3
-    BG_COLOR = (18,18,18)
+    BG_COLOR = (22,22,22)
 
     def __init__(self, width, height, batch, bg, fg) :
         self.batch = batch
@@ -16,7 +16,7 @@ class ShadowBorder() :
         self.height = height + ShadowBorder.BORDER_SPACING * 2 
 
     def drawLines(self) :
-        self.border = shapes.Rectangle(0, 0, self.width, self.height, color=ShadowBorder.BG_COLOR, batch=self.batch, group=self.bg  )
+        self.border = shapes.Rectangle(self.x1, self.y1, self.width, self.height, color=ShadowBorder.BG_COLOR, batch=self.batch, group=self.bg  )
         x2 = self.x1 + self.getWidth()
         y2 = self.y1 + self.getHeight()
 
@@ -62,8 +62,8 @@ class ScoreboardElement :
                    maxDigits=2, displayLeadingZeroes=False, batch=None) :
 
         # border will go in the background group, all others foreground
-        self.bg = pyglet.graphics.OrderedGroup(1)
-        self.fg = pyglet.graphics.OrderedGroup(2)
+        self.bg = pyglet.graphics.OrderedGroup(3)
+        self.fg = pyglet.graphics.OrderedGroup(24)
 
         self.isOn = True
         self.updateFunc = updateFunc
@@ -76,26 +76,20 @@ class ScoreboardElement :
         if not(text is None) :
             self.label = pyglet.text.Label(text, font_name=textFont, font_size=textSize, color=textColor, batch=batch, group=self.fg)
 
-        self.docs = self.createDocuments(digitFont, digitSize, digitColor, maxDigits)
-        self.layouts = []
-        for d in self.docs :
-            layout = pyglet.text.layout.TextLayout(d, batch=batch, group=self.fg)
-            self.layouts.append(layout)
-            # store max Height and max Width in the document
-            d.set_style(0, len(d.text), dict(maxWidth=layout.content_width, maxHeight = layout.content_height))
+        self.doc = self.createDocument(digitFont, digitSize, digitColor, maxDigits)
+        self.layout = pyglet.text.layout.TextLayout(self.doc, batch=batch, group=self.fg)
+        # store max Height and max Width in the document
+        self.doc.set_style(0, len(self.doc.text), dict(maxWidth=self.layout.content_width, maxHeight = self.layout.content_height))
 
-        self.borders = []
-        for l in self.layouts :
-            width = l.document.get_style('maxWidth', 0)
-            height = l.document.get_style('maxHeight', 0)
-            self.borders.append(ShadowBorder( width, height, batch, self.bg, self.fg))  
+        width = self.layout.document.get_style('maxWidth', 0)
+        height = self.layout.document.get_style('maxHeight', 0)
+        self.border = ShadowBorder( width, height, batch, self.bg, self.fg)
 
         self.computeHeight()
         self.update()
 
     # base class just creates a single document
-    def createDocuments(self, fontName, fontSize, fontColor, maxDigits) :
-        docs = []
+    def createDocument(self, fontName, fontSize, fontColor, maxDigits) :
         text = ''
         for i in range(0, maxDigits) :
             text += '0'
@@ -105,8 +99,7 @@ class ScoreboardElement :
                                                        color=fontColor,
                                                        align='right',
                                                        kerning=ScoreboardElement.DIGIT_KERNING))
-        docs.append(document)
-        return docs
+        return document
 
     def setOn(self, value) :
         self.isOn = value
@@ -114,7 +107,7 @@ class ScoreboardElement :
 
    # base class assumes a single document
     def update(self) :
-        self.docs[0].delete_text(0, len(self.docs[0].text))
+        self.doc.delete_text(0, len(self.doc.text))
         if self.isOn :
             value = str(self.updateFunc())
 
@@ -125,7 +118,7 @@ class ScoreboardElement :
         else :
             value = ''
 
-        self.docs[0].insert_text(0, value)
+        self.doc.insert_text(0, value)
 
     def getCenter(self) :
         return self.center
@@ -141,7 +134,7 @@ class ScoreboardElement :
         self.label.color = fontColor
 
     def computeHeight(self) :
-        self.height = self.borders[0].getHeight()
+        self.height = self.border.getHeight()
         if not(self.label is None) :
             self.height += self.label.content_height
 
@@ -154,54 +147,53 @@ class ScoreboardElement :
             self.label.anchor_y = 'top'
             self.label.position = (x, y)
             y = y - self.label.content_height - ScoreboardElement.VERTICAL_SPACING
-        self.positionBorderAndLayoutFromBottomLeft(x - self.borders[0].getWidth() // 2, y - self.borders[0].getHeight())
+        self.positionBorderAndLayoutFromBottomLeft(x - self.border.getWidth() // 2, y - self.border.getHeight())
         
     
    # base class assumes a single layout
    # right justify
     def setRightTop(self, x, y) :
         self.top = y
-        self.center = x - self.borders[0].getWidth() // 2
+        self.center = x - self.border.getWidth() // 2
         if self.label != None :
             self.label.anchor_x = 'right'
             self.label.anchor_y = 'top'
             self.label.position = (x, y)
             y = y - self.label.content_height - ScoreboardElement.VERTICAL_SPACING
-        self.positionBorderAndLayoutFromBottomLeft(x - self.borders[0].getWidth(), y - self.borders[0].getHeight())
+        self.positionBorderAndLayoutFromBottomLeft(x - self.border.getWidth(), y - self.border.getHeight())
 
 
    # base class assumes a single layout
     def setLeftTop(self, x, y) :
         self.top = y
-        self.center = x + self.borders[0].getWidth() // 2
+        self.center = x + self.border.getWidth() // 2
         if self.label != None :
             self.label.anchor_x = 'left'
             self.label.anchor_y = 'top'
             self.label.position = (x, y)
             y = y - self.label.content_height - ScoreboardElement.VERTICAL_SPACING
-        self.positionBorderAndLayoutFromBottomLeft(x, y - self.borders[0].getHeight())
+        self.positionBorderAndLayoutFromBottomLeft(x, y - self.border.getHeight())
 
 
     def positionBorderAndLayoutFromBottomLeft(self, x, y) :
-        self.borders[0].setPosition((x, y))
+        self.border.setPosition((x, y))
 
-        self.layouts[0].anchor_x = 'right'
-        self.layouts[0].anchor_y = 'bottom'
+        self.layout.anchor_x = 'right'
+        self.layout.anchor_y = 'bottom'
 
-        width = self.layouts[0].document.get_style('maxWidth', 0)
-        height = self.layouts[0].document.get_style('maxHeight', 0)
-        self.layouts[0].position = ( x + self.borders[0].getWidth() - (self.borders[0].getWidth() - width) // 2,
-                                     y + 2 + (self.borders[0].getHeight()  - height ) // 2) # added a fudge of 2
+        width = self.layout.document.get_style('maxWidth', 0)
+        height = self.layout.document.get_style('maxHeight', 0)
+        self.layout.position = ( x + self.border.getWidth() - (self.border.getWidth() - width) // 2,
+                                     y + 2 + (self.border.getHeight()  - height ) // 2) # added a fudge of 2
  
     def getHeight(self) :
         return self.height
 
     def getWidth(self) :
-        return self.borders[0].getWidth()
+        return self.border.getWidth()
 
     def setVisible(self, value) :
-        for l in self.layouts :
-            l.visible = value
+        self.layout.visible = value
         
 
 ############################################
@@ -220,9 +212,9 @@ class HorizontalElement(ScoreboardElement) :
                                     displayLeadingZeroes=displayLeadingZeroes, batch=batch)
 
     def setCenterTop(self, x, y) :
-        self.layouts[0].anchor_x = 'left'
-        self.layouts[0].anchor_y = 'top'
-        layoutWidth = self.layouts[0].document.get_style('maxWidth', 0)
+        self.layout.anchor_x = 'left'
+        self.layout.anchor_y = 'top'
+        layoutWidth = self.layout.document.get_style('maxWidth', 0)
         totalWidth = layoutWidth
         if not(self.label is None) :
             self.label.anchor_x = 'left'
@@ -234,9 +226,9 @@ class HorizontalElement(ScoreboardElement) :
         else :
             x -= totalWidth // 2
 
-        self.positionBorderAndLayoutFromBottomLeft(x, y - self.borders[0].getHeight())   
+        self.positionBorderAndLayoutFromBottomLeft(x, y - self.border.getHeight())   
 
-        self.height = self.borders[0].getHeight() if self.label.content_height > self.height else  self.label.content_height 
+        self.height = self.border.getHeight() if self.label.content_height > self.height else  self.label.content_height 
 
 ################################
 # Creates two ScoreboardElements to fill via one function that gets seconds
@@ -253,8 +245,8 @@ class ClockElement(ScoreboardElement) :
 
         self.minutesElement = None
         self.secondsElement = None
-        ScoreboardElement.__init__(self, text, textFont, textSize, textColor, updateFunc, digitFont, digitSize, digitColor, maxDigits, displayLeadingZeroes, batch)
-        self.setVisible(False)
+        ScoreboardElement.__init__(self, text, textFont, textSize, textColor, updateFunc, digitFont, digitSize, digitColor, maxDigits, displayLeadingZeroes, batch=None)
+        #self.setVisible(False)
 
         self.minutesElement = ScoreboardElement(None, textFont, textSize, textColor, self.getMinutes, digitFont, digitSize, digitColor, maxDigits, displayLeadingZeroes, batch)
         self.secondsElement = ScoreboardElement(None, textFont, textSize, textColor, self.getSeconds, digitFont, digitSize, digitColor, 2, True, batch)

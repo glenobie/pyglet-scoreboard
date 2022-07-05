@@ -40,7 +40,7 @@ class Scoreboard(KeyHandler) :
         self.bg = pyglet.graphics.OrderedGroup(0)
         self.attachedFAC = None
 
-        self.background = pyglet.shapes.Rectangle(0,0,800,480, (18,18,18), self.batch, self.bg)
+        self.background = pyglet.shapes.Rectangle(0,0,800,480, (28,28,28), self.batch, self.bg)
 
         self.elements = []
         self.state = None
@@ -101,6 +101,7 @@ class Scoreboard(KeyHandler) :
         if horizontal :
             text = text + ':'
             func = HorizontalElement
+
         e = func(text=text, textFont=Scoreboard.TEXT_FONT, 
                                   textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
                                   updateFunc=self.state.getPeriod, digitFont=Scoreboard.DIGIT_FONT,
