@@ -76,13 +76,13 @@ class InsidePitchSet(FACSet) :
 
     def createDice(self) :
         self.pitcher = IP_DiceSet(title= 'Pitcher', batch=self.batch)
-        self.pitcher.setTopLeft(36, 460)
+        self.pitcher.setTopLeft(36, 454)
 
         self.hitter = IP_DiceSet(title= 'Hitter',batch=self.batch)
-        self.hitter.setTopLeft(286, 460)
+        self.hitter.setTopLeft(286, 454)
 
         self.ballpark = IP_DiceSet(title= 'Ballpark',batch=self.batch)
-        self.ballpark.setTopLeft(540, 460)
+        self.ballpark.setTopLeft(540, 454)
 
 
         starLine = Die(Die.D_AQUA, Die.T_WHITE, 6, self.batch)

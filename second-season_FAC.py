@@ -67,7 +67,6 @@ class SecondSeasonSet(FACSet) :
         for j in range(0,rows) :
             list = f.readline().split(',')
             calls.append(list)
-            print(list)
         return calls
 
     def createDice(self) :
@@ -78,13 +77,13 @@ class SecondSeasonSet(FACSet) :
 
         self.chartDice = BorderedDiceSet([self.red, self.white], 24 , self.batch)
         self.chartDice.setTitle('Chart Dice')
-        self.chartDice.setPosition(40, 400, 16)
+        self.chartDice.setPosition(40, 394, 16)
 
         self.finderDie = Die(Die.D_BLUE, text_color=Die.T_WHITE, sides=20, batch=self.batch)
         self.finderDie.scale(0.8)
         self.playerSet = BorderedDiceSet([self.finderDie], 24, self.batch)
         self.playerSet.setTitle("Finder")
-        self.playerSet.setPosition(490,400)        
+        self.playerSet.setPosition(620,394)        
 
         self.defenseDie = Die(Die.D_AQUA, text_color=Die.T_WHITE, sides=20, batch=self.batch)
         self.defenseDie.scale(0.7)
@@ -108,7 +107,7 @@ class SecondSeasonSet(FACSet) :
         offense = self.offensiveCalls[self.getOffenseRowFromDice(self.o1, self.o2)][self.situation]
         self.defPlayCall.setText(defense.replace('\n', ''))
         self.offPlayCall.setText(offense.replace('\n',''))
-        print(defense)
+
 
     def downChanged(self, down) :
         self.down = down
