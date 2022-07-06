@@ -16,7 +16,7 @@ class BlastSet(FACSet) :
         d1.scale(scale)
         d2.scale(scale)
 
-        dice = BorderedDiceSet([d1, d2], 20 * scale, self.batch)
+        dice = BorderedDiceSet([d1, d2], 26 * scale, self.batch)
         dice.setTitleFontSize(20 * scale)
         dice.setLabelFontSize(20 * scale)
 
@@ -60,13 +60,13 @@ class HockeyBlastSet(BlastSet) :
 
 
         self.powerDice = self.createBlastDice(white.makeClone(), black.makeClone(),  500, 400, 16, 
-                                                'Power', HockeyBlastSet.POWER, 0.8)
+                                                'Power', HockeyBlastSet.POWER, 0.76)
         self.powerDice.setBorderColor((255,0,0), 255)
         self.emptyNetDice = self.createBlastDice(white.makeClone(), black.makeClone(), 500, 248, 16, 
-                                                'Empty Net', HockeyBlastSet.EMPTY_NET, 0.8)
+                                                'Empty Net', HockeyBlastSet.EMPTY_NET, 0.76)
         self.emptyNetDice.setBorderColor((255,255,0), 255)
         self.threeOn3Dice = self.createBlastDice(white.makeClone(), black.makeClone(),  500, 90, 16, 
-                                                '3 on 3', HockeyBlastSet.THREE_ON_3, 0.8)
+                                                '3 on 3', HockeyBlastSet.THREE_ON_3, 0.76)
         self.threeOn3Dice.setBorderColor((0,255,255), 255)
         red = Die(Die.D_RED, sides=6, text_color=Die.T_WHITE, batch=self.batch)
         blue = Die(Die.D_BLUE, sides=6, text_color=Die.T_WHITE, batch=self.batch)
