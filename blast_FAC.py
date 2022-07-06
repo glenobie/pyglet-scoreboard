@@ -5,6 +5,7 @@ from dice_set import DiceSet, SortedDiceSet
 from bordered_dice_set import  BorderedDiceSet
 from fac_set import FACSet
 
+#############################################################################
 class BlastSet(FACSet) :
 
     def __init__(self, loader) :
@@ -30,7 +31,7 @@ class BlastSet(FACSet) :
     def draw(self) :
         self.batch.draw()
 
-
+###############################################################################
 class HockeyBlastSet(BlastSet) :
 
     NORMAL = ['None', 'Fight?', 'Play', 'Odd Man Rush!', 'Penalty Event', 'Zoom!', 'Lull', 'Ice Blast!',
@@ -80,6 +81,7 @@ class HockeyBlastSet(BlastSet) :
     def handle_K(self) :
         self.d6s.roll()
 
+################################################################
 class SoccerBlastSet(BlastSet) :
 
     NORMAL = ['None', 'Attack!', 'Highlight Reel', 'Home Advantage', 'Referee','Take On', 'Midfield Battle', 'Build-up', 
@@ -116,7 +118,7 @@ class SoccerBlastSet(BlastSet) :
         self.d6s.roll()
 
 
-
+###############################################################################
 class LacrosseBlastSet(BlastSet) :
 
     NORMAL = ['None', 'Fight?', 'Play', 'Goal Charge', 'Penalty Event', 'Crash', 'Boxla Blast', 'Scramble',
