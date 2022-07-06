@@ -1,3 +1,9 @@
+Legends of Boxing
+boxing
+BoxingScoreboard
+legends_of_boxing.png
+lob_FAC
+LegendsOfBoxingSet
 Hockey Blast
 hockey
 HockeyScoreboard
@@ -44,12 +50,6 @@ Cold Snap
 football
 CFLScoreboard
 cold-snap.png
-hmg_FAC
-HistoryMakerGolfSet
-Legends of Boxing
-boxing
-BoxingScoreboard
-legends_of_boxing.png
 hmg_FAC
 HistoryMakerGolfSet
 International Cricket

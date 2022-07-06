@@ -50,8 +50,8 @@ Legends of Boxing
 boxing
 BoxingScoreboard
 legends_of_boxing.png
-hmg_FAC
-HistoryMakerGolfSet
+lob_FAC
+LegendsOfBoxingSet
 International Cricket
 cricket
 CricketScoreboard

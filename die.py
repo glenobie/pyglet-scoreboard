@@ -27,8 +27,8 @@ class Die :
 
     WIDTH = 100
     HEIGHT = 100
-    TEXT_SIZE = 80
-    INTERIOR_SPACING_PCT = 0.5
+    TEXT_SIZE = 100
+    INTERIOR_SPACING_PCT = 0.2
     FONT = 'Arial'
     
     def __init__(self, color, text_color=(0,0,0,255), sides=6, batch=None) :
@@ -78,9 +78,9 @@ class Die :
             if len(t) > len(testString) :
                 testString = t
 
-        desiredSpacing = self.border.width * self.interiorSpacingPct
+        desiredSpacing = self.border.height * self.interiorSpacingPct
         self.document.text = testString
-        while self.border.width - self.layout.content_width < desiredSpacing :
+        while self.border.height  - self.layout.content_height < desiredSpacing :
             self.baseTextSize -= 1
             self.document.set_style(0, len(self.document.text), dict(font_size=self.baseTextSize))
         
