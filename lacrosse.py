@@ -10,7 +10,6 @@ class LacrosseTeamState(TeamState) :
         TeamState.__init__(self, score, maxScore)
  
 
-
 ###########################
 class LacrosseGameState(TimedGameState) :
     
