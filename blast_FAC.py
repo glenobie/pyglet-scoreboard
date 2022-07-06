@@ -1,7 +1,7 @@
 from functools import partial
 import pyglet
-from die import Die, DieClone
-from dice_set import DiceSet, SortedDiceSet 
+from die import Die
+from dice_set import DiceSet
 from bordered_dice_set import  BorderedDiceSet
 from fac_set import FACSet
 
