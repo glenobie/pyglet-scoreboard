@@ -114,3 +114,48 @@ class SoccerBlastSet(BlastSet) :
 
     def handle_K(self) :
         self.d6s.roll()
+
+
+
+class LacrosseBlastSet(BlastSet) :
+
+    NORMAL = ['None', 'Fight?', 'Play', 'Goal Charge', 'Penalty Event', 'Crash', 'Boxla Blast', 'Scramble',
+                'Loose Ball', 'Turnover', 'Play/Clock', 'Spectacular Save!']
+
+    POWER = ['None', 'Penalty Event', 'Power Play', 'Goal Charge', 'Penalty Kill', 'Crash', 'Power Play',
+                'Scramble', 'Play', 'Turnover', 'Loose Ball', 'Spectacular Save!']
+
+    EMPTY_NET =  ['None', 'Spectacular Save!', 'Man-Adv. Play', 'Goal Crash', 'Penalty Event', 'Crash', 'Man-Adv. Play',
+                'Scramble', 'Play', 'Turnover', 'Loose Ball', 'Spectacular Save!']
+
+    def __init__(self, loader) :
+        FACSet.__init__(self, loader)
+        self.batch = pyglet.graphics.Batch()
+        white = Die(Die.D_WHITE, sides=6, batch=self.batch)
+        black = Die(Die.D_BLACK, sides=6, text_color=Die.T_WHITE,batch=self.batch)
+        self.normalDice = self.createBlastDice(white, black,100, 380, 16, 'Normal Minutes', LacrosseBlastSet.NORMAL)
+
+
+        self.powerDice = self.createBlastDice(white.makeClone(), black.makeClone(),  500, 320, 16, 
+                                                'Power', LacrosseBlastSet.POWER, 0.76)
+        self.powerDice.setBorderColor((255,0,0), 255)
+        self.emptyNetDice = self.createBlastDice(white.makeClone(), black.makeClone(), 500, 128, 16, 
+                                                'Empty Net', LacrosseBlastSet.EMPTY_NET, 0.76)
+        self.emptyNetDice.setBorderColor((255,255,0), 255)
+
+        red = Die(Die.D_RED, sides=6, text_color=Die.T_WHITE, batch=self.batch)
+        blue = Die(Die.D_BLUE, sides=6, text_color=Die.T_WHITE, batch=self.batch)
+
+        self.d6s = DiceSet([red, blue], self.batch)
+        self.d6s.setPosition(120, 96, 16) 
+        self.green = Die(Die.D_GREEN, text_color=Die.T_WHITE, sides=6, batch=self.batch) 
+        self.green.setCenter(170, 220)
+
+
+    def handle_L(self) :
+        self.normalDice.roll()
+        self.green.roll()
+        self.d6s.roll()
+
+    def handle_K(self) :
+        self.d6s.roll()
