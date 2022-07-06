@@ -4,6 +4,12 @@ HockeyScoreboard
 hockey_blast.png
 blast_FAC
 HockeyBlastSet
+Soccer Blast
+soccer
+SoccerScoreboard
+soccer-blast.png
+blast_FAC
+SoccerBlastSet
 Inside Pitch
 baseball
 BaseballScoreboard
@@ -80,12 +86,6 @@ History Maker Golf
 golf
 GolfScoreboard
 hmg.png
-hmg_FAC
-HistoryMakerGolfSet
-Soccer Blast
-soccer
-SoccerScoreboard
-soccer-blast.png
 hmg_FAC
 HistoryMakerGolfSet
 EOF

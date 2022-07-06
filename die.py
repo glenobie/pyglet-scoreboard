@@ -20,6 +20,7 @@ class Die :
     D_BROWN = (102, 51, 0 )
     D_AQUA = (0,150,150)
     D_DARK_GREEN = (0,80,0)
+    D_GOLD = (255,215,0)
 
     T_WHITE = (255,255,255,255)
     T_BLACK = (0,0,0,255)

@@ -104,8 +104,8 @@ Soccer Blast
 soccer
 SoccerScoreboard
 soccer-blast.png
-hmg_FAC
-HistoryMakerGolfSet
+blast_FAC
+SoccerBlastSet
 Dice United
 soccer
 SoccerScoreboard
