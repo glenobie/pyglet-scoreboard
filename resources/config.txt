@@ -1,3 +1,9 @@
+Hockey Blast
+hockey
+HockeyScoreboard
+hockey_blast.png
+blast_FAC
+HockeyBlastSet
 Inside Pitch
 baseball
 BaseballScoreboard
@@ -74,12 +80,6 @@ History Maker Golf
 golf
 GolfScoreboard
 hmg.png
-hmg_FAC
-HistoryMakerGolfSet
-Hockey Blast
-hockey
-HockeyScoreboard
-hockey_blast.png
 hmg_FAC
 HistoryMakerGolfSet
 Soccer Blast

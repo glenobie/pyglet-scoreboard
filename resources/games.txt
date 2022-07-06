@@ -74,8 +74,8 @@ Hockey Blast
 hockey
 HockeyScoreboard
 hockey_blast.png
-hmg_FAC
-HistoryMakerGolfSet
+blast_FAC
+HockeyBlastSet
 Bowl-O-Rama
 bowling
 BowlingScoreboard

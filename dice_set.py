@@ -34,6 +34,9 @@ class DiceSet :
     def setTitleFontSize(self, value) :
         self.titleDoc.set_style(0, len(self.titleDoc.text), dict(font_size = value))
 
+    def setLabelFontSize(self, value) :
+        self.labelDoc.set_style(0, len(self.labelDoc.text), dict(font_size = value))
+
     # are all the dice equal in value
     def allEqual(self) :
         d1 = self.dice[0].getValue()

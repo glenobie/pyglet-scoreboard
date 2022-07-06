@@ -1,5 +1,6 @@
 import pyglet
 import random
+import math
 
 ##########################################
 class Die :
@@ -120,8 +121,8 @@ class Die :
 
 
     def scale(self, value) :
-        self.border.width = Die.WIDTH * value
-        self.border.height = Die.HEIGHT * value
+        self.border.width = math.floor(Die.WIDTH * value)
+        self.border.height = math.floor(Die.HEIGHT * value)
         self.adjustBaseTextSize()
         self.setCenter(self.center[0], self.center[1])
         self.update()
