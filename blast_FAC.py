@@ -30,11 +30,6 @@ class BlastSet(FACSet) :
     def draw(self) :
         self.batch.draw()
 
-    def handle_L(self) :
-        0
-
-    def handle_K(self) :
-        0
 
 class HockeyBlastSet(BlastSet) :
 

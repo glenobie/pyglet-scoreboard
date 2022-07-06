@@ -80,12 +80,14 @@ class SecondSeasonSet(FACSet) :
         self.chartDice.setPosition(40, 394, 16)
 
         self.finderDie = Die(Die.D_BLUE, text_color=Die.T_WHITE, sides=20, batch=self.batch)
+        self.finderDie.setInteriorSpacingPct(0.3)
         self.finderDie.scale(0.8)
         self.playerSet = BorderedDiceSet([self.finderDie], 24, self.batch)
         self.playerSet.setTitle("Finder")
         self.playerSet.setPosition(620,394)        
 
         self.defenseDie = Die(Die.D_AQUA, text_color=Die.T_WHITE, sides=20, batch=self.batch)
+        self.defenseDie.setInteriorSpacingPct(0.3)
         self.defenseDie.scale(0.7)
         self.defenseSet = BorderedDiceSet([self.defenseDie], 20, self.batch)
         self.defenseSet.setTitleFontSize(16)
