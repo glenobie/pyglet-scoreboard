@@ -2,6 +2,7 @@ import pyglet
 from pyglet import shapes
 from key_handler import KeyHandler
 import math
+import os
 
 # helper function to subtract one list from another
 def listDifference(list1, list2) :
@@ -335,7 +336,14 @@ class ConfigScreen(KeyHandler) :
         self.unchosenGameLayout.selectNext(-1)
                            
     def handle_Z(self, modified) :
-        self.unchosenGameLayout.selectNext(1)
+        if (modified) :
+            os.excel("restart.sh","")
+            # TODO determine if ethernet cable connected
+            # Determine if link to github exists
+            # run github pull script
+            # quit and restart
+        else :
+            self.unchosenGameLayout.selectNext(1)
 
     def handle_A(self, modified) :
         if (modified and not(self.chosenGameLayout.zeroGames())) :
