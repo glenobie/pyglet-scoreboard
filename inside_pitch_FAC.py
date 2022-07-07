@@ -8,7 +8,7 @@ class IP_DiceSet :
     LABEL_SPACING = 8
     SPACE = 8
 
-    def __init__(self, title = '', batch=None) :
+    def __init__(self, title = '', label = '', batch=None) :
         self.dice = []
         self.batch = batch
         
@@ -26,6 +26,10 @@ class IP_DiceSet :
         self.title = pyglet.text.Label(title, 'Arial', 22, batch=self.batch)
         self.title.anchor_x = 'left'
         self.title.anchor_y = 'center'
+
+        self.label = pyglet.text.Label(label, 'Arial', 22, batch=self.batch)
+        self.label.anchor_x = 'left'
+        self.label.anchor_y = 'center'
 
 
     def setTopLeft(self, x, y) :
@@ -51,7 +55,7 @@ class IP_DiceSet :
         self.lines = []
         self.lines.append(pyglet.shapes.Line(x, y, x, y + height, width=1, batch=self.batch))  
         self.lines.append(pyglet.shapes.Line(x+width, y, x+width, y + height, width=1, batch=self.batch))  
-        self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch))  
+        #self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch))  
  
         if len(self.title.text) > 0 :
             title_x = x + (width - self.title.content_width) // 2
@@ -62,7 +66,19 @@ class IP_DiceSet :
             self.lines.append(pyglet.shapes.Line(title_x + self.title.content_width + IP_DiceSet.LABEL_SPACING, y+height, x+width, 
                                                  y + height, width=1, batch=self.batch))       
         else :
-            self.lines.append(pyglet.shapes.Line(x, y+height, x+width, y+height, width=1, batch=self.batch))       
+            self.lines.append(pyglet.shapes.Line(x, y+height, x+width, y+height, width=1, batch=self.batch))      
+
+        if len(self.label.text) > 0 :
+            label_x = x + (width - self.label.content_width) // 2
+            self.label.position = (label_x, y)
+            self.lines.append(pyglet.shapes.Line(x, y, label_x - BorderedDiceSet.LABEL_SPACING, 
+                                    y, width=1, batch=self.batch))       
+            self.lines.append(pyglet.shapes.Line(label_x + self.label.content_width + BorderedDiceSet.LABEL_SPACING, 
+                                                   y, x+width, y, width=1, batch=self.batch))       
+             
+        else :
+            self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch))       
+ 
            
 
 
@@ -75,13 +91,13 @@ class InsidePitchSet(FACSet) :
         self.createDice()
 
     def createDice(self) :
-        self.pitcher = IP_DiceSet(title= 'Pitcher', batch=self.batch)
+        self.pitcher = IP_DiceSet(title= 'Pitcher', label='K/W/??', batch=self.batch)
         self.pitcher.setTopLeft(36, 454)
 
-        self.hitter = IP_DiceSet(title= 'Hitter',batch=self.batch)
+        self.hitter = IP_DiceSet(title= 'Hitter', label='HR/HBP/?', batch=self.batch)
         self.hitter.setTopLeft(286, 454)
 
-        self.ballpark = IP_DiceSet(title= 'Ballpark',batch=self.batch)
+        self.ballpark = IP_DiceSet(title= 'Ballpark', label='E/Strategy', batch=self.batch)
         self.ballpark.setTopLeft(540, 454)
 
 
