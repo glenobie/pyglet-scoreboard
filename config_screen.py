@@ -261,8 +261,8 @@ class ConfigScreen(KeyHandler) :
         self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
 
 
-        gitNotFound = subprocess.call(['sh', '/home/pi/git-test'])
-        if (gitNotFound) :
+        gitFound = subprocess.call(['sh', '/home/pi/git-test'])
+        if (gitFound) :
             updateText = 'Internet connection found. [MOD+F2] will update and restart.'
         else :
             updateText = 'Not connected to internet.'
@@ -347,18 +347,16 @@ class ConfigScreen(KeyHandler) :
             self.chosenGameLayout.selectNext(-1)
  
     def handle_Q(self, modified) :
-        self.unchosenGameLayout.selectNext(-1)
-                           
-    def handle_Z(self, modified) :
         if (modified) :
-
-
             # run github pull script
             subprocess.call(['sh', '/home/pi/git-pull-scoreboard'])
             # quit and restart
             os.execl(sys.executable, sys.executable, *sys.argv)
         else :
-            self.unchosenGameLayout.selectNext(1)
+            self.unchosenGameLayout.selectNext(-1)
+                           
+    def handle_Z(self, modified) :
+        self.unchosenGameLayout.selectNext(1)
 
     def handle_A(self, modified) :
         if (modified and not(self.chosenGameLayout.zeroGames())) :
