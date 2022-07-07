@@ -1,4 +1,3 @@
-from http.cookies import Morsel
 import pyglet
 from die import Die
 from bordered_dice_set import BorderedDiceSet

@@ -1,4 +1,3 @@
-import socket
 import pyglet
 from pyglet import font
 from key_handler import KeyHandler
@@ -11,7 +10,7 @@ from scoreboard import Scoreboard
 
 ####################################################################
 
-class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
+class GamePicker(KeyHandler, pyglet.window.Window) :
 
     INDEX_ICON = 2
 
@@ -30,7 +29,8 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
         self.displayingFAC = (isPi and len(screens) > 1) or not(isPi)
 
         pyglet.window.Window.__init__(self, width, height, fullscreen=isPi, screen=screens[0])
-        # Ideally, you just find both screens and assign a fullscreen window to each screen. But this was not consistent.
+        # Ideally, you just find both screens and assign a fullscreen window to each screen. 
+        # But this was not consistently putting both windows on different screens.
         # So, I find the other screen using its virtual x coordinate
         # Then continue to create the other window, far away enough to be on the other screen.
         # If not far enough away, close the window and create it again.
@@ -175,14 +175,6 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
             self.windowFAC.close()
         return super().on_close()
 
-##################################################
-# start me up!
-
-isPi = socket.gethostname() == "raspberrypi"
-picker = ScoreboardPicker(800, 480, isPi)
-picker.activate() # should work on Linux, won't on windows
-pyglet.clock.schedule_interval(picker.update, 1/30.0)
-pyglet.app.run()
 
 
 

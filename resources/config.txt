@@ -4,12 +4,6 @@ LacrosseScoreboard
 lacrosse-blast.png
 blast_FAC
 LacrosseBlastSet
-International Cricket
-cricket
-CricketScoreboard
-cricket.png
-hmg_FAC
-HistoryMakerGolfSet
 Legends of Boxing
 boxing
 BoxingScoreboard

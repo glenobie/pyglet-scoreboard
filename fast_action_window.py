@@ -22,7 +22,7 @@ class FastActionWindow(pyglet.window.Window) :
     def on_draw(self) :
         self.clear()
         if self.fac is None :
-            self.displayMessage('Choose a Scoreboard')
+            self.displayMessage('Choose a Game')
         else:
             self.fac.draw()
 
@@ -42,7 +42,7 @@ class FastActionWindow(pyglet.window.Window) :
 
     def displayMessage(self, text) :
         msgDoc = pyglet.text.document.UnformattedDocument(text)
-        msgDoc.set_style(0,len(msgDoc.text), dict(color=(255,255,255,255), font_name = Die.FONT,  font_size = 24 ))
+        msgDoc.set_style(0,len(msgDoc.text), dict(color=(255,255,255,255), font_name = Die.FONT,  font_size = 28 ))
         self.msgLayout = pyglet.text.layout.TextLayout(msgDoc)
         self.msgLayout.anchor_x = 'center'
         self.msgLayout.position = (400, 300)

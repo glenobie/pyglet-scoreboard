@@ -25,7 +25,8 @@ class ConfigScreen(KeyHandler) :
     END_OF_FILE = 'EOF'
     ALL_GAMES_FILE = 'games.txt'
     CHOSEN_GAMES_FILE = 'config.txt'
-    ICON_DIR = 'icons'
+    FIND_GIT_HUB_SCRIPT = 'git-test'
+    GIT_PULL_SCRIPT = 'git-pull-scoreboard'
 
     def __init__(self, loader, iconBatch) :
         self.loader = loader
@@ -47,15 +48,16 @@ class ConfigScreen(KeyHandler) :
 
         self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
 
-        gitNotFound = subprocess.call(['sh', str(Path.home()) + '/git-test'])
-        if (gitNotFound) :
+        self.scriptHome = str(Path.home()) +'/'
+
+        # run script to see if git-hub can be reached
+        self.gitNotFound = subprocess.call(['sh',  self.scriptHome + ConfigScreen.FIND_GIT_HUB_SCRIPT])
+        if (self.gitNotFound) :
             updateText = 'Not connected to internet.'
         else :
             updateText = 'Internet connection found. [MOD+F2] will update and restart.'
 
-        self.msg = pyglet.text.Label(updateText, font_name='Arial', font_size=16,
-                                        x=20, y=20, batch=self.batch, group=self.fg)
-
+        self.msg = pyglet.text.Label(updateText, font_name='Arial', font_size=16, x=20, y=20, batch=self.batch, group=self.fg)
 
     def recordToFile(self, gameList) :
         print("writing")
@@ -121,21 +123,21 @@ class ConfigScreen(KeyHandler) :
     # keyboard handlers
 
     def handle_C(self, modified) :
-        if (modified) :
+        if modified :
             self.chosenGameLayout.moveDown()
         else :
             self.chosenGameLayout.selectNext(1)
                            
     def handle_E(self, modified) :
-        if (modified) :
+        if modified :
             self.chosenGameLayout.moveUp()
         else :
             self.chosenGameLayout.selectNext(-1)
  
     def handle_Q(self, modified) :
-        if (modified) :
+        if modified  and not(self.gitNotFound):
             # run github pull script
-            subprocess.call(['sh', str(Path.home()) + '/git-pull-scoreboard'])
+            subprocess.call(['sh', self.scriptHome + ConfigScreen.GIT_PULL_SCRIPT])
             # quit and restart
             os.execl(sys.executable, sys.executable, *sys.argv)
         else :
@@ -145,12 +147,12 @@ class ConfigScreen(KeyHandler) :
         self.unchosenGameLayout.selectNext(1)
 
     def handle_A(self, modified) :
-        if (modified and not(self.chosenGameLayout.zeroGames())) :
+        if modified and not(self.chosenGameLayout.zeroGames()) :
             g = self.chosenGameLayout.removeSelectedGame()
             self.unchosenGameLayout.addGame(g)
 
     def handle_D(self, modified) :
-        if (modified and not(self.unchosenGameLayout.zeroGames())) :
+        if modified and not(self.unchosenGameLayout.zeroGames()) :
             g = self.unchosenGameLayout.removeSelectedGame()
             self.chosenGameLayout.addGame(g)
  
