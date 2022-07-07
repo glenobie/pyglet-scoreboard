@@ -1,5 +1,6 @@
 import pyglet
 import random
+import math
 
 ##########################################
 class Die :
@@ -19,14 +20,15 @@ class Die :
     D_BROWN = (102, 51, 0 )
     D_AQUA = (0,150,150)
     D_DARK_GREEN = (0,80,0)
+    D_GOLD = (255,215,0)
 
     T_WHITE = (255,255,255,255)
     T_BLACK = (0,0,0,255)
 
     WIDTH = 100
     HEIGHT = 100
-    TEXT_SIZE = 80
-    INTERIOR_SPACING_PCT = 0.5
+    TEXT_SIZE = 100
+    INTERIOR_SPACING_PCT = 0.2
     FONT = 'Arial'
     
     def __init__(self, color, text_color=(0,0,0,255), sides=6, batch=None) :
@@ -76,9 +78,9 @@ class Die :
             if len(t) > len(testString) :
                 testString = t
 
-        desiredSpacing = self.border.width * self.interiorSpacingPct
+        desiredSpacing = self.border.height * self.interiorSpacingPct
         self.document.text = testString
-        while self.border.width - self.layout.content_width < desiredSpacing :
+        while self.border.height  - self.layout.content_height < desiredSpacing :
             self.baseTextSize -= 1
             self.document.set_style(0, len(self.document.text), dict(font_size=self.baseTextSize))
         
@@ -120,8 +122,8 @@ class Die :
 
 
     def scale(self, value) :
-        self.border.width = Die.WIDTH * value
-        self.border.height = Die.HEIGHT * value
+        self.border.width = math.floor(Die.WIDTH * value)
+        self.border.height = math.floor(Die.HEIGHT * value)
         self.adjustBaseTextSize()
         self.setCenter(self.center[0], self.center[1])
         self.update()

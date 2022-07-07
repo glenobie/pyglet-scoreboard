@@ -50,8 +50,8 @@ Legends of Boxing
 boxing
 BoxingScoreboard
 legends_of_boxing.png
-hmg_FAC
-HistoryMakerGolfSet
+lob_FAC
+LegendsOfBoxingSet
 International Cricket
 cricket
 CricketScoreboard
@@ -74,8 +74,8 @@ Hockey Blast
 hockey
 HockeyScoreboard
 hockey_blast.png
-hmg_FAC
-HistoryMakerGolfSet
+blast_FAC
+HockeyBlastSet
 Bowl-O-Rama
 bowling
 BowlingScoreboard
@@ -104,8 +104,8 @@ Soccer Blast
 soccer
 SoccerScoreboard
 soccer-blast.png
-hmg_FAC
-HistoryMakerGolfSet
+blast_FAC
+SoccerBlastSet
 Dice United
 soccer
 SoccerScoreboard
