@@ -36,7 +36,7 @@ class LegendsOfBoxingSet(FACSet) :
         self.punchDice.setTitle('Punch & Defense')
         self.punchDice.setPosition(160, 150, 16)
 
-        d20 = Die(Die.D_AQUA, text_color=Die.T_WHITE, batch=self.batch)
+        d20 = Die(Die.D_AQUA, sides=20, text_color=Die.T_WHITE, batch=self.batch)
         d20.setInteriorSpacingPct(0.2)
         self.testDice = BorderedDiceSet([d20], 20, self.batch)
         self.testDice.setPosition(520, 150, 16)
