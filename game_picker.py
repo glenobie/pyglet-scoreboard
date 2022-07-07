@@ -8,7 +8,6 @@ import importlib
 from pyglet import resource
 from scoreboard import Scoreboard
 
-####################################################################
 
 class GamePicker(KeyHandler, pyglet.window.Window) :
 
@@ -40,9 +39,9 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
                 self.set_exclusive_mouse(True)
                 while not(positionedCorrectly) :           
                     
-                    self.windowFAC = FastActionWindow(800, 480, fullscreen=False)
+                    self.windowFAC = FastActionWindow(self.width, self.height, fullscreen=False)
                     self.windowFAC.switch_to()
-                    otherX = 800 if self.get_location()[0] == 0 else 0
+                    otherX = self.width if self.get_location()[0] == 0 else 0
                     self.windowFAC.set_location(otherX, 0)
 
                     if not(self.windowFAC.get_location()[0] == self.get_location()[0]) :
@@ -51,7 +50,7 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
                         self.windowFAC.close()
 
             elif not(isPi) : 
-                self.windowFAC = FastActionWindow(800, 480, fullscreen=False)
+                self.windowFAC = FastActionWindow(self.width, self.height, fullscreen=False)
 
         self.batch = pyglet.graphics.Batch()
         self.configScreen = ConfigScreen(self.loader, self.batch)
@@ -80,7 +79,7 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
     
     # try to create menu, if no games, send to config screen
     def createMenu(self) :
-        # (title for config screen, scoreboard, icon, FUTURE: FAC)
+        # (title for config screen, scoreboard, icon,  FAC)
         self.scoreboardTuples = self.configScreen.getScoreboards()
 
         self.options = Carousel(self.controlPoints, self.scoreboardTuples)

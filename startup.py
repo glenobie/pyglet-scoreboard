@@ -3,8 +3,9 @@ import pyglet
 from game_picker import GamePicker
 
 
-##################################################
-# start me up!
+################
+# start me up! #
+################
 
 isPi = socket.gethostname() == "raspberrypi"
 picker = GamePicker(800, 480, isPi)
