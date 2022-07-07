@@ -261,11 +261,11 @@ class ConfigScreen(KeyHandler) :
         self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
 
 
-        gitFound = subprocess.call(['sh', '/home/pi/git-test'])
-        if (gitFound) :
-            updateText = 'Internet connection found. [MOD+F2] will update and restart.'
-        else :
+        gitNotFound = subprocess.call(['sh', '/home/pi/git-test'])
+        if (gitNotFound) :
             updateText = 'Not connected to internet.'
+        else :
+            updateText = 'Internet connection found. [MOD+F2] will update and restart.'
 
         self.msg = pyglet.text.Label(updateText, font_name='Arial', font_size=16,
                                         x=20, y=20, batch=self.batch, group=self.fg)
