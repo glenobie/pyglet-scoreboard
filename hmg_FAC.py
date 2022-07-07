@@ -26,7 +26,7 @@ class HistoryMakerGolfSet(FACSet) :
         dice.append(self.gray)
 
         self.decider = Die(Die.D_WHITE, text_color=Die.T_WHITE, sides=2, batch = self.batch)
-        self.decider.setInteriorSpacingPct(0.2)
+        self.decider.setInteriorSpacingPct(0.5)
         self.decider.setDieLabels(('YES', 'NO'))
         self.decider.addColorCondition((1, Die.D_DARK_GREEN))
         self.decider.addColorCondition((2, Die.D_RED))
