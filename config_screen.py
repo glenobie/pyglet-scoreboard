@@ -5,6 +5,7 @@ import math
 import os
 import sys
 import subprocess
+import socket
 
 # helper function to subtract one list from another
 def listDifference(list1, list2) :
@@ -259,6 +260,10 @@ class ConfigScreen(KeyHandler) :
 
         self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
 
+
+        gitAvailable = subprocess.call(['sh', '/home/pi/git-test'])
+        print("Git: " + str(gitAvailable))
+        
     def recordToFile(self, gameList) :
         print("writing")
         f = self.loader.file(ConfigScreen.CHOSEN_GAMES_FILE, 'w')
@@ -339,12 +344,10 @@ class ConfigScreen(KeyHandler) :
                            
     def handle_Z(self, modified) :
         if (modified) :
-            # TODO determine if ethernet cable connected
-            # TODO determine if link to github exists
+
 
             # run github pull script
             subprocess.call(['sh', '/home/pi/git-pull-scoreboard'])
-            os.system('/home/pi/git-pull-scoreboard')
             # quit and restart
             os.execl(sys.executable, sys.executable, *sys.argv)
         else :
