@@ -3,6 +3,7 @@ from pyglet import shapes
 from key_handler import KeyHandler
 import math
 import os
+import sys
 
 # helper function to subtract one list from another
 def listDifference(list1, list2) :
@@ -337,11 +338,12 @@ class ConfigScreen(KeyHandler) :
                            
     def handle_Z(self, modified) :
         if (modified) :
-            os.execl("./restart-scoreboard","")
             # TODO determine if ethernet cable connected
             # Determine if link to github exists
             # run github pull script
             # quit and restart
+            os.system('home/pi/git-pull-scoreboard')
+            os.execl(sys.executable, sys.executable, *sys.argv)
         else :
             self.unchosenGameLayout.selectNext(1)
 
