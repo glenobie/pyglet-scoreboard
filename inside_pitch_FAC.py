@@ -91,7 +91,6 @@ class InsidePitchSet(FACSet) :
         self.createDice()
 
     def createDice(self) :
-        self.pitcher = IP_DiceSet(title= 'Pitcher', label='WP/HR?/??', batch=self.batch)
         self.pitcher.setTopLeft(36, 454)
 
         self.hitter = IP_DiceSet(title= 'Hitter', label='HBP/K/W/HR/?', batch=self.batch)
