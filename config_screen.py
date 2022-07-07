@@ -337,7 +337,7 @@ class ConfigScreen(KeyHandler) :
                            
     def handle_Z(self, modified) :
         if (modified) :
-            os.excel("restart.sh","")
+            os.excel("restart-scoreboard","")
             # TODO determine if ethernet cable connected
             # Determine if link to github exists
             # run github pull script
