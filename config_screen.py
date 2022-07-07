@@ -342,7 +342,7 @@ class ConfigScreen(KeyHandler) :
             # Determine if link to github exists
             # run github pull script
             # quit and restart
-            os.system('home/pi/git-pull-scoreboard')
+            os.system('/home/pi/git-pull-scoreboard')
             os.execl(sys.executable, sys.executable, *sys.argv)
         else :
             self.unchosenGameLayout.selectNext(1)
