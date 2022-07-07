@@ -118,4 +118,10 @@ SoccerScoreboard
 beautiful-game.png
 hmg_FAC
 HistoryMakerGolfSet
+Lacrosse Blast
+lacrosse
+LacrosseScoreboard
+lacrosse-blast.png
+blast_FAC
+LacrosseBlastSet
 EOF

@@ -1,3 +1,9 @@
+Lacrosse Blast
+lacrosse
+LacrosseScoreboard
+lacrosse-blast.png
+blast_FAC
+LacrosseBlastSet
 Legends of Boxing
 boxing
 BoxingScoreboard
@@ -22,12 +28,6 @@ BaseballScoreboard
 inside-pitch.png
 inside_pitch_FAC
 InsidePitchSet
-Payoff Pitch
-baseball
-BaseballScoreboard
-payoff-pitch.png
-hmg_FAC
-HistoryMakerGolfSet
 Second Season
 football
 FootballScoreboard
@@ -46,42 +46,6 @@ RacingScoreboard
 rwbr.png
 rwbr_FAC
 RWBRSet
-Cold Snap
-football
-CFLScoreboard
-cold-snap.png
-hmg_FAC
-HistoryMakerGolfSet
-International Cricket
-cricket
-CricketScoreboard
-cricket.png
-hmg_FAC
-HistoryMakerGolfSet
-Inside the Crease
-hockey
-HockeyScoreboard
-inside-crease.png
-hmg_FAC
-HistoryMakerGolfSet
-Bowl-O-Rama
-bowling
-BowlingScoreboard
-bowl-o-rama.png
-hmg_FAC
-HistoryMakerGolfSet
-Inside the Paint
-basketball
-BasketballScoreboard
-inside-paint.png
-hmg_FAC
-HistoryMakerGolfSet
-Centre Court Tennis
-tennis
-TennisScoreboard
-centre-court.png
-hmg_FAC
-HistoryMakerGolfSet
 History Maker Golf
 golf
 GolfScoreboard

@@ -27,7 +27,7 @@ class IP_DiceSet :
         self.title.anchor_x = 'left'
         self.title.anchor_y = 'center'
 
-        self.label = pyglet.text.Label(label, 'Arial', 22, batch=self.batch)
+        self.label = pyglet.text.Label(label, 'Arial', 18, batch=self.batch)
         self.label.anchor_x = 'left'
         self.label.anchor_y = 'center'
 
@@ -91,13 +91,13 @@ class InsidePitchSet(FACSet) :
         self.createDice()
 
     def createDice(self) :
-        self.pitcher = IP_DiceSet(title= 'Pitcher', label='K/W/??', batch=self.batch)
+        self.pitcher = IP_DiceSet(title= 'Pitcher', label='HR?/??/HBP', batch=self.batch)
         self.pitcher.setTopLeft(36, 454)
 
-        self.hitter = IP_DiceSet(title= 'Hitter', label='HR/HBP/?', batch=self.batch)
+        self.hitter = IP_DiceSet(title= 'Hitter', label='K/W/HR/?', batch=self.batch)
         self.hitter.setTopLeft(286, 454)
 
-        self.ballpark = IP_DiceSet(title= 'Ballpark', label='E/Strategy', batch=self.batch)
+        self.ballpark = IP_DiceSet(title= 'Ballpark', label='E/H?/Strategy', batch=self.batch)
         self.ballpark.setTopLeft(540, 454)
 
 
