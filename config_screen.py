@@ -261,9 +261,12 @@ class ConfigScreen(KeyHandler) :
         self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
 
 
-        gitAvailable = subprocess.call(['sh', '/home/pi/git-test'])
-        print("Git: " + str(gitAvailable))
-        
+        gitNotFound = subprocess.call(['sh', '/home/pi/git-test'])
+        if (gitNotFound) :
+            print("Cannot update")
+        else :
+            print("May update")
+            
     def recordToFile(self, gameList) :
         print("writing")
         f = self.loader.file(ConfigScreen.CHOSEN_GAMES_FILE, 'w')
