@@ -59,7 +59,7 @@ class ScoreboardPicker(KeyHandler, pyglet.window.Window) :
         # center points for the icons
 
         self.controlPoints = ( (400, 240, 0.9),   # 0: front, center
-                               (220, 260, 0.6),   # 1: front, left of center
+                               (220, 260, 0.6),   # 1: front, left of centerQ
                                (100, 300, 0.44),  # 2: front, just before apex
                                (80, 330, 0.4),    # 3: left apex
                                (100, 340, 0.35),  # 4: back, just after apex
