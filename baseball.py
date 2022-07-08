@@ -102,8 +102,8 @@ class BaseballGameState(GameState) :
     
 ##################################
 class BaseballScoreboard(Scoreboard) :
-    def __init__(self) :
-        Scoreboard.__init__(self)
+    def __init__(self, loader) :
+        Scoreboard.__init__(self, loader)
         self.state = BaseballGameState()
         
         self.addScores(2, 470)
@@ -134,7 +134,10 @@ class BaseballScoreboard(Scoreboard) :
       
 
     def autosave(self) :
+        Scoreboard.autosave(self)
         print("autosaving")
+
+        
     # handle keys
 
     def handle_A(self, modified = False) :

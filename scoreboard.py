@@ -1,5 +1,5 @@
 import pyglet
-
+import os
 from functools import partial
 from element import ScoreboardElement
 from element import HorizontalElement
@@ -34,19 +34,33 @@ class Scoreboard(KeyHandler) :
 
     DIGIT_FONT = 'Digital-7 Mono'
     TEXT_FONT = 'Built Titling'
+    AUTOSAVE_FILE = 'autosave'
 
-    def __init__(self) :
+    def __init__(self, loader) :
         self.batch = pyglet.graphics.Batch()
         self.bg = pyglet.graphics.OrderedGroup(0)
         self.attachedFAC = None
+        self.loader = loader
 
         self.background = pyglet.shapes.Rectangle(0,0,800,480, (28,28,28), self.batch, self.bg)
 
         self.elements = []
         self.state = None
 
+        self.createAutosaveFile()
+
+    def createAutosaveFile(self) :
+        dir = pyglet.resource.get_settings_path('Scoreboard')
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        filename = os.path.join(dir, Scoreboard.AUTOSAVE_FILE)
+        file = open(filename, 'wt')
+        file.write('Scoreboard')
+        file.close()
+
     def autosave(self) :
-        print(" autosaving")
+        0
+
 
     def attachFAC(self, fac) :
         self.attachedFAC = fac
