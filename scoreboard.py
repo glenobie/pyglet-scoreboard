@@ -45,22 +45,30 @@ class Scoreboard(KeyHandler) :
         self.background = pyglet.shapes.Rectangle(0,0,800,480, (28,28,28), self.batch, self.bg)
 
         self.elements = []
-        self.state = None
 
-        self.createAutosaveFile()
-
-    def createAutosaveFile(self) :
+        self.findAutosaveFile()
+ 
+    def findAutosaveFile(self) :
         dir = pyglet.resource.get_settings_path('Scoreboard')
         if not os.path.exists(dir):
             os.makedirs(dir)
-        filename = os.path.join(dir, Scoreboard.AUTOSAVE_FILE)
-        file = open(filename, 'wt')
-        file.write('Scoreboard')
-        file.close()
+        self.autosaveFilename = os.path.join(dir, Scoreboard.AUTOSAVE_FILE)
+
+        # check if I was the last saver of the autofile, if so load it
+        if os.path.exists(self.autosaveFilename) :
+            file = open(self.autosaveFilename, 'r')
+            lastSaver = file.readline().strip('\n')
+            if lastSaver == self.__class__.__name__ :
+                self.loadAutosave(file)
+
+    def loadAutosave(self, file) :
+        self.state.restoreFromList(file.readlines())
 
     def autosave(self) :
-        0
-
+        file = open(self.autosaveFilename, 'wt')
+        file.write(self.__class__.__name__ + '\n')
+        file.writelines(self.state.getStateAsList())
+        file.close()
 
     def attachFAC(self, fac) :
         self.attachedFAC = fac

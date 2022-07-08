@@ -103,6 +103,9 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
     def getBatch(self) :
         return self.batch
 
+    def autosave(self) :
+        0
+        
     def on_draw(self) :
         self.clear()
         self.activeScreen.getBatch().draw()

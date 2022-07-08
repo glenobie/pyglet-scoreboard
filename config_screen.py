@@ -42,7 +42,6 @@ class ConfigScreen(KeyHandler) :
 
         self.createUserConfigFiles()
 
-
         allGames = self.processGamesFile(self.loader.file(ConfigScreen.ALL_GAMES_FILE, mode='r'))
         chosenGames = self.processGamesFile(open(self.configFilename, mode='r'))
         unchosenGames = listDifference(allGames,chosenGames)
@@ -52,7 +51,7 @@ class ConfigScreen(KeyHandler) :
 
         self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
 
-        self.scriptHome = str(Path.home()) +'/'
+        self.scriptHome = str(Path.home()) + '/'
 
         # run script to see if git-hub can be reached
         self.gitNotFound = subprocess.call(['sh',  self.scriptHome + ConfigScreen.FIND_GIT_HUB_SCRIPT])
@@ -64,10 +63,11 @@ class ConfigScreen(KeyHandler) :
         self.msg = pyglet.text.Label(updateText, font_name='Arial', font_size=16, x=20, y=20, batch=self.batch, group=self.fg)
 
     def createUserConfigFiles(self) :
-        # find user config directory
+        # find user config directory or create it
         dir = pyglet.resource.get_settings_path('Scoreboard')
         if not os.path.exists(dir):
             os.makedirs(dir)
+        # find chosen games file or create it
         self.configFilename = os.path.join(dir, ConfigScreen.CHOSEN_GAMES_FILE)
         if not (os.path.exists(self.configFilename)) :
             self.configFile = open(self.configFilename, 'wt')
