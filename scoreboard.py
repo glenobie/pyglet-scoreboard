@@ -45,6 +45,9 @@ class Scoreboard(KeyHandler) :
         self.elements = []
         self.state = None
 
+    def autosave(self) :
+        print(" autosaving")
+
     def attachFAC(self, fac) :
         self.attachedFAC = fac
 

@@ -132,6 +132,9 @@ class BaseballScoreboard(Scoreboard) :
         self.elements.append(self.bottom)
         self.bottom.setOn(self.state.getTeamAtBat() == GameState.HOME_INDEX)
       
+
+    def autosave(self) :
+        print("autosaving")
     # handle keys
 
     def handle_A(self, modified = False) :

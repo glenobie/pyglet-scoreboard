@@ -1,9 +1,3 @@
-Lacrosse Blast
-lacrosse
-LacrosseScoreboard
-lacrosse-blast.png
-blast_FAC
-LacrosseBlastSet
 Legends of Boxing
 boxing
 BoxingScoreboard

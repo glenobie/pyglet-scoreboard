@@ -59,6 +59,10 @@ class ConfigScreen(KeyHandler) :
 
         self.msg = pyglet.text.Label(updateText, font_name='Arial', font_size=16, x=20, y=20, batch=self.batch, group=self.fg)
 
+    # only scoreboards do autosave
+    def autosave(self) :
+        0
+
     def recordToFile(self, gameList) :
         print("writing")
         f = self.loader.file(ConfigScreen.CHOSEN_GAMES_FILE, 'w')
