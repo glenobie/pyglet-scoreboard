@@ -26,6 +26,16 @@ class GameState :
     def getScore(self, team) :
         return self.teams[team].getScore()
 
+
+
+        # for autosave loading
+    def restoreFromList(self, stateList) :
+        0
+
+    def getStateAsList(self) :
+        stateList = []
+        return stateList
+
 ###########################   
 class TimedGameState(GameState):
     def __init__(self) : 

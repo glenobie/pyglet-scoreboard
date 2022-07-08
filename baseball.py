@@ -128,9 +128,9 @@ class BaseballGameState(GameState) :
     
 ##################################
 class BaseballScoreboard(Scoreboard) :
-    def __init__(self, loader) :
+    def __init__(self) :
         self.state = BaseballGameState()
-        Scoreboard.__init__(self, loader)
+        Scoreboard.__init__(self)
         
         self.addScores(2, 470)
         self.addMediumElement(2, Scoreboard.LEFT_CENTER, 300, 'Hits', partial(self.state.getHits, 0), Scoreboard.RED)

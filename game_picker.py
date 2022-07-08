@@ -93,7 +93,7 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
     def processSelection(self) :
         picked = self.scoreboardTuples[self.options.getSelection()]
         scoreboardClass = getattr(importlib.import_module(picked[1]), picked[2])
-        self.activeScreen = scoreboardClass(self.loader)
+        self.activeScreen = scoreboardClass()
         if self.displayingFAC :
             class_ = getattr(importlib.import_module(picked[4]), picked[5])
             fac = class_(self.loader)
@@ -105,7 +105,7 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
 
     def autosave(self) :
         0
-        
+
     def on_draw(self) :
         self.clear()
         self.activeScreen.getBatch().draw()

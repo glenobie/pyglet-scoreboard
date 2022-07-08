@@ -36,11 +36,10 @@ class Scoreboard(KeyHandler) :
     TEXT_FONT = 'Built Titling'
     AUTOSAVE_FILE = 'autosave'
 
-    def __init__(self, loader) :
+    def __init__(self) :
         self.batch = pyglet.graphics.Batch()
         self.bg = pyglet.graphics.OrderedGroup(0)
         self.attachedFAC = None
-        self.loader = loader
 
         self.background = pyglet.shapes.Rectangle(0,0,800,480, (28,28,28), self.batch, self.bg)
 
