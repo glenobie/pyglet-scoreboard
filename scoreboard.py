@@ -135,6 +135,7 @@ class Scoreboard(KeyHandler) :
         self.elements.append(e)
 
     def handleExit(self, menuScreen):
+        self.autosave()
         return 1
 
     # handle keys

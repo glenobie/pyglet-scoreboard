@@ -13,7 +13,7 @@ from scoreboard import Scoreboard
 class GamePicker(KeyHandler, pyglet.window.Window) :
 
     INDEX_ICON = 2
-    AUTOSAVE_INTERVAL = 10 # scoreboards will autosave every AUTOSAVE_INTERVAL seconds
+    AUTOSAVE_INTERVAL = 60 # scoreboards will autosave every AUTOSAVE_INTERVAL seconds
 
     def __init__(self, width, height, isPi = False) :
 
