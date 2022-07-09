@@ -92,8 +92,9 @@ class BoxingScoreboard(Scoreboard) :
 
    
     def __init__(self) :
-        Scoreboard.__init__(self)
         self.state = BoxingGameState()
+        Scoreboard.__init__(self)
+
         
         self.addLargeElement(2, Scoreboard.LEFT_CENTER, 470, 'RED', partial(self.state.getScore, 0), Scoreboard.RED)
         self.addLargeElement(2, Scoreboard.RIGHT_CENTER, 470, 'BLUE', partial(self.state.getScore, 1), Scoreboard.BLUE)
