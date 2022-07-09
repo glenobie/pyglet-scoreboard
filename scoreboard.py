@@ -45,27 +45,19 @@ class Scoreboard(KeyHandler) :
 
         self.elements = []
 
-        self.findAutosaveFile()
- 
-    def findAutosaveFile(self) :
         dir = pyglet.resource.get_settings_path('Scoreboard')
-        if not os.path.exists(dir):
-            os.makedirs(dir)
-        self.autosaveFilename = os.path.join(dir, Scoreboard.AUTOSAVE_FILE)
+        self.autosaveFilename = os.path.join(dir, Scoreboard.AUTOSAVE_FILE + '.' + self.__class__.__name__)
 
-        # check if I was the last saver of the autofile, if so load it
-        if os.path.exists(self.autosaveFilename) :
+
+    def loadFromAutosaveFile(self) :
+        if (os.path.exists(self.autosaveFilename)) :
             file = open(self.autosaveFilename, 'r')
-            lastSaver = file.readline().strip('\n')
-            if lastSaver == self.__class__.__name__ :
-                self.loadAutosave(file)
-
-    def loadAutosave(self, file) :
-        self.state.restoreFromList(file.readlines())
+            self.state.restoreFromList(file.readlines())
+            self.updateElements()
 
     def autosave(self) :
         file = open(self.autosaveFilename, 'wt')
-        file.write(self.__class__.__name__ + '\n')
+        #file.write(self.__class__.__name__ + '\n')
         file.writelines(self.state.getStateAsList())
         file.close()
 

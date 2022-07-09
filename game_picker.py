@@ -1,3 +1,4 @@
+from json import load
 import pyglet
 from pyglet import font
 from key_handler import KeyHandler
@@ -5,6 +6,7 @@ from config_screen import ConfigScreen
 from fast_action_window import FastActionWindow
 from carousel import Carousel
 import importlib    
+import os
 from pyglet import resource
 from scoreboard import Scoreboard
 
@@ -84,6 +86,12 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
         font.load(Scoreboard.DIGIT_FONT)
         font.load(Scoreboard.TEXT_FONT)    # try to create menu, if no games, send to config screen
 
+        # find user save directory. If does not exist, create it
+        dir = pyglet.resource.get_settings_path('Scoreboard')
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+
+
     def createMenu(self) :
         # (title for config screen, scoreboard, icon,  FAC)
         self.scoreboardTuples = self.configScreen.getScoreboards()
@@ -92,10 +100,12 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
         self.options.initialize()      
     
     # open the selected scoreboard
-    def processSelection(self) :
+    def processSelection(self, loadAutoSave=True) :
         picked = self.scoreboardTuples[self.options.getSelection()]
         scoreboardClass = getattr(importlib.import_module(picked[1]), picked[2])
         self.activeScreen = scoreboardClass()
+        if loadAutoSave :
+            self.activeScreen.loadFromAutosaveFile()
         if self.displayingFAC :
             class_ = getattr(importlib.import_module(picked[4]), picked[5])
             fac = class_(self.loader)
@@ -152,6 +162,11 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
             self.batch = pyglet.graphics.Batch()
             self.configScreen.setIconBatch(self.batch)
             self.activeScreen = self.configScreen
+
+
+    def handle_E(self, modified=False) :
+        if modified :
+            self.processSelection(loadAutoSave=False)
 
     def handle_C(self, modified=False) :
         if modified :

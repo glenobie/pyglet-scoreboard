@@ -158,17 +158,6 @@ class BaseballScoreboard(Scoreboard) :
         self.elements.append(self.bottom)
         self.bottom.setOn(self.state.getTeamAtBat() == GameState.HOME_INDEX)
 
-        #self.findAutosaveFile()
-      
-    def loadAutosave(self, file) :
-        Scoreboard.loadAutosave(self, file)
-        print("loading from an autosave")
-
-    def autosave(self) :
-        Scoreboard.autosave(self)
-        print("autosave completed")
-
-
     # handle keys
 
     def handle_A(self, modified = False) :
