@@ -15,49 +15,14 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
     AUTOSAVE_INTERVAL = 60 # scoreboards will autosave every AUTOSAVE_INTERVAL seconds
 
     def __init__(self, width, height, isPi = False) :
-
-        self.path = ['resources', 'resources/icons', 'resources/fonts']
-        self.loader = resource.Loader(self.path)
-        self.loader.add_font('digital-7.mono.ttf')
-        self.loader.add_font('title-sb.ttf')
-        font.load(Scoreboard.DIGIT_FONT)
-        font.load(Scoreboard.TEXT_FONT)
-
-        display = pyglet.canvas.get_display()
-        screens = display.get_screens()
-
-        self.displayingFAC = (isPi and len(screens) > 1) or not(isPi)
-
-        pyglet.window.Window.__init__(self, width, height, fullscreen=isPi, screen=screens[0])
-        # Ideally, you just find both screens and assign a fullscreen window to each screen. 
-        # But this was not consistently putting both windows on different screens.
-        # So, I find the other screen using its virtual x coordinate
-        # Then continue to create the other window, far away enough to be on the other screen.
-        # If not far enough away, close the window and create it again.
-        if self.displayingFAC :
-            if isPi :
-                positionedCorrectly = False
-                self.set_exclusive_mouse(True)
-                while not(positionedCorrectly) :           
-                    
-                    self.windowFAC = FastActionWindow(self.width, self.height, fullscreen=False)
-                    self.windowFAC.switch_to()
-                    otherX = self.width if self.get_location()[0] == 0 else 0
-                    self.windowFAC.set_location(otherX, 0)
-
-                    if not(self.windowFAC.get_location()[0] == self.get_location()[0]) :
-                            positionedCorrectly = True
-                    else :
-                        self.windowFAC.close()
-
-            elif not(isPi) : 
-                self.windowFAC = FastActionWindow(self.width, self.height, fullscreen=False)
+        self.findResources()
+        self.createWindows(isPi, width, height)
 
         self.batch = pyglet.graphics.Batch()
         self.configScreen = ConfigScreen(self.loader, self.batch)
-
+        self.timeSinceAutosave = 0
+ 
         # center points for the icons
-
         self.controlPoints = ( (400, 240, 0.9),   # 0: front, center
                                (220, 260, 0.6),   # 1: front, left of centerQ
                                (100, 300, 0.44),  # 2: front, just before apex
@@ -78,9 +43,47 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
         else :
             self.activeScreen = self.configScreen
 
-        self.timeSinceAutosave = 0
     
-    # try to create menu, if no games, send to config screen
+
+    def createWindows(self, isPi, width, height) :
+        display = pyglet.canvas.get_display()
+        screens = display.get_screens()
+
+        self.displayingFAC = (isPi and len(screens) > 1) or not(isPi)
+
+        pyglet.window.Window.__init__(self, width, height, fullscreen=isPi, screen=screens[0])
+        # Ideally, you just find both screens and assign a fullscreen window to each screen. 
+        # But this was not consistently putting both windows on different screens.
+        # So, I find the other screen using its virtual x coordinate
+        # Then continue to create the other window, far away enough to be on the other screen.
+        # If not far enough away, close the window and create it again.
+        if self.displayingFAC :
+            if isPi :
+                positionedCorrectly = False
+                self.set_exclusive_mouse(True)
+                while not(positionedCorrectly) :           
+                    
+                    self.windowFAC = FastActionWindow(width, height, fullscreen=False)
+                    self.windowFAC.switch_to()
+                    otherX = self.width if self.get_location()[0] == 0 else 0
+                    self.windowFAC.set_location(otherX, 0)
+
+                    if not(self.windowFAC.get_location()[0] == self.get_location()[0]) :
+                            positionedCorrectly = True
+                    else :
+                        self.windowFAC.close()
+
+            elif not(isPi) : 
+                self.windowFAC = FastActionWindow(width, height, fullscreen=False)
+    
+    def findResources(self) :
+        self.path = ['resources', 'resources/icons', 'resources/fonts']
+        self.loader = resource.Loader(self.path)
+        self.loader.add_font('digital-7.mono.ttf')
+        self.loader.add_font('title-sb.ttf')
+        font.load(Scoreboard.DIGIT_FONT)
+        font.load(Scoreboard.TEXT_FONT)    # try to create menu, if no games, send to config screen
+
     def createMenu(self) :
         # (title for config screen, scoreboard, icon,  FAC)
         self.scoreboardTuples = self.configScreen.getScoreboards()
