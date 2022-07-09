@@ -1,3 +1,4 @@
+
 from scoreboard import Scoreboard
 from element import ScoreboardElement
 from game_state import GameState
@@ -99,12 +100,37 @@ class BaseballGameState(GameState) :
 
     def getTeamAtBat(self) :
         return self.teamAtBat
+
+    # for autosave loading
+    def restoreFromList(self, stateList) :
+        self.teams[0].score = int(stateList[0].strip('\n'))
+        self.teams[0].hits = int(stateList[1].strip('\n'))
+        self.teams[0].errors = int(stateList[2].strip('\n'))
+        self.teams[1].score = int(stateList[3].strip('\n'))
+        self.teams[1].hits = int(stateList[4].strip('\n'))
+        self.teams[1].errors = int(stateList[5].strip('\n'))
+        self.outs = int(stateList[6].strip('\n'))
+        self.inning = int(stateList[7].strip('\n'))
+        self.teamAtBat = int(stateList[8].strip('\n'))
+
+    def getStateAsList(self) :
+        stateList = []
+        stateList.append(str(self.getScore(0)) +'\n')
+        stateList.append(str(self.getHits(0))+'\n')
+        stateList.append(str(self.getErrors(0))+'\n')
+        stateList.append(str(self.getScore(1))+'\n')
+        stateList.append(str(self.getHits(1))+'\n')
+        stateList.append(str(self.getErrors(1))+'\n')
+        stateList.append(str(self.getOuts())+'\n')
+        stateList.append(str(self.getInning()) + '\n')
+        stateList.append(str(self.getTeamAtBat()) + '\n')
+        return stateList
     
 ##################################
 class BaseballScoreboard(Scoreboard) :
     def __init__(self) :
-        Scoreboard.__init__(self)
         self.state = BaseballGameState()
+        Scoreboard.__init__(self)
         
         self.addScores(2, 470)
         self.addMediumElement(2, Scoreboard.LEFT_CENTER, 300, 'Hits', partial(self.state.getHits, 0), Scoreboard.RED)
@@ -131,7 +157,18 @@ class BaseballScoreboard(Scoreboard) :
         self.bottom.setCenterTop(500, 370)
         self.elements.append(self.bottom)
         self.bottom.setOn(self.state.getTeamAtBat() == GameState.HOME_INDEX)
+
+        #self.findAutosaveFile()
       
+    def loadAutosave(self, file) :
+        Scoreboard.loadAutosave(self, file)
+        print("loading from an autosave")
+
+    def autosave(self) :
+        Scoreboard.autosave(self)
+        print("autosave completed")
+
+
     # handle keys
 
     def handle_A(self, modified = False) :

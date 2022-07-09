@@ -12,6 +12,7 @@ from scoreboard import Scoreboard
 class GamePicker(KeyHandler, pyglet.window.Window) :
 
     INDEX_ICON = 2
+    AUTOSAVE_INTERVAL = 60 # scoreboards will autosave every AUTOSAVE_INTERVAL seconds
 
     def __init__(self, width, height, isPi = False) :
 
@@ -76,6 +77,8 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
             self.activeScreen = self
         else :
             self.activeScreen = self.configScreen
+
+        self.timeSinceAutosave = 0
     
     # try to create menu, if no games, send to config screen
     def createMenu(self) :
@@ -99,11 +102,19 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
     def getBatch(self) :
         return self.batch
 
+    def autosave(self) :
+        0
+
     def on_draw(self) :
         self.clear()
         self.activeScreen.getBatch().draw()
  
     def update(self, dt) :
+        self.timeSinceAutosave += dt
+        if (self.timeSinceAutosave > GamePicker.AUTOSAVE_INTERVAL) :
+            self.activeScreen.autosave()
+            self.timeSinceAutosave = 0
+
         for t in self.scoreboardTuples :
             t[3].update(dt)
         self.activeScreen.getBatch().draw()

@@ -39,8 +39,11 @@ class ConfigScreen(KeyHandler) :
         self.bg = pyglet.graphics.OrderedGroup(0)
         self.fg = pyglet.graphics.OrderedGroup(1)
 
-        allGames = self.processGamesFile(filename=ConfigScreen.ALL_GAMES_FILE)
-        chosenGames = self.processGamesFile(filename=ConfigScreen.CHOSEN_GAMES_FILE)
+
+        self.createUserConfigFiles()
+
+        allGames = self.processGamesFile(self.loader.file(ConfigScreen.ALL_GAMES_FILE, mode='r'))
+        chosenGames = self.processGamesFile(open(self.configFilename, mode='r'))
         unchosenGames = listDifference(allGames,chosenGames)
 
         self.unchosenGameLayout = GameList('Other Games', unchosenGames, self.batch, self.fg, self.bg, 100)        
@@ -48,7 +51,7 @@ class ConfigScreen(KeyHandler) :
 
         self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
 
-        self.scriptHome = str(Path.home()) +'/'
+        self.scriptHome = str(Path.home()) + '/'
 
         # run script to see if git-hub can be reached
         self.gitNotFound = subprocess.call(['sh',  self.scriptHome + ConfigScreen.FIND_GIT_HUB_SCRIPT])
@@ -59,15 +62,31 @@ class ConfigScreen(KeyHandler) :
 
         self.msg = pyglet.text.Label(updateText, font_name='Arial', font_size=16, x=20, y=20, batch=self.batch, group=self.fg)
 
+    def createUserConfigFiles(self) :
+        # find user config directory or create it
+        dir = pyglet.resource.get_settings_path('Scoreboard')
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        # find chosen games file or create it
+        self.configFilename = os.path.join(dir, ConfigScreen.CHOSEN_GAMES_FILE)
+        if not (os.path.exists(self.configFilename)) :
+            self.configFile = open(self.configFilename, 'wt')
+            self.configFile.write(ConfigScreen.END_OF_FILE)
+            self.configFile.close()
+
+     # only scoreboards do autosave
+    def autosave(self) :
+        0
+
     def recordToFile(self, gameList) :
+        self.configFile = open(self.configFilename, 'wt')
         print("writing")
-        f = self.loader.file(ConfigScreen.CHOSEN_GAMES_FILE, 'w')
         for g in gameList :
             for e in g :
-                f.write(e)
-                f.write('\n')    
-        f.write(ConfigScreen.END_OF_FILE + '\n')
-        f.close()
+                self.configFile.write(e)
+                self.configFile.write('\n')    
+        self.configFile.write(ConfigScreen.END_OF_FILE + '\n')
+        self.configFile.close()
 
     def setIconBatch(self, batch) :
         self.iconBatch = batch
@@ -89,9 +108,9 @@ class ConfigScreen(KeyHandler) :
         return objectList
 
     # (Menu Name in config screen, scoreboard module name, scoreboard class name, dingbat char, dingbat font, menu text )
-    def processGamesFile(self, filename) :
+    def processGamesFile(self, file) :
         
-        lines = self.loader.file(filename, mode='r').read().splitlines()
+        lines = file.read().splitlines()
         games = []
 
         if len(lines) > 0 :

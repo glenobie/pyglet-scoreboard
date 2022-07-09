@@ -66,6 +66,27 @@ class BoxingGameState(TimedGameState) :
             team.resetScore()
         self.seconds = self.MAX_SECONDS
         
+    def restoreFromList(self, stateList) :
+        self.seconds = int(stateList[0].strip('\n'))
+        self.period = int(stateList[1].strip('\n'))
+        self.teams[0].score = int(stateList[2].strip('\n'))
+        self.teams[0].endurance = int(stateList[3].strip('\n'))
+        self.teams[0].tkoPoints = int(stateList[4].strip('\n'))
+        self.teams[1].score = int(stateList[5].strip('\n'))
+        self.teams[1].endurance = int(stateList[6].strip('\n'))
+        self.teams[1].tkoPoints = int(stateList[7].strip('\n'))
+
+    def getStateAsList(self) :
+        stateList = []
+        stateList.append(str(self.seconds) +'\n')
+        stateList.append(str(self.period)+'\n')
+        stateList.append(str(self.teams[0].score)+'\n')
+        stateList.append(str(self.teams[0].endurance)+'\n')
+        stateList.append(str(self.teams[0].tkoPoints)+'\n')
+        stateList.append(str(self.teams[1].score) + '\n')
+        stateList.append(str(self.teams[1].endurance)+'\n')
+        stateList.append(str(self.teams[1].tkoPoints)+'\n')
+        return stateList
 
 class BoxingScoreboard(Scoreboard) :
 

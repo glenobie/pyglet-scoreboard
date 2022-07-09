@@ -103,7 +103,10 @@ class SoccerBlastSet(BlastSet) :
         self.green = Die(Die.D_GREEN, text_color=Die.T_WHITE, sides=6, batch=self.batch) 
         self.green.setCenter(170, 220)
         self.gold = Die(Die.D_GOLD, sides=6, batch=self.batch)
-        self.goldSet = BorderedDiceSet([self.gold], batch=self.batch)
+        self.gold.scale(0.75)
+
+        self.goldSet = BorderedDiceSet([self.gold], spacing = 22, batch=self.batch)
+        self.goldSet.setTitleFontSize(16)
         self.goldSet.setTitle('Optional')
         self.goldSet.setPosition(500, 380)
 

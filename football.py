@@ -117,11 +117,34 @@ class FootballGameState(TimedGameState) :
             line = 0
         return line
 
+   # for autosave loading
+    def restoreFromList(self, stateList) :
+        self.seconds = int(stateList[0].strip('\n'))
+        self.period = int(stateList[1].strip('\n'))
+        self.down = int(stateList[2].strip('\n'))
+        self.lineOfScrimmage = int(stateList[3].strip('\n'))
+        self.yardsToGain = int(stateList[4].strip('\n'))
+        self.teamPossessingBall = int(stateList[5].strip('\n'))
+        self.teams[0].score = int(stateList[6].strip('\n'))
+        self.teams[1].score = int(stateList[7].strip('\n'))
+
+    def getStateAsList(self) :
+        stateList = []
+        stateList.append(str(self.seconds) +'\n')
+        stateList.append(str(self.period)+'\n')
+        stateList.append(str(self.down)+'\n')
+        stateList.append(str(self.lineOfScrimmage)+'\n')
+        stateList.append(str(self.yardsToGain)+'\n')
+        stateList.append(str(self.teamPossessingBall)+'\n')
+        stateList.append(str(self.teams[0].score)+'\n')
+        stateList.append(str(self.teams[1].score) + '\n')
+        return stateList
+
 ###################################
 class FootballScoreboard(Scoreboard) :
     def __init__(self) :
-        Scoreboard.__init__(self)
         self.state = FootballGameState()
+        Scoreboard.__init__(self)
         
         self.addElements()
     

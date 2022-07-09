@@ -1,5 +1,5 @@
 import pyglet
-
+import os
 from functools import partial
 from element import ScoreboardElement
 from element import HorizontalElement
@@ -34,6 +34,7 @@ class Scoreboard(KeyHandler) :
 
     DIGIT_FONT = 'Digital-7 Mono'
     TEXT_FONT = 'Built Titling'
+    AUTOSAVE_FILE = 'autosave'
 
     def __init__(self) :
         self.batch = pyglet.graphics.Batch()
@@ -43,7 +44,30 @@ class Scoreboard(KeyHandler) :
         self.background = pyglet.shapes.Rectangle(0,0,800,480, (28,28,28), self.batch, self.bg)
 
         self.elements = []
-        self.state = None
+
+        self.findAutosaveFile()
+ 
+    def findAutosaveFile(self) :
+        dir = pyglet.resource.get_settings_path('Scoreboard')
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        self.autosaveFilename = os.path.join(dir, Scoreboard.AUTOSAVE_FILE)
+
+        # check if I was the last saver of the autofile, if so load it
+        if os.path.exists(self.autosaveFilename) :
+            file = open(self.autosaveFilename, 'r')
+            lastSaver = file.readline().strip('\n')
+            if lastSaver == self.__class__.__name__ :
+                self.loadAutosave(file)
+
+    def loadAutosave(self, file) :
+        self.state.restoreFromList(file.readlines())
+
+    def autosave(self) :
+        file = open(self.autosaveFilename, 'wt')
+        file.write(self.__class__.__name__ + '\n')
+        file.writelines(self.state.getStateAsList())
+        file.close()
 
     def attachFAC(self, fac) :
         self.attachedFAC = fac
@@ -111,6 +135,7 @@ class Scoreboard(KeyHandler) :
         self.elements.append(e)
 
     def handleExit(self, menuScreen):
+        self.autosave()
         return 1
 
     # handle keys

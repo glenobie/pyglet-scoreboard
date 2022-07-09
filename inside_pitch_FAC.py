@@ -94,10 +94,10 @@ class InsidePitchSet(FACSet) :
         self.pitcher = IP_DiceSet(title= 'Pitcher', label='WP/HR?/??', batch=self.batch)
         self.pitcher.setTopLeft(36, 454)
 
-        self.hitter = IP_DiceSet(title= 'Hitter', label='HBP/K/W/HR/?', batch=self.batch)
+        self.hitter = IP_DiceSet(title= 'Hitter', label='HBP/K/W/HR', batch=self.batch)
         self.hitter.setTopLeft(286, 454)
 
-        self.ballpark = IP_DiceSet(title= 'Ballpark', label='E/Strategy', batch=self.batch)
+        self.ballpark = IP_DiceSet(title= 'Ballpark', label='H?/E/Strategy', batch=self.batch)
         self.ballpark.setTopLeft(540, 454)
 
 
@@ -121,7 +121,7 @@ class InsidePitchSet(FACSet) :
         self.fieldSet.setTitle('DP/SF')
         self.fieldSet.setPosition(316, 100, 10)
 
-        b1 = Die(Die.D_GRAY, Die.T_WHITE, 6, self.batch)
+        b1 = Die(Die.D_GOLD, Die.T_BLACK, 6, self.batch)
         b2 = Die(Die.D_ORANGE, Die.T_WHITE, 6, self.batch)
         b3 = Die(Die.D_BROWN, Die.T_WHITE, 6, self.batch)
         d = [b1, b2, b3]

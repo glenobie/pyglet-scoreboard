@@ -20,11 +20,11 @@ class LacrosseGameState(TimedGameState) :
         self.teams = [LacrosseTeamState(0, self.getMaxScore()), 
                       LacrosseTeamState(0, self.getMaxScore())]
         self.TIME_INTERVAL = 60
-        self.MINUTES_PER_PERIOD = 45
+        self.MINUTES_PER_PERIOD = 15
         self.MAX_SECONDS = self.MINUTES_PER_PERIOD * 60
         self.seconds = self.MAX_SECONDS
-        self.timeDivisionName = "Half"
-        self.maxPeriods = 2
+        self.timeDivisionName = "Quarter"
+        self.maxPeriods = 4
 
     def resetHalf(self):
         for team in self.teams :
