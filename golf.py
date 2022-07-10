@@ -76,17 +76,16 @@ class GolfGameState(GameState) :
         for i in range(GolfGameState.NUM_GOLFERS) :
             self.golfers.append(Golfer(i+1, GolfGameState.START_HOLES[i]))
             
-        self.leaders = sorted(self.golfers, key=lambda golfer: golfer.score)
         self.adjustShotsBack()
 
 
     def adjustShotsBack(self) :
+        self.leaders = sorted(self.golfers, key=lambda golfer: golfer.score)
         for g in self.golfers :
             g.computeShotsBack(self.leaders[0].getScore())
 
     def modifyScore(self, golferID, adj) :
         self.golfers[golferID-1].adjustScore(adj)
-        self.leaders = sorted(self.golfers, key=lambda golfer: golfer.score)
         self.adjustShotsBack()
 
     def getLeaderboard(self) :
@@ -128,7 +127,6 @@ class GolfGameState(GameState) :
             g.id = int(stateList.pop(0).strip('\n'))
             g.score = int(stateList.pop(0).strip('\n'))
             g.hole = int(stateList.pop(0).strip('\n'))
-        self.leaders = sorted(self.golfers, key=lambda golfer: golfer.score)
         self.adjustShotsBack()
 
 
