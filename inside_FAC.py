@@ -124,11 +124,11 @@ class InsideSportsSet(FACSet) :
             random.shuffle(self.facs)
             self.deckIndex = 0
 
-        fieldIndex = 0
-        for f in self.valueFields :
-            f.setText(self.facs[self.deckIndex][fieldIndex].strip('\n'))
-            fieldIndex += 1
-
+        for fieldIndex in range(8, 17) :
+            self.valueFields[fieldIndex].setText(self.facs[self.deckIndex][fieldIndex].strip('\n'))
+        for fieldIndex in range(0, 8) :
+            self.valueFields[fieldIndex].setText(self.facs[self.deckIndex-1][fieldIndex].strip('\n'))
+   
     def handle_L(self) :
         self.flipForward()
 
