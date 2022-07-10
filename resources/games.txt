@@ -68,8 +68,8 @@ Inside the Crease
 hockey
 HockeyScoreboard
 inside-crease.png
-hmg_FAC
-HistoryMakerGolfSet
+inside_FAC
+InsideSportsSet
 Hockey Blast
 hockey
 HockeyScoreboard

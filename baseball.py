@@ -126,7 +126,7 @@ class BaseballGameState(GameState) :
         stateList.append(str(self.getTeamAtBat()) + '\n')
         return stateList
     
-##################################
+################################################################
 class BaseballScoreboard(Scoreboard) :
     def __init__(self) :
         self.state = BaseballGameState()

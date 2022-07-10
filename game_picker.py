@@ -1,6 +1,7 @@
 from json import load
 import pyglet
 from pyglet import font
+from fac_set import FACSet
 from key_handler import KeyHandler
 from config_screen import ConfigScreen
 from fast_action_window import FastActionWindow
@@ -83,9 +84,10 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
         self.loader = resource.Loader(self.path)
         self.loader.add_font('digital-7.mono.ttf')
         self.loader.add_font('title-sb.ttf')
+        self.loader.add_font('BebasKai.ttf')
         font.load(Scoreboard.DIGIT_FONT)
-        font.load(Scoreboard.TEXT_FONT)    # try to create menu, if no games, send to config screen
-
+        font.load(Scoreboard.TEXT_FONT)   
+        font.load(FACSet.TEXT_FONT)
         # find user save directory. If does not exist, create it
         dir = pyglet.resource.get_settings_path('Scoreboard')
         if not os.path.exists(dir):
