@@ -5,4 +5,4 @@ autosave game state
 - could determine if autosave necessary based on whether state changed  
 
 - create autosave file for each scoreboard (or game?)
-- TODO: cricket, hockey
+- TODO: cricket
