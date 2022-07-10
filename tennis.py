@@ -87,8 +87,9 @@ class TennisScoreboard(Scoreboard) :
     COLS = [198, 428, 508, 588, 668, 748]
   
     def __init__(self) :
-        Scoreboard.__init__(self)
         self.state = TennisGameState()
+        Scoreboard.__init__(self)
+
         self.state.modifyPoints(0,False)
         self.selectedSet = 0
 

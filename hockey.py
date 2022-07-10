@@ -86,8 +86,8 @@ class HockeyGameState(TimedGameState) :
 
 class HockeyScoreboard(Scoreboard) :
     def __init__(self) :
-        Scoreboard.__init__(self)
         self.state = HockeyGameState()
+        Scoreboard.__init__(self)
         
         self.addScores(3, 470)
         self.addClock(440)

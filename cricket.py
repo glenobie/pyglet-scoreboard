@@ -170,8 +170,9 @@ class CricketGameState(GameState) :
 ##################################
 class CricketScoreboard(Scoreboard) :
     def __init__(self) :
-        Scoreboard.__init__(self)
         self.state = CricketGameState()
+        Scoreboard.__init__(self)
+
         
         self.addLargeElement(3, Scoreboard.CENTER, 470, 'Total', self.state.getTotal, Scoreboard.RED)
         self.addMediumElement(1, Scoreboard.CENTER, 290, 'Wickets', self.state.getWickets, Scoreboard.GREEN)
