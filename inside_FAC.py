@@ -1,8 +1,6 @@
-from attr import Factory
-from scoreboard import Scoreboard
+import random
 import pyglet
 from fac_set import FACSet
-from pyglet import font
 
 class FACField() :
     F_BLUE = (0, 255, 255)
@@ -79,15 +77,18 @@ class InsideSportsSet(FACSet) :
 
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
+        self.paintBackground(FACSet.W_COLOR_WHITE)
         self.fg = pyglet.graphics.OrderedGroup(62)
         self.FACbg = pyglet.graphics.OrderedGroup(5)
 
-        # test
-        self.index = 1
+        self.deckIndex = 0
+        self.facs = self.readFACSFromFile('crease_FACs', 2)
+        random.shuffle(self.facs)
 
-        self.paintBackground(FACSet.W_COLOR_WHITE)
+        self.createLayout()
 
-        # test
+
+    def createLayout(self)  :    
         self.textFields = []
         self.valueFields = []
         x = InsideSportsSet.SPACE
@@ -106,19 +107,30 @@ class InsideSportsSet(FACSet) :
                 y += InsideSportsSet.FIELD_HEIGHT + InsideSportsSet.SPACE
             x += InsideSportsSet.FIELD_WIDTH + InsideSportsSet.SPACE
 
-
-
+    def readFACSFromFile(self, filename, numFACS) :
+        facs = []
+        f = self.loader.file(filename, mode='r')
+        for j in range(0, numFACS) :
+            list = f.readline().split(',')
+            facs.append(list)
+        return facs
 
     def draw(self) :
         self.batch.draw()
 
-    def flipFAC(self) :
+    def flipForward(self) :
+        self.deckIndex += 1
+        if self.deckIndex >= len(self.facs) :
+            random.shuffle(self.facs)
+            self.deckIndex = 0
+
+        fieldIndex = 0
         for f in self.valueFields :
-            f.setText(str(self.index))
-            self.index += 1
+            f.setText(self.facs[self.deckIndex][fieldIndex].strip('\n'))
+            fieldIndex += 1
 
     def handle_L(self) :
-        self.flipFAC()
+        self.flipForward()
 
     def handle_K(self) :
-        0
+        self.flipBackward()
