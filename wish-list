@@ -3,6 +3,5 @@ Loading message while waiting for scoreboard to open. Might need double bufferin
 
 autosave game state 
 - could determine if autosave necessary based on whether state changed  
+- create autosave file for each game?
 
-- create autosave file for each scoreboard (or game?)
-- TODO: cricket

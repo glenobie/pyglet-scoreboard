@@ -44,16 +44,13 @@ class LacrosseGameState(TimedGameState) :
         stateList.append(str(self.teams[0].score)+'\n')
         stateList.append(str(self.teams[1].score) + '\n')
         return stateList
-
-        
-
+       
+#################################################
 class LacrosseScoreboard(Scoreboard) :
-   
     def __init__(self) :
         self.state = LacrosseGameState()        
         Scoreboard.__init__(self)
 
-        
         self.addLargeElement(2, Scoreboard.LEFT_CENTER, 470, 'GUEST', partial(self.state.getScore, 0), Scoreboard.RED)
         self.addLargeElement(2, Scoreboard.RIGHT_CENTER, 470, 'HOME', partial(self.state.getScore, 1), Scoreboard.RED)
         self.addClock(440)

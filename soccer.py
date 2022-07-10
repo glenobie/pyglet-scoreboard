@@ -8,8 +8,6 @@ from functools import partial
 class SoccerTeamState(TeamState) :
     def __init__(self, score, maxScore=19) :
         TeamState.__init__(self, score, maxScore)
- 
-
 
 ###########################
 class SoccerGameState(TimedGameState) :
@@ -26,9 +24,6 @@ class SoccerGameState(TimedGameState) :
         self.seconds = self.MAX_SECONDS
         self.timeDivisionName = "Half"
         self.maxPeriods = 2
-
- 
-
 
     def resetHalf(self):
         for team in self.teams :
@@ -49,10 +44,8 @@ class SoccerGameState(TimedGameState) :
         stateList.append(str(self.teams[1].score) + '\n')
         return stateList
 
-     
-class SoccerScoreboard(Scoreboard) :
-
-   
+ ############################################    
+class SoccerScoreboard(Scoreboard) :   
     def __init__(self) :
         self.state = SoccerGameState()
         Scoreboard.__init__(self)
