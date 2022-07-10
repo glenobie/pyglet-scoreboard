@@ -45,12 +45,23 @@ class RaceState(GameState) :
         else :
             return '  '
         
+    def restoreFromList(self, stateList) :
+        self.currentTurn = int(stateList[0].strip('\n'))
+        self.totalTurns = int(stateList[1].strip('\n'))
+
+    def getStateAsList(self) :
+        stateList = []
+        stateList.append(str(self.currentTurn) +'\n')
+        stateList.append(str(self.totalTurns)+'\n')
+        return stateList
+
 #######################################
 class RacingScoreboard(Scoreboard) :
    
     def __init__(self) :
-        Scoreboard.__init__(self)
         self.state = RaceState()
+        Scoreboard.__init__(self)
+
         
         self.addLargeElement(2, Scoreboard.CENTER, 460, 'Current Turn', self.state.getCurrentTurn, Scoreboard.GREEN)
         self.addMediumElement(2, Scoreboard.RIGHT_CENTER, 240, 'Total Turns', self.state.getTotalTurns, Scoreboard.RED)
