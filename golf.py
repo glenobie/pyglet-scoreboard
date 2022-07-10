@@ -122,6 +122,23 @@ class GolfGameState(GameState) :
     
     def getShotsBackAsString(self, id) :
         return str(self.getGolfer(id).getShotsBack())
+
+    def restoreFromList(self, stateList) :
+        for g in self.golfers :
+            g.id = int(stateList.pop(0).strip('\n'))
+            g.score = int(stateList.pop(0).strip('\n'))
+            g.hole = int(stateList.pop(0).strip('\n'))
+        self.leaders = sorted(self.golfers, key=lambda golfer: golfer.score)
+        self.adjustShotsBack()
+
+
+    def getStateAsList(self) :
+        stateList = []
+        for g in self.golfers :
+            stateList.append(str(int(g.id)) + '\n')
+            stateList.append(str(int(g.score)) + '\n')
+            stateList.append(str(int(g.hole))  + '\n')
+        return stateList
  
 ##################################
 
@@ -239,9 +256,9 @@ class GolfScoreboard(Scoreboard) :
     LEADERBOARD_COLS = (540, 610, 690, 770)
 
     def __init__(self) :
-        Scoreboard.__init__(self)
         self.state = GolfGameState()
 
+        Scoreboard.__init__(self)
         self.holes = []
         self.selectedHole = 0
 
