@@ -127,8 +127,7 @@ class ScoreboardElement :
         return self.top
 
     def setFontColor(self, fontColor) :
-        for d in self.docs :
-            d.set_style(0, len(d.text), dict(color=fontColor))
+        self.doc.set_style(0, len(self.doc.text), dict(color=fontColor))
 
     def setLabelColor(self, fontColor) :
         self.label.color = fontColor

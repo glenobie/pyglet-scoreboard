@@ -59,6 +59,25 @@ class TennisGameState(GameState) :
     def getPoints(self, playerIndex) :
         return TennisPlayer.POINTS[self.players[playerIndex].pointsIndex]
 
+    def restoreFromList(self, stateList) :
+        for p in self.players :
+            p.pointsIndex = int(stateList.pop(0).strip('\n'))
+            p.serving = bool(int(stateList.pop(0).strip('\n')))
+            p.sets = [int(stateList.pop(0).strip('\n')),
+                            int(stateList.pop(0).strip('\n')),
+                            int(stateList.pop(0).strip('\n')),
+                            int(stateList.pop(0).strip('\n')),
+                            int(stateList.pop(0).strip('\n'))]
+
+    def getStateAsList(self) :
+        stateList = []
+        for p in self.players :
+            stateList.append(str(p.pointsIndex) +'\n')
+            stateList.append(str(int(p.serving)) +'\n')
+            for s in p.sets :
+                stateList.append(str(s) +'\n')
+        return stateList
+
 ##################################
 class TennisScoreboard(Scoreboard) :
 

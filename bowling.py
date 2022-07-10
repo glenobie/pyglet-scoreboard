@@ -168,16 +168,13 @@ class BowlingGameState(GameState) :
         return self.bowlers[playerIndex].getScore(frameID)
 
     def restoreFromList(self, stateList) :
-        index = 0
         for b in self.bowlers :
-            numFramesBowled = int(stateList[index].strip('\n'))
-            index += 1
+            numFramesBowled = int(stateList.pop(0).strip('\n'))
             for f in range(0, numFramesBowled) :
-                b.frames[f].balls = [int(stateList[index].strip('\n')),
-                           int(stateList[index+1].strip('\n')),
-                           int(stateList[index+2].strip('\n'))]
+                b.frames[f].balls = [int(stateList.pop(0).strip('\n')),
+                                    int(stateList.pop(0).strip('\n')),
+                                    int(stateList.pop(0).strip('\n'))]
                 b.frames[f].empty = False
-                index += 3
             b.computeFrameScores()
 
 
