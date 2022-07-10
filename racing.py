@@ -61,12 +61,10 @@ class RacingScoreboard(Scoreboard) :
     def __init__(self) :
         self.state = RaceState()
         Scoreboard.__init__(self)
-
         
         self.addLargeElement(2, Scoreboard.CENTER, 460, 'Current Turn', self.state.getCurrentTurn, Scoreboard.GREEN)
         self.addMediumElement(2, Scoreboard.RIGHT_CENTER, 240, 'Total Turns', self.state.getTotalTurns, Scoreboard.RED)
         self.addMediumElement(3, Scoreboard.LEFT_CENTER, 240, 'Message', self.state.getPitMessage, Scoreboard.YELLOW)
-  
   
     # handle keys
     def handle_Q(self, modified = False) :

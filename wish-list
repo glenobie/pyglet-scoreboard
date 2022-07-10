@@ -5,5 +5,5 @@ autosave game state
 - could determine if autosave necessary based on whether state changed  
 
 - create autosave file for each scoreboard (or game?)
-- Completed :football, baseball, basketball, boxing, soccer, racing
-- TODO: bowling, tennis, golf, cricket, hockey, lacrosse
+- Completed :football, baseball, basketball, boxing, soccer, racing, lacrosse, bowling
+- TODO: tennis, golf, cricket, hockey

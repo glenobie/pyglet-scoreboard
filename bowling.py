@@ -80,8 +80,8 @@ class Bowler() :
     def modifyPins(self, frameIndex, ballIndex, value) :
         # can only change empty frame if its first empty frame
         if frameIndex < self.getFirstEmptyFrameNumber() :
-          self.frames[frameIndex].modifyPins(ballIndex, value)
-          self.computeFrameScores()
+            self.frames[frameIndex].modifyPins(ballIndex, value)
+            self.computeFrameScores()
 
     def computeStrikeFrame(self, frameIndex) :
         frameNum = frameIndex + 1       
@@ -166,7 +166,31 @@ class BowlingGameState(GameState) :
 
     def getScore(self, playerIndex, frameID) :
         return self.bowlers[playerIndex].getScore(frameID)
-    
+
+    def restoreFromList(self, stateList) :
+        index = 0
+        for b in self.bowlers :
+            numFramesBowled = int(stateList[index].strip('\n'))
+            index += 1
+            for f in range(0, numFramesBowled) :
+                b.frames[f].balls = [int(stateList[index].strip('\n')),
+                           int(stateList[index+1].strip('\n')),
+                           int(stateList[index+2].strip('\n'))]
+                b.frames[f].empty = False
+                index += 3
+            b.computeFrameScores()
+
+
+    def getStateAsList(self) :
+        stateList = []
+        for b in self.bowlers :
+            numFramesBowled = b.getFirstEmptyFrameNumber() - 1 
+            stateList.append(str(numFramesBowled) + '\n')
+            for f in range(0, numFramesBowled) :
+                for ball in  b.frames[f].balls :
+                    stateList.append( str(ball) + '\n' )
+        return stateList
+
 
 ###########################################################
 class FrameDisplay() :
@@ -262,8 +286,6 @@ class TenthFrameDisplay(FrameDisplay) :
  
         self.drawBorder()
 
-
-
 ############################################################
 class BowlingScoreboard(Scoreboard) :
 
@@ -274,13 +296,13 @@ class BowlingScoreboard(Scoreboard) :
     HEADER_X = 14
 
     def __init__(self) :
-        Scoreboard.__init__(self)
         self.state = BowlingGameState()
+        Scoreboard.__init__(self)
         self.selectedFrame = 0
         self.inUpper = True
         gp = pyglet.graphics.Group()
 
-        self.frames = []
+        self.frames = [] # FrameDisplays
         self.labels = []
 
         for i in range(0, len(self.state.bowlers)) :
@@ -298,6 +320,7 @@ class BowlingScoreboard(Scoreboard) :
                 f = class_(self.state, i+1, b, self.state.getPins, self.state.getScore, self.batch )
                 f.setLeftTop(x, BowlingScoreboard.ROWS[b])
                 f.setSelected(False)
+                self.elements.append(f)
                 frameSet.append(f)
     
             self.frames.append(frameSet)
@@ -306,25 +329,18 @@ class BowlingScoreboard(Scoreboard) :
             columnLabel.position = (x+self.frames[i][0].getWidth() // 2, BowlingScoreboard.HEADER_Y)
             self.labels.append(columnLabel)
             x += self.frames[i][0].getWidth() + BowlingScoreboard.SPACING
-        self.selectFrames(1, True)
+
+        self.selectFrames(self.selectedFrame, True)
 
 
     def selectFrames(self, frameId, isSelected) :
-        for f in self.frames :
-            if self.inUpper :
-                self.frames[self.selectedFrame][0].setSelected(isSelected)
-                self.frames[self.selectedFrame][1].setSelected(isSelected)
-            else :
-                self.frames[self.selectedFrame][2].setSelected(isSelected)
-                self.frames[self.selectedFrame][3].setSelected(isSelected)
+        if self.inUpper :
+            self.frames[frameId][0].setSelected(isSelected)
+            self.frames[frameId][1].setSelected(isSelected)
+        else :
+            self.frames[frameId][2].setSelected(isSelected)
+            self.frames[frameId][3].setSelected(isSelected)
         
-    # presently not called
-    def updateAllElements(self):
-        for s in self.frames :
-            for b in s :
-                b.update()
-
-
     # handle keys
 
     def handle_Q(self, modified=False) :

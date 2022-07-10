@@ -30,13 +30,29 @@ class LacrosseGameState(TimedGameState) :
         for team in self.teams :
             team.resetScore()
         self.seconds = self.MAX_SECONDS
+
+    def restoreFromList(self, stateList) :
+        self.seconds = int(stateList[0].strip('\n'))
+        self.period = int(stateList[1].strip('\n'))
+        self.teams[0].score = int(stateList[2].strip('\n'))
+        self.teams[1].score = int(stateList[3].strip('\n'))
+
+    def getStateAsList(self) :
+        stateList = []
+        stateList.append(str(self.seconds) +'\n')
+        stateList.append(str(self.period)+'\n')
+        stateList.append(str(self.teams[0].score)+'\n')
+        stateList.append(str(self.teams[1].score) + '\n')
+        return stateList
+
         
 
 class LacrosseScoreboard(Scoreboard) :
    
     def __init__(self) :
+        self.state = LacrosseGameState()        
         Scoreboard.__init__(self)
-        self.state = LacrosseGameState()
+
         
         self.addLargeElement(2, Scoreboard.LEFT_CENTER, 470, 'GUEST', partial(self.state.getScore, 0), Scoreboard.RED)
         self.addLargeElement(2, Scoreboard.RIGHT_CENTER, 470, 'HOME', partial(self.state.getScore, 1), Scoreboard.RED)
