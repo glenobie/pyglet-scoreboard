@@ -67,8 +67,11 @@ class CricketGameState(GameState) :
         self.lastWicket = 0
         self.overs = 0
         self.extras = 0
+        self.balls = 0
         self.batters[0].setNumber(1)
+        self.batters[0].resetRuns()
         self.batters[1].setNumber(2)
+        self.batters[1].resetRuns()
 
     def recordScore(self):
         self.lastWicket = self.total        
@@ -132,6 +135,37 @@ class CricketGameState(GameState) :
         temp = self.batters[0]
         self.batters[0] = self.batters[1]
         self.batters[1] = temp
+
+    def restoreFromList(self, stateList) :
+        self.total = int(stateList.pop(0).strip('\n'))
+        self.balls = int(stateList.pop(0).strip('\n'))
+        self.extras = int(stateList.pop(0).strip('\n'))
+        self.lastInnings = int(stateList.pop(0).strip('\n'))
+        self.lastWicket = int(stateList.pop(0).strip('\n'))
+        self.overs = int(stateList.pop(0).strip('\n'))
+        self.wickets = int(stateList.pop(0).strip('\n'))
+        self.batters[0].number = int(stateList.pop(0).strip('\n'))
+        self.batters[0].runs= int(stateList.pop(0).strip('\n'))
+        self.batters[1].number = int(stateList.pop(0).strip('\n'))
+        self.batters[1].runs = int(stateList.pop(0).strip('\n'))
+
+
+    def getStateAsList(self) :
+        stateList = []
+        stateList.append(str(self.total)+'\n')
+        stateList.append(str(self.balls)+'\n')
+        stateList.append(str(self.extras)+'\n')
+        stateList.append(str(self.lastInnings)+'\n')
+        stateList.append(str(self.lastWicket)+'\n')
+        stateList.append(str(self.overs)+'\n')
+        stateList.append(str(self.wickets)+'\n')
+        stateList.append(str(self.batters[0].number)+'\n')
+        stateList.append(str(self.batters[0].runs)+'\n')
+        stateList.append(str(self.batters[1].number)+'\n')
+        stateList.append(str(self.batters[1].runs)+'\n')
+
+        return stateList
+
 
 ##################################
 class CricketScoreboard(Scoreboard) :
