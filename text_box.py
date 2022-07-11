@@ -40,19 +40,19 @@ class BorderedTextBox :
  
     def drawBorder(self, x, y, width, height) :
         self.lines = []
-        self.lines.append(pyglet.shapes.Line(x, y, x, y + height, width=1, batch=self.batch))  
-        self.lines.append(pyglet.shapes.Line(x+width, y, x+width, y + height, width=1, batch=self.batch))  
-        self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch))  
+        self.lines.append(pyglet.shapes.Line(x, y, x, y + height, width=1, batch=self.batch, group=self.fg))  
+        self.lines.append(pyglet.shapes.Line(x+width, y, x+width, y + height, width=1, batch=self.batch, group=self.fg))  
+        self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch, group=self.fg))  
         
         if len(self.title.text) > 0 :
             title_x = x + (width - self.title.content_width) // 2
             self.title.position = (title_x, y+height)
             self.lines.append(pyglet.shapes.Line(x, y+height, title_x - BorderedTextBox.LABEL_SPACING, 
-                                    y + height, width=1, batch=self.batch))       
+                                    y + height, width=1, batch=self.batch, group=self.fg))       
             self.lines.append(pyglet.shapes.Line(title_x + self.title.content_width + BorderedTextBox.LABEL_SPACING, y+height, x+width, 
-                                 y + height, width=1, batch=self.batch))       
+                                 y + height, width=1, batch=self.batch, group=self.fg))       
         else :
-            self.lines.append(pyglet.shapes.Line(x, y+height, x+width, y+height, width=1, batch=self.batch))       
+            self.lines.append(pyglet.shapes.Line(x, y+height, x+width, y+height, width=1, batch=self.batch, group=self.fg))       
            
          
 
