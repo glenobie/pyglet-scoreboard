@@ -10,7 +10,6 @@ class BlastSet(FACSet) :
 
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
-        self.batch = pyglet.graphics.Batch()
 
     def createBlastDice(self, d1, d2, x, y, spacing, title, labels, scale=1.0) :
 

@@ -19,7 +19,7 @@ class IP_DiceSet :
         self.white.scale(0.8)
         self.dice.append(self.white)
         self.d20 = Die(Die.D_BLUE, text_color=Die.T_WHITE, sides=20, batch=self.batch)
-        self.d20.setInteriorSpacingPct(0.4)
+        self.d20.setInteriorSpacingPct(0.2)
         self.d20.scale(0.8)
         self.dice.append(self.d20)
 
@@ -87,7 +87,6 @@ class InsidePitchSet(FACSet) :
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
         self.decisionNumber = 1
-        self.batch = pyglet.graphics.Batch()
         self.createDice()
 
     def createDice(self) :

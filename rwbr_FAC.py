@@ -11,7 +11,6 @@ class RWBRSet(FACSet) :
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
         self.challengeNumber = 1
-        self.batch = pyglet.graphics.Batch()
         self.createDice()
 
     def createDice(self) :

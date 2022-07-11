@@ -10,7 +10,6 @@ class HistoryMakerBaseballSet(FACSet) :
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
         self.decisionNumber = 1
-        self.batch = pyglet.graphics.Batch()
         self.createDice()
 
     def createDice(self) :
@@ -25,7 +24,7 @@ class HistoryMakerBaseballSet(FACSet) :
         self.allDice.setPosition(570, 60, 12)
 
         self.decider = Die(Die.D_WHITE, text_color=Die.T_WHITE, sides=2, batch = self.batch)
-        self.decider.setInteriorSpacingPct(0.5)
+        self.decider.setInteriorSpacingPct(0.36)
         self.decider.setDieLabels(('YES', 'NO'))
         self.decider.addColorCondition((1, Die.D_DARK_GREEN))
         self.decider.addColorCondition((2, Die.D_RED))

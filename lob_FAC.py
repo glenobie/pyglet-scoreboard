@@ -5,12 +5,10 @@ from bordered_dice_set import BorderedDiceSet
 from functools import partial
 
 from fac_set import FACSet
-
 class LegendsOfBoxingSet(FACSet) :
 
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
-        self.batch = pyglet.graphics.Batch()
         self.createDice()
 
     def createDice(self) :

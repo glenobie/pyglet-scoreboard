@@ -9,7 +9,7 @@ class Die :
     D_BLUE = (0,0,204)
     D_WHITE = (255,255,255)
     D_GRAY = (160,160,160)
-    D_BLACK = (20,20,20)
+    D_BLACK = (10,10,10)
     D_PINK = (153, 0, 76)
     D_ORANGE = (204, 102, 0)
     D_RED = (204, 0, 0)
@@ -28,8 +28,8 @@ class Die :
     WIDTH = 100
     HEIGHT = 100
     TEXT_SIZE = 100
-    INTERIOR_SPACING_PCT = 0.2
-    FONT = 'Arial'
+    INTERIOR_SPACING_PCT = 0.1
+    FONT = 'Coolvetica'
     
     def __init__(self, color, text_color=(0,0,0,255), sides=6, batch=None) :
         self.bg = pyglet.graphics.OrderedGroup(4)

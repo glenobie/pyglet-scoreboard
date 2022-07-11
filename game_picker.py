@@ -86,6 +86,7 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
         self.loader.add_font('title-sb.ttf')
         self.loader.add_font('Roboto-Regular.ttf')
         self.loader.add_font('Roboto-Bold.ttf')
+        self.loader.add_font('cool.otf')
         font.load(Scoreboard.DIGIT_FONT)
         font.load(Scoreboard.TEXT_FONT)   
         font.load(FACSet.TEXT_FONT)

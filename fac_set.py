@@ -10,7 +10,7 @@ class FACSet() :
     def __init__(self, loader) :
         self.loader = loader
         self.batch = pyglet.graphics.Batch()
-        self.bg = pyglet.graphics.OrderedGroup(2)
+        self.bg = pyglet.graphics.OrderedGroup(0)
 
         self.paintBackground(FACSet.W_COLOR_BLACK)
         

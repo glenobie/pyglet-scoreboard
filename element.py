@@ -244,8 +244,8 @@ class ClockElement(ScoreboardElement) :
 
         self.minutesElement = None
         self.secondsElement = None
-        ScoreboardElement.__init__(self, text, textFont, textSize, textColor, updateFunc, digitFont, digitSize, digitColor, maxDigits, displayLeadingZeroes, batch=None)
-        #self.setVisible(False)
+        ScoreboardElement.__init__(self, text, textFont, textSize, textColor, updateFunc, digitFont, digitSize, digitColor, maxDigits, displayLeadingZeroes, batch=batch)
+        self.setVisible(False)
 
         self.minutesElement = ScoreboardElement(None, textFont, textSize, textColor, self.getMinutes, digitFont, digitSize, digitColor, maxDigits, displayLeadingZeroes, batch)
         self.secondsElement = ScoreboardElement(None, textFont, textSize, textColor, self.getSeconds, digitFont, digitSize, digitColor, 2, True, batch)
