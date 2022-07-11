@@ -1,5 +1,6 @@
 import pyglet
 from die import Die
+from fac_set import FACSet
 
 ########################################################
 class DiceSet :
@@ -18,14 +19,14 @@ class DiceSet :
         self.booleanFunctionLabels = []
 
         self.labelDoc = pyglet.text.document.UnformattedDocument('')  
-        self.labelDoc.set_style(0, len(self.labelDoc.text),  dict(font_name = Die.FONT, 
+        self.labelDoc.set_style(0, len(self.labelDoc.text),  dict(font_name = FACSet.TEXT_FONT, 
                                                                        font_size = 20, 
                                                                        color=(255,255,255,255)))
         self.labelLayout = pyglet.text.layout.TextLayout(self.labelDoc, batch=batch, group = self.fg)
         self.labelLayout.anchor_y = 'center'
 
         self.titleDoc = pyglet.text.document.UnformattedDocument('')  
-        self.titleDoc.set_style(0, len(self.titleDoc.text), dict(font_name = Die.FONT, 
+        self.titleDoc.set_style(0, len(self.titleDoc.text), dict(font_name = FACSet.TEXT_FONT, 
                                                                          font_size = 20, 
                                                                          color=(255,255,255,255)))
         self.titleLayout = pyglet.text.layout.TextLayout(self.titleDoc, batch=batch, group = self.fg)

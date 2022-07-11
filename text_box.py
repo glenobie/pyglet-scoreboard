@@ -1,5 +1,7 @@
 import pyglet
 
+from fac_set import FACSet
+
 #########################################
 class BorderedTextBox :
     BORDER_SPACING = 24
@@ -11,11 +13,11 @@ class BorderedTextBox :
         self.height = height
 
         self.x = self.y = 0
-        self.title = pyglet.text.Label(title, 'Arial', 20, batch=self.batch)
+        self.title = pyglet.text.Label(title, FACSet.TEXT_FONT, 20, batch=self.batch)
         self.title.anchor_x = 'left'
         self.title.anchor_y = 'center'
 
-        self.contents = pyglet.text.Label('', 'Arial', 22, batch=self.batch)
+        self.contents = pyglet.text.Label('', FACSet.TEXT_FONT, 22, batch=self.batch)
         self.contents.anchor_x = 'center'
         self.contents.anchor_y = 'center'
 

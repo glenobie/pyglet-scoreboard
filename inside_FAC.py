@@ -155,4 +155,4 @@ class InsideSportsSet(FACSet) :
         self.flipForward()
 
     def handle_K(self) :
-        self.flipBackward()
+        0

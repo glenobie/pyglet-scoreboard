@@ -23,11 +23,11 @@ class IP_DiceSet :
         self.d20.scale(0.8)
         self.dice.append(self.d20)
 
-        self.title = pyglet.text.Label(title, 'Arial', 22, batch=self.batch)
+        self.title = pyglet.text.Label(title, FACSet.TEXT_FONT, 22, batch=self.batch)
         self.title.anchor_x = 'left'
         self.title.anchor_y = 'center'
 
-        self.label = pyglet.text.Label(label, 'Arial', 18, batch=self.batch)
+        self.label = pyglet.text.Label(label, FACSet.TEXT_FONT, 18, batch=self.batch)
         self.label.anchor_x = 'left'
         self.label.anchor_y = 'center'
 
