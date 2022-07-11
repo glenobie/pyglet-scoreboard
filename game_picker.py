@@ -31,9 +31,9 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
                                (100, 300, 0.44),  # 2: front, just before apex
                                (80, 330, 0.4),    # 3: left apex
                                (100, 340, 0.35),  # 4: back, just after apex
-                               (280, 380, 0.3),   # 5: back, left of center
-                               (400, 400, 0.20),  # 6: back center
-                               (520, 380, 0.3),   # 7: back, right of center
+                               (264, 380, 0.3),   # 5: back, left of center
+                               (400, 390, 0.24),  # 6: back center
+                               (536, 380, 0.3),   # 7: back, right of center
                                (700, 340, 0.35),  # 8: back, just before apex
                                (720, 330, 0.4),   # 9: right apex
                                (700, 300, 0.44),  # 10: right, front, just after apex

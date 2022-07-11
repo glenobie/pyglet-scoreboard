@@ -73,7 +73,7 @@ class Carousel :
         if size > 0 :
             self.listFront.setIndex(0)   # always one in front
         if size > 1 :
-            self.listFront.getBack().setIndex(1) 
+            self.listFront.getBack().setIndex(1) #next 2 go left and right of front
         if size > 2 :
             self.listFront.getFront().setIndex(2)
         if size > 3 and size % 2 == 0 : #put end of list in center back, if even number of items
@@ -83,8 +83,8 @@ class Carousel :
             self.listFront.getBack().getBack().setIndex(3)
             self.listFront.getFront().getFront().setIndex(4)
             
-            # Now, 5 items in front, one in back if even number, and an even number of leftover items
-            # add half of those leftovers to each side
+            # Now, 5 items in front, one in back if even number, and an even number of leftover items.
+            # Add half of those leftovers to each side
 
             # find range to add to each side
             # left range is 5 to  5 + number of items/2 - 1
@@ -103,7 +103,7 @@ class Carousel :
     def scatterRemains(self, startIndex, endIndex, leftNode, rightNode) :
         # if odd number to place (1, 3, 5, etc) place one in gap node
         # odd number to place if end - start is even
-        print("scattering")
+        #print("scattering")
         gapNode = leftNode.getFront()
         if (endIndex - startIndex) % 2 == 0 :
             gapNode.setIndex(startIndex)   
@@ -129,9 +129,17 @@ class Carousel :
         
     # average position and scale between two points
     def calculateLocation(self, leftLoc, rightLoc) :
-        x = leftLoc[0] + (rightLoc[0] - leftLoc[0]) / 2 
-        y = leftLoc[1] + (rightLoc[1] - leftLoc[1]) / 2
-        s = leftLoc[2] + (rightLoc[2] - leftLoc[2]) / 2
+        # if rightLoc has an icon, split distance in half
+        # if not, 2/3
+        if rightLoc.index == MenuLocationNode.IS_EMPTY :
+            divisor = 2 / 3
+        elif leftLoc.index == MenuLocationNode.IS_EMPTY :
+            divisor = 1 / 3
+        else :
+            divisor = 1 / 2
+        x = leftLoc[0] + (rightLoc[0] - leftLoc[0]) * divisor 
+        y = leftLoc[1] + (rightLoc[1] - leftLoc[1]) * divisor
+        s = leftLoc[2] + (rightLoc[2] - leftLoc[2]) * divisor
         return (x, y, s)
 
     def insertInFrontOf(self, frontNode, newNode) :

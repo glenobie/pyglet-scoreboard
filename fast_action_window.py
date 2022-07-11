@@ -2,7 +2,6 @@ import pyglet
 from die import Die
 from random import seed
 import time
-import importlib
 
 ####################################################################
 class FastActionWindow(pyglet.window.Window) :
