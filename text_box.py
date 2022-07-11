@@ -11,13 +11,15 @@ class BorderedTextBox :
         self.batch = batch
         self.width = width
         self.height = height
+        # labels will fall below background without a group
+        self.fg = pyglet.graphics.OrderedGroup(4)
 
         self.x = self.y = 0
-        self.title = pyglet.text.Label(title, FACSet.TEXT_FONT, 20, batch=self.batch)
+        self.title = pyglet.text.Label(title, FACSet.TEXT_FONT, 20, batch=self.batch, group=self.fg)
         self.title.anchor_x = 'left'
         self.title.anchor_y = 'center'
 
-        self.contents = pyglet.text.Label('', FACSet.TEXT_FONT, 22, batch=self.batch)
+        self.contents = pyglet.text.Label('', FACSet.TEXT_FONT, 22, batch=self.batch, group= self.fg)
         self.contents.anchor_x = 'center'
         self.contents.anchor_y = 'center'
 
