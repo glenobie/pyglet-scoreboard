@@ -5,7 +5,7 @@ class FACSet() :
     W_COLOR_WHITE = (220,220,220)
     W_COLOR_BLACK = (30,30,30)
 
-    TEXT_FONT = 'Bebas Kai'
+    TEXT_FONT = 'Roboto'
 
     def __init__(self, loader) :
         self.loader = loader

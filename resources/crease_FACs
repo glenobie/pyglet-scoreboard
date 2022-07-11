@@ -1,2 +1,2 @@
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
-q, w, e, r, t, y, u, i, o, a, s, d, f, g, h, j, k
+;Forced Dump In if RD DEF >= 6;21;Off C vs Def C;Home C;#1;C;(RW);Delay of Game$Fighting;Goalie recovers,$leaves for RD;#21;Wide shot if LD DEF >= 2$Shot on target if DEF FC = 3;C, (H);# 21;RD (2);#1 Snap;If LW BRK >= 4
+Use PASS # if DEF FC = 3;Forced Dump In if C DEF >= 1;1;FO: INJ? Home C;Off C vs Def C;#1;C;(RD);Delay of Game$Boarding INJ?;Goalie recovers,$leaves for LD;#1;Blocked if LD BLK >= 2$No block if DEF FC = 3;KO:HOME;# 1;HIGH;#1 Snap;If C BRK >= 1$Not if FC = 0

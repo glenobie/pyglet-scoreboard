@@ -11,31 +11,31 @@ class FACField() :
     B_BLACK = (0,0,0)
 
 
-    FONT_SIZE = 20
+    FONT_SIZE = 18
     FONT_COLOR = (0, 0, 0, 255)
-    LINE_SPACING = 6
+    LINE_SPACING = 8
 
 
-    def __init__(self, bgColor, width, height, text='', fillFunc=None, 
-                                batch=None, fgGroup = None, bgGroup = None) :
-        self.fillFunc = fillFunc
-
-
+    def __init__(self, font_size, bgColor, width, height, text='', bold=False, 
+                              batch=None, fgGroup = None, bgGroup = None) :
         self.border = pyglet.shapes.BorderedRectangle(0, 0, width, height, color = bgColor, border_color=FACField.B_BLACK,
                                                         batch = batch, group = bgGroup)
-        self.doc = pyglet.text.document.UnformattedDocument(text)
+        self.doc = pyglet.text.document.FormattedDocument(text)
 
         self.doc.set_style(0, len(self.doc.text), dict(color=FACField.FONT_COLOR, 
-                                                       font_size=FACField.FONT_SIZE,
+                                                       font_size=font_size,
                                                        font_name=FACSet.TEXT_FONT,
                                                        align='center',
-                                                       line_spacing=FACField.FONT_SIZE+FACField.LINE_SPACING))
+                                                       bold=bold,
+                                                       line_spacing=font_size+FACField.LINE_SPACING))
         self.layout = pyglet.text.layout.TextLayout(self.doc, multiline=True, width=width, batch=batch, group=fgGroup)
         self.layout.anchor_x = 'left'
         self.layout.anchor_y = 'bottom'    
         #self.layout.content_valign = 'bottom'
 
     def setPosition(self, left, bottom) :
+        self.left = left
+        self.bottom = bottom
         self.border.position = (left, bottom)
 
         #center layout in border
@@ -44,20 +44,28 @@ class FACField() :
         self.layout.position = (x, y)
 
     def setText(self, text) :
-        self.doc.text = text
+        # change <= and >=
+        pos = text.find('>=')
+        if pos > 0 :
+            text = text.replace('>=', '>')
+            self.doc.text = text
+            self.doc.set_style(pos, pos+1, dict(baseline=1, underline=FACField.FONT_COLOR))
+        else :
+            self.doc.text = text
+        self.setPosition(self.left, self.bottom)
 
 
 class InsideSportsSet(FACSet) :
 
-    FIELD_WIDTH = 128
+    FIELD_WIDTH = 130
     FIELD_HEIGHT = 61
-    SPACE = 5
+    SPACE = 3
     
     TEXT_FIELD_COLOR = FACField.F_GRAY
  
     # (color, width, title, index into list of card fields)
-    COLUMNS = [ ( (FACField.F_GRAY, 1, 'PEN'), (FACField.F_GRAY, 1, 'LOOSE PUCK'),
-                  (FACField.F_GRAY, 1, 'REB'), (FACField.F_GRAY, 1, 'SHOTS'),
+    COLUMNS = [ ( (FACField.F_GRAY, 1, 'PENALTY'), (FACField.F_GRAY, 1, 'LOOSE\nPUCK'),
+                  (FACField.F_GRAY, 1, 'REBOUND'), (FACField.F_GRAY, 1, 'SHOTS'),
                   (FACField.F_BLUE, 3, 'FLIP'), (FACField.F_BLUE, 3, 'FLIP'),
                   (FACField.F_GRAY, 1, 'PASS TO')), 
                 ( (FACField.F_WHITE, 2, 'FLIP'), (FACField.F_WHITE, 2, 'FLIP'),
@@ -68,11 +76,11 @@ class InsideSportsSet(FACSet) :
                     (FACField.F_YELLOW, 1, 'FLIP'), (FACField.F_GREEN, 3, 'FLIP'),
                     (FACField.F_WHITE, 1, 'FLIP'), (FACField.F_GRAY, 1, 'FO'),
                     (FACField.F_BLUE, 2, 'FLIP')),
-                ( None, None, (FACField.F_GRAY, 1, 'REB'), None, 
-                 (FACField.F_WHITE, 1, 'FLIP'), (FACField.F_GRAY, 1, 'AST'), None),
+                ( None, None, (FACField.F_GRAY, 1, 'SHOOTOUT'), None, 
+                 (FACField.F_WHITE, 1, 'FLIP'), (FACField.F_GRAY, 1, 'ASSIST'), None),
                 ( (FACField.F_GRAY, 1, 'MAJOR\nMINOR'), (FACField.F_GRAY, 1, 'DUMP INS'),
                   (FACField.F_WHITE, 1, 'FLIP'), None, (FACField.F_WHITE, 1, 'FLIP'), 
-                  (FACField.F_GRAY, 1, 'BREAK AWAY'), (FACField.F_GRAY, 1, 'PASS TO')
+                  (FACField.F_GRAY, 1, 'BREAKAWAY'), (FACField.F_GRAY, 1, 'PASS TO')
                 ) ]
 
     def __init__(self, loader) :
@@ -96,14 +104,20 @@ class InsideSportsSet(FACSet) :
             y = InsideSportsSet.SPACE           
             for spot in col :
                 if not(spot is None) :
-                    f = FACField(spot[0], InsideSportsSet.FIELD_WIDTH * spot[1] + InsideSportsSet.SPACE * (spot[1] - 1), 
-                                InsideSportsSet.FIELD_HEIGHT, spot[2], batch=self.batch, fgGroup=self.fg, 
-                                bgGroup=self.FACbg)
-                    f.setPosition(x, y)
                     if spot[0] == InsideSportsSet.TEXT_FIELD_COLOR :
+
+                        f = FACField(16, spot[0], InsideSportsSet.FIELD_WIDTH * spot[1] + InsideSportsSet.SPACE * (spot[1] - 1), 
+                                    InsideSportsSet.FIELD_HEIGHT, spot[2], batch=self.batch, fgGroup=self.fg, 
+                                    bgGroup=self.FACbg, bold=True)
+                        
                         self.textFields.append(f)
                     else :
+                        f = FACField(16, spot[0], InsideSportsSet.FIELD_WIDTH * spot[1] + InsideSportsSet.SPACE * (spot[1] - 1), 
+                                    InsideSportsSet.FIELD_HEIGHT, spot[2], batch=self.batch, fgGroup=self.fg, 
+                                    bgGroup=self.FACbg)
                         self.valueFields.append(f)
+                    f.setPosition(x, y)
+        
                 y += InsideSportsSet.FIELD_HEIGHT + InsideSportsSet.SPACE
             x += InsideSportsSet.FIELD_WIDTH + InsideSportsSet.SPACE
 
@@ -111,8 +125,11 @@ class InsideSportsSet(FACSet) :
         facs = []
         f = self.loader.file(filename, mode='r')
         for j in range(0, numFACS) :
-            list = f.readline().split(',')
-            facs.append(list)
+            list = f.readline().split(';')
+            strings = []
+            for s in list :
+                strings.append(s.replace('\n', '').replace('$', '\n'))
+            facs.append(strings)
         return facs
 
     def draw(self) :
