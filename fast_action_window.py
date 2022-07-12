@@ -28,5 +28,4 @@ class FastActionWindow(pyglet.window.Window) :
     def clearFACSet(self) :
         self.fac = FACSet()
 
-    def prepareForNewFAC(self) :
-        self.fac.prepareForNewFAC()
+
