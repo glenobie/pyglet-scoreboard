@@ -54,8 +54,8 @@ class IP_DiceSet :
 
     def drawBorder(self, x, y, width, height) :
         self.lines = []
-        self.lines.append(pyglet.shapes.Line(x, y, x, y + height, width=1, batch=self.batch))  
-        self.lines.append(pyglet.shapes.Line(x+width, y, x+width, y + height, width=1, batch=self.batch))  
+        self.lines.append(pyglet.shapes.Line(x, y, x, y + height, width=1, batch=self.batch, group=self.fg))  
+        self.lines.append(pyglet.shapes.Line(x+width, y, x+width, y + height, width=1, batch=self.batch, group=self.fg))  
         #self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch))  
  
         if len(self.title.text) > 0 :
