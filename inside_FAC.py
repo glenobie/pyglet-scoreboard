@@ -97,7 +97,7 @@ class InsideSportsSet(FACSet) :
         self.FACbg = pyglet.graphics.OrderedGroup(5)
 
         self.deckIndex = 0
-        self.facs = self.readFACSFromFile('crease_FACs', 8)
+        self.facs = self.readFACSFromFile('crease_FACs', 12)
         random.shuffle(self.facs)
 
         self.createLayout()
