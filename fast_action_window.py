@@ -24,7 +24,7 @@ class FastActionWindow(pyglet.window.Window) :
             self.displayMessage('Choose a Game')
         else:
             self.fac.draw()
-
+ 
     def setFACSet(self, fac):
         self.fac = fac
 
