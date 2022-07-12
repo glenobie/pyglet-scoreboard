@@ -43,20 +43,22 @@ class FACField() :
         y = bottom +  (self.border.height - self.layout.content_height + FACField.LINE_SPACING) // 2 
         self.layout.position = (x, y)
 
+    #replace all >= or <= in document text with underlined > or underline <
+    def replaceComparators(self, comparator) :
+       while (True) : 
+            pos = self.doc.text.find(comparator)
+            if pos > 0  :
+                self.doc.delete_text(pos+1, pos+2)
+                self.doc.set_style(pos, pos+1, dict(baseline=1, underline=FACField.FONT_COLOR))
+            else :
+                break
+
+
     def setText(self, text) :
         # change <= and >=
-        pos1 = text.find('>=')
-        pos2 = text.find('<=')
-        if pos1 > 0 :
-            text = text.replace('>=', '>')
-            self.doc.text = text
-            self.doc.set_style(pos1, pos1+1, dict(baseline=1, underline=FACField.FONT_COLOR))
-        elif pos2 > 0 :
-            text = text.replace('<=', '<')
-            self.doc.text = text
-            self.doc.set_style(pos2, pos2+1, dict(baseline=1, underline=FACField.FONT_COLOR))
-        else :
-            self.doc.text = text
+        self.doc.text = text       
+        self.replaceComparators('<=')
+        self.replaceComparators('>=')
         self.setPosition(self.left, self.bottom)
 
 
@@ -95,7 +97,7 @@ class InsideSportsSet(FACSet) :
         self.FACbg = pyglet.graphics.OrderedGroup(5)
 
         self.deckIndex = 0
-        self.facs = self.readFACSFromFile('crease_FACs', 6)
+        self.facs = self.readFACSFromFile('crease_FACs', 8)
         random.shuffle(self.facs)
 
         self.createLayout()
