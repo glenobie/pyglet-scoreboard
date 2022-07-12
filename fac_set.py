@@ -26,6 +26,12 @@ class FACSet() :
     def draw(self) :
         self.msgLayout.draw()
 
+    def handle_L(self) :
+        0
+
+    def handle_K(self):
+        0
+
 
 
 

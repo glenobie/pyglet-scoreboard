@@ -10,3 +10,5 @@ Use PASS # if DEF FC = 3;Forced Dump In if LD DEF >= 1;4;Home C;Off C vs DEF C +
 Use PASS # if DEF FC = 3;Forced Dump In if RD DEF >= 1;5;Home C; Off C vs Def C +4;#5;LD;(C);Clipping$Slashing INJ?;Goalie recovers,$leaves for LD;#5;Blocked if C BLK >= 2$No block if DEF FC = 3;+6 LD, (H);# 1;HIGH;#5$Wrist;If LW BRK >= 2$Not if FC <= 1
 Use PASS #if DEF FC = 0 or 1;Takeaway if C TAKE >= 1;6;Home C;Off C vs Def C +5;#6;C;(RD);Close hand on puck$Charging INJ?;Goalie recovers,$leaves for LD;#6;;+5 C (H);# 2;HIGH;#6$Backhand;If RW BRK >= 2$Not if FC <= 1
 OFF FC = 3 and PASS then AST;Takeaway if RD TAKE >= 6;26;Off C vs Def C +4;Home C;#6;C;(RW);Close hand on puck$Fighting;Goalie recovers,$leaves for RD;#26;;C, (H);# 22;RD (3);#6$Backhand;If C BRK >= 6
+Use PASS # if DEF FC = 0 or 1;Takeaway if LW TAKE >= 1;7;FO: INJ? Home RW;Off C vs Def C +6;#7;RW;(LW);Kneeing$Spearing INJ?;Goalie recovers,$leaves for LD;#7;;+4 RW, (H);# 2;2nd HIGH;#7$Wrist;If C BRK >= 3
+OFF FC = 3 and PASS then AST;Takeaway if LW TAKE >= 6;27;Off C vs Def C +5;Home RW;#7;RW;(LD);Kneeing$Fighting;Goalie recovers,$leaves for RD;#27;;C, (H);# 22;LD (3);#7$Wrist;If LW BRK >= 6
