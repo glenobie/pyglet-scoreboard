@@ -27,8 +27,8 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
  
         # center points for the icons
         self.controlPoints = ( (400, 240, 0.95),   # 0: front, center
-                               (220, 260, 0.6),   # 1: front, left of centerQ
-                               (100, 300, 0.44),  # 2: front, just before apex
+                               (220, 260, 0.6),   # 1: front, left of center
+                               (100, 300, 0.48),  # 2: front, just before apex
                                (60, 330, 0.4),    # 3: left apex
                                (120, 340, 0.35),  # 4: back, just after apex
                                (260, 380, 0.3),   # 5: back, left of center
@@ -36,7 +36,7 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
                                (540, 380, 0.3),   # 7: back, right of center
                                (680, 340, 0.35),  # 8: back, just before apex
                                (740, 330, 0.4),   # 9: right apex
-                               (700, 300, 0.44),  # 10: right, front, just after apex
+                               (700, 300, 0.48),  # 10: right, front, just after apex
                                (580, 260, 0.6),   # 11: front, right of center
                              )
         self.createMenu()
