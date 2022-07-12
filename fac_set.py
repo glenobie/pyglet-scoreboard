@@ -21,13 +21,11 @@ class FACSet() :
         self.msgLayout.position = (400, 300)
         
     def paintBackground(self, color) :
-        self.backdrop = pyglet.shapes.Rectangle(0,0,800,480,color=color, batch=self.batch, group=self.bg)
+        self.backdrop = pyglet.shapes.Rectangle(0, 0, 800, 480, color=color, batch=self.batch, group=self.bg)
 
     def draw(self) :
         self.msgLayout.draw()
 
-    def prepareForNewFAC(self) :
-        self.msgDoc.text = 'Loading Selected Game'
-        self.draw()
+
 
 

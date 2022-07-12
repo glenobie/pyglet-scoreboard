@@ -110,11 +110,10 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
         if loadAutoSave :
             self.activeScreen.loadFromAutosaveFile()
         if self.displayingFAC :
-            self.windowFAC.prepareForNewFAC()
             class_ = getattr(importlib.import_module(picked[4]), picked[5])
             fac = class_(self.loader)
             self.windowFAC.setFACSet(fac)
-            self.activeScreen.attachFAC(fac)
+            self.activeScreen.attachFAC(fac) # for messages bewteen FAC and Scoreboard
 
     def getBatch(self) :
         return self.batch
