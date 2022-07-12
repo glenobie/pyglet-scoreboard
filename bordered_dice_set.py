@@ -46,31 +46,31 @@ class BorderedDiceSet(DiceSet) :
  
     def drawBorder(self, x, y, width, height) :
         self.lines = []
-        self.lines.append(pyglet.shapes.Line(x, y, x, y + height, width=1, color=self.borderColor,batch=self.batch))  
-        self.lines.append(pyglet.shapes.Line(x+width, y, x+width, y + height, width=1, color=self.borderColor,batch=self.batch))  
+        self.lines.append(pyglet.shapes.Line(x, y, x, y + height, width=1, color=self.borderColor,batch=self.batch, group=self.fg))  
+        self.lines.append(pyglet.shapes.Line(x+width, y, x+width, y + height, width=1, color=self.borderColor,batch=self.batch, group=self.fg))  
  
         if len(self.titleDoc.text) > 0 :
             title_x = x + (width - self.titleLayout.content_width) // 2
             title_y = y + height 
             self.titleLayout.position = (title_x, title_y)
             self.lines.append(pyglet.shapes.Line(x, y+height, title_x - BorderedDiceSet.LABEL_SPACING, 
-                                    y + height, width=1, color=self.borderColor,batch=self.batch))       
+                                    y + height, width=1, color=self.borderColor,batch=self.batch, group=self.fg))       
             self.lines.append(pyglet.shapes.Line(title_x + self.titleLayout.content_width + BorderedDiceSet.LABEL_SPACING, y+height, x+width, 
-                                 y + height, width=1, color=self.borderColor,batch=self.batch))       
+                                 y + height, width=1, color=self.borderColor,batch=self.batch, group=self.fg))       
         else :
-            self.lines.append(pyglet.shapes.Line(x, y+height, x+width, y+height, width=1, color=self.borderColor,batch=self.batch))       
+            self.lines.append(pyglet.shapes.Line(x, y+height, x+width, y+height, width=1, color=self.borderColor,batch=self.batch, group=self.fg))       
            
 
         if len(self.labelDoc.text) > 0 :
             label_x = x + (width - self.labelLayout.content_width) // 2
             self.labelLayout.position = (label_x, y)
             self.lines.append(pyglet.shapes.Line(x, y, label_x - BorderedDiceSet.LABEL_SPACING, 
-                                    y, width=1, color=self.borderColor,batch=self.batch))       
+                                    y, width=1, color=self.borderColor,batch=self.batch, group=self.fg))       
             self.lines.append(pyglet.shapes.Line(label_x + self.labelLayout.content_width + BorderedDiceSet.LABEL_SPACING, 
-                                                   y, x+width, y, width=1, color=self.borderColor,batch=self.batch))       
+                                                   y, x+width, y, width=1, color=self.borderColor,batch=self.batch, group=self.fg))       
              
         else :
-            self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, color=self.borderColor,batch=self.batch))       
+            self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, color=self.borderColor,batch=self.batch, group=self.fg))       
 
     def valueChanged(self, value):
         super().valueChanged(value)

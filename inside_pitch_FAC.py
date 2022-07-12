@@ -63,22 +63,22 @@ class IP_DiceSet :
             title_y = y + height 
             self.title.position = (title_x, title_y)
             self.lines.append(pyglet.shapes.Line(x, y+height, title_x - IP_DiceSet.LABEL_SPACING, 
-                                                 y + height, width=1, batch=self.batch))       
+                                                 y + height, width=1, batch=self.batch, group=self.fg))       
             self.lines.append(pyglet.shapes.Line(title_x + self.title.content_width + IP_DiceSet.LABEL_SPACING, y+height, x+width, 
-                                                 y + height, width=1, batch=self.batch))       
+                                                 y + height, width=1, batch=self.batch, group=self.fg))       
         else :
-            self.lines.append(pyglet.shapes.Line(x, y+height, x+width, y+height, width=1, batch=self.batch))      
+            self.lines.append(pyglet.shapes.Line(x, y+height, x+width, y+height, width=1, batch=self.batch, group=self.fg))      
 
         if len(self.label.text) > 0 :
             label_x = x + (width - self.label.content_width) // 2
             self.label.position = (label_x, y)
             self.lines.append(pyglet.shapes.Line(x, y, label_x - BorderedDiceSet.LABEL_SPACING, 
-                                    y, width=1, batch=self.batch))       
+                                    y, width=1, batch=self.batch, group=self.fg))       
             self.lines.append(pyglet.shapes.Line(label_x + self.label.content_width + BorderedDiceSet.LABEL_SPACING, 
-                                                   y, x+width, y, width=1, batch=self.batch))       
+                                                   y, x+width, y, width=1, batch=self.batch, group=self.fg))       
              
         else :
-            self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch))       
+            self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch, group=self.fg))       
  
            
 
