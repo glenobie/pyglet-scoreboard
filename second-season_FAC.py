@@ -1,4 +1,3 @@
-import pyglet
 from die import Die
 from bordered_dice_set import BorderedDiceSet
 from fac_set import FACSet

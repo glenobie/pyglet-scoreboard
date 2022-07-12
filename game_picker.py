@@ -45,7 +45,6 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
             self.activeScreen = self
         else :
             self.activeScreen = self.configScreen
-
     
 
     def createWindows(self, isPi, width, height) :
@@ -111,6 +110,7 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
         if loadAutoSave :
             self.activeScreen.loadFromAutosaveFile()
         if self.displayingFAC :
+            self.windowFAC.prepareForNewFAC()
             class_ = getattr(importlib.import_module(picked[4]), picked[5])
             fac = class_(self.loader)
             self.windowFAC.setFACSet(fac)
