@@ -12,7 +12,7 @@ class IP_DiceSet :
         self.dice = []
         self.batch = batch
         self.fg = pyglet.graphics.OrderedGroup(4)
-        
+
         self.red = Die(Die.D_RED, text_color=Die.T_WHITE, sides=6, batch=self.batch)
         self.red.scale(0.8)
         self.dice.append(self.red)
@@ -35,16 +35,16 @@ class IP_DiceSet :
 
     def setTopLeft(self, x, y) :
         dice_x = x + IP_DiceSet.BORDER_SPACING
-        self.red.setCenter(dice_x + self.white.getWidth() + self.red.getWidth() // 2 + IP_DiceSet.SPACE, 
+        self.red.setCenter(dice_x + self.white.getWidth() + self.red.getWidth() // 2 + IP_DiceSet.SPACE,
                            y - IP_DiceSet.BORDER_SPACING - self.red.getWidth() // 2)
 
         y2 = y - (self.red.getWidth() + self.d20.getWidth()//2 + IP_DiceSet.SPACE + IP_DiceSet.BORDER_SPACING)
 
         self.white.setCenter(dice_x + self.white.getWidth() // 2, y2)
         self.d20.setCenter(dice_x + self.white.getWidth() + self.d20.getWidth()//2 + IP_DiceSet.SPACE, y2 )
-        
+
         width = IP_DiceSet.SPACE + self.white.getWidth() + self.d20.getWidth() + IP_DiceSet.BORDER_SPACING*2
-        
+
         self.drawBorder(x, y - width, width, width)
 
     def roll(self) :
@@ -54,40 +54,39 @@ class IP_DiceSet :
 
     def drawBorder(self, x, y, width, height) :
         self.lines = []
-        self.lines.append(pyglet.shapes.Line(x, y, x, y + height, width=1, batch=self.batch, group=self.fg))  
-        self.lines.append(pyglet.shapes.Line(x+width, y, x+width, y + height, width=1, batch=self.batch, group=self.fg))  
-        #self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch))  
- 
+        self.lines.append(pyglet.shapes.Line(x, y, x, y + height, width=1, batch=self.batch, group=self.fg))
+        self.lines.append(pyglet.shapes.Line(x+width, y, x+width, y + height, width=1, batch=self.batch, group=self.fg))
+        #self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch))
+
         if len(self.title.text) > 0 :
             title_x = x + (width - self.title.content_width) // 2
-            title_y = y + height 
+            title_y = y + height
             self.title.position = (title_x, title_y)
-            self.lines.append(pyglet.shapes.Line(x, y+height, title_x - IP_DiceSet.LABEL_SPACING, 
-                                                 y + height, width=1, batch=self.batch, group=self.fg))       
-            self.lines.append(pyglet.shapes.Line(title_x + self.title.content_width + IP_DiceSet.LABEL_SPACING, y+height, x+width, 
-                                                 y + height, width=1, batch=self.batch, group=self.fg))       
+            self.lines.append(pyglet.shapes.Line(x, y+height, title_x - IP_DiceSet.LABEL_SPACING,
+                                                 y + height, width=1, batch=self.batch, group=self.fg))
+            self.lines.append(pyglet.shapes.Line(title_x + self.title.content_width + IP_DiceSet.LABEL_SPACING, y+height, x+width,
+                                                 y + height, width=1, batch=self.batch, group=self.fg))
         else :
-            self.lines.append(pyglet.shapes.Line(x, y+height, x+width, y+height, width=1, batch=self.batch, group=self.fg))      
+            self.lines.append(pyglet.shapes.Line(x, y+height, x+width, y+height, width=1, batch=self.batch, group=self.fg))
 
         if len(self.label.text) > 0 :
             label_x = x + (width - self.label.content_width) // 2
             self.label.position = (label_x, y)
-            self.lines.append(pyglet.shapes.Line(x, y, label_x - BorderedDiceSet.LABEL_SPACING, 
-                                    y, width=1, batch=self.batch, group=self.fg))       
-            self.lines.append(pyglet.shapes.Line(label_x + self.label.content_width + BorderedDiceSet.LABEL_SPACING, 
-                                                   y, x+width, y, width=1, batch=self.batch, group=self.fg))       
-             
+            self.lines.append(pyglet.shapes.Line(x, y, label_x - BorderedDiceSet.LABEL_SPACING,
+                                    y, width=1, batch=self.batch, group=self.fg))
+            self.lines.append(pyglet.shapes.Line(label_x + self.label.content_width + BorderedDiceSet.LABEL_SPACING,
+                                                   y, x+width, y, width=1, batch=self.batch, group=self.fg))
+
         else :
-            self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch, group=self.fg))       
- 
-           
+            self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch, group=self.fg))
+
+
 
 
 class InsidePitchSet(FACSet) :
 
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
-        self.decisionNumber = 1
         self.createDice()
 
     def createDice(self) :

@@ -8,8 +8,8 @@ Payoff Pitch
 baseball
 BaseballScoreboard
 payoff-pitch.png
-hmg_FAC
-HistoryMakerGolfSet
+payoff_pitch_FAC
+PayoffPitchSet
 Statis-Pro Baseball
 baseball
 BaseballScoreboard

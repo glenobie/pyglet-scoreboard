@@ -1,13 +1,14 @@
 import pyglet
 from die import Die
 from fac_set import FACSet
+import types
 
 ########################################################
 class DiceSet :
 
     # pass me a list of Die objects
     def __init__(self, dice, batch) :
-        
+
         self.fg = pyglet.graphics.OrderedGroup(59)
         self.batch = batch
         self.dice = dice
@@ -18,16 +19,16 @@ class DiceSet :
 
         self.booleanFunctionLabels = []
 
-        self.labelDoc = pyglet.text.document.UnformattedDocument('')  
-        self.labelDoc.set_style(0, len(self.labelDoc.text),  dict(font_name = FACSet.TEXT_FONT, 
-                                                                       font_size = 20, 
+        self.labelDoc = pyglet.text.document.UnformattedDocument('')
+        self.labelDoc.set_style(0, len(self.labelDoc.text),  dict(font_name = FACSet.TEXT_FONT,
+                                                                       font_size = 20,
                                                                        color=(255,255,255,255)))
         self.labelLayout = pyglet.text.layout.TextLayout(self.labelDoc, batch=batch, group = self.fg)
         self.labelLayout.anchor_y = 'center'
 
-        self.titleDoc = pyglet.text.document.UnformattedDocument('')  
-        self.titleDoc.set_style(0, len(self.titleDoc.text), dict(font_name = FACSet.TEXT_FONT, 
-                                                                         font_size = 20, 
+        self.titleDoc = pyglet.text.document.UnformattedDocument('')
+        self.titleDoc.set_style(0, len(self.titleDoc.text), dict(font_name = FACSet.TEXT_FONT,
+                                                                         font_size = 20,
                                                                          color=(255,255,255,255)))
         self.titleLayout = pyglet.text.layout.TextLayout(self.titleDoc, batch=batch, group = self.fg)
         self.titleLayout.anchor_y = 'center'
@@ -57,6 +58,9 @@ class DiceSet :
                 return True
         return False
 
+    def totalAsString(self) :
+        return str(self.computeTotal())
+
     def valueChanged(self, value) :
         self.computeTotal()
         self.updateLabels()
@@ -65,6 +69,7 @@ class DiceSet :
         self.total = 0
         for d in self.dice :
             self.total += d.getValue()
+        return self.total
 
     # instead of boolean function labels
     def setLabel(self, text) :
@@ -73,8 +78,11 @@ class DiceSet :
     def updateLabels(self) :
         newLabel = ''
         for b in self.booleanFunctionLabels :
-            if b[0]() : 
-                newLabel += b[1]
+            if b[0]() :
+                if callable(b[1])  :
+                    newLabel += b[1]()
+                else :
+                    newLabel += b[1]
         self.labelDoc.text = newLabel
 
     def setPositionInternal(self, left, center, spacing, list) :
@@ -90,11 +98,11 @@ class DiceSet :
     def setPosition(self, left, center, spacing=12) :
         self.setPositionInternal(left, center, spacing, self.dice)
 
-    # pair is a (booleanFunction, text) pair
+    # pair is a (booleanFunction, text) pair or a (booleanFunction, stringFunction) pair
     def attachBooleanFunctionLabel(self, pair) :
         self.booleanFunctionLabels.append(pair)
         self.updateLabels()
-        
+
     # label to left of dice set
     def setTitle(self, title) :
         self.title = title
@@ -103,7 +111,7 @@ class DiceSet :
     def roll(self) :
         for d in self.dice :
             d.roll()
-        
+
 #################################################
 class SortedDiceSet(DiceSet) :
 
@@ -111,7 +119,7 @@ class SortedDiceSet(DiceSet) :
     def __init__(self, dice, batch) :
         DiceSet.__init__(self, dice, batch)
         self.sortedList = sorted(self.dice, key=lambda die: die.value)
-    
+
     # redirects with the sorted list
     def setPosition(self, left, center, spacing=12) :
         self.left = left
@@ -123,5 +131,3 @@ class SortedDiceSet(DiceSet) :
         DiceSet.valueChanged(self, value)
         self.sortedList = sorted(self.dice, key=lambda die: die.value)
         self.setPosition(self.left, self.center, self.spacing)
-
-
