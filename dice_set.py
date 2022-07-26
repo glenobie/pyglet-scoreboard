@@ -117,6 +117,10 @@ class DiceSet :
         for d in self.dice :
             d.roll()
 
+    def clearBooleanFunctionLabels(self) :
+        self.booleanFunctionLabels = []
+        self.updateLabels()
+
 #################################################
 class SortedDiceSet(DiceSet) :
 

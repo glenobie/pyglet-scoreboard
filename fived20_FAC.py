@@ -15,6 +15,13 @@ class FiveD20Set(FACSet) :
 
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
+        self.kicking = False
+        self.down = 1
+        self.distance = 10
+        self.quarter = 1
+        self.secondsLeft = 0
+        self.differential = 0 # score of team possessing minus score of other team
+
         self.createDice()
 
         #self.defPlayCall = BorderedTextBox('Defense', 300, 110, self.batch)
@@ -22,14 +29,6 @@ class FiveD20Set(FACSet) :
 
         #self.offPlayCall = BorderedTextBox('Offense', 400, 110, self.batch)
         #self.offPlayCall.setPosition(280, 26)
-
-        self.down = 1
-        self.distance = 10
-        self.quarter = 1
-        self.secondsLeft = 0
-        self.differential = 0 # score of team possessing minus score of other team
-
-
         self.situation = self.getSituation()
         self.callPlays()
 
@@ -50,9 +49,6 @@ class FiveD20Set(FACSet) :
 
         self.playDice = BorderedDiceSet(self.offSet, spacing=18, batch=self.batch)
         self.playDice.setLabelFontSize(18)
-        self.playDice.setTitle('Offense Dice')
-        self.playDice.attachBooleanFunctionLabel(( partial(self.fumbleCheck, self.offSet),  "Snap Fumbled?"))
-        self.playDice.attachBooleanFunctionLabel((partial(self.penaltyCheck, self.offSet), partial(self.getPenaltyReport, "Snap Penalty?", self.offSet)))
         self.playDice.setPosition(40, 394, 16)
 
         self.offPen = Die(Die.D_YELLOW, sides=20, batch=self.batch)
@@ -60,7 +56,6 @@ class FiveD20Set(FACSet) :
         self.offPenaltyDice = BorderedDiceSet([self.offPen], spacing=18, batch=self.batch)
         self.offPenaltyDice.setTitle("Penalty")
         self.offPenaltyDice.setTitleFontSize(16)
-        self.offPenaltyDice.setPosition(640, 394, 16)
 
 
         self.defRed = Die(Die.D_RED, text_color=Die.T_WHITE, sides=20, batch=self.batch)
@@ -77,12 +72,7 @@ class FiveD20Set(FACSet) :
         self.defSet = [self.defRed, self.defWhite, self.defBlue, self.defBlack, self.defYellow]
 
         self.defDice = BorderedDiceSet(self.defSet, batch=self.batch, spacing=18)
-        self.defDice.attachBooleanFunctionLabel((self.homeFieldCheck, "Home Field Advantage?"))
-        self.defDice.attachBooleanFunctionLabel(( partial(self.fumbleCheck, self.defSet),  "Fumble?"))
-        self.defDice.attachBooleanFunctionLabel((partial(self.penaltyCheck, self.defSet), partial(self.getPenaltyReport, "Penalty?", self.defSet)))
         self.defDice.setLabelFontSize(18)
-        self.defDice.setTitle('Defense Dice')
-        self.defDice.setPosition(40, 234, 16)
 
         self.defPen = Die(Die.D_YELLOW, sides=20, batch=self.batch)
         self.defPen.scale(FiveD20Set.SCALE)
@@ -90,6 +80,20 @@ class FiveD20Set(FACSet) :
         self.defPenaltyDice.setTitle("Penalty")
         self.defPenaltyDice.setTitleFontSize(16)
         self.defPenaltyDice.setPosition(640, 234, 16)
+
+        self.retBlack = Die(Die.D_BLACK, text_color=Die.T_WHITE, sides=20, batch=self.batch)
+        self.retBlack.scale(FiveD20Set.SCALE)
+        self.retWhite = Die(Die.D_WHITE, sides=20, batch=self.batch)
+        self.retWhite.scale(FiveD20Set.SCALE)
+
+        self.returnDice = BorderedDiceSet([self.retWhite, self.retBlack], spacing = 18, batch=self.batch)
+        self.returnDice.setLabelFontSize(16)
+        self.returnDice.setTitleFontSize(16)
+
+        self.changeMode(kicking=True)
+        self.defDice.setPosition(40, 234, 16)
+        self.returnDice.setPosition(40, 84, 16)
+        self.offPenaltyDice.setPosition(640, 394, 16)
 
     def homeFieldCheck(self) :
         return self.defWhite.getValue() == 1 or self.defWhite.getValue() == 20
@@ -105,7 +109,7 @@ class FiveD20Set(FACSet) :
 
     def getPenaltyReport(self, text, dice) :
         report = text + " ["
-        if not (dice[FiveD20Set.RED].getValue() == dice[FiveD20Set.BLUE].getValue() or dice[FiveD20Set.RED].getValue() == dice[FiveD20Set.WHITE]) :
+        if not (dice[FiveD20Set.RED].getValue() == dice[FiveD20Set.BLUE].getValue() or dice[FiveD20Set.RED].getValue() == dice[FiveD20Set.WHITE] ) :
             report += str(dice[FiveD20Set.BLUE].getValue())
         else :
             report += str(dice[FiveD20Set.RED].getValue())
@@ -139,12 +143,52 @@ class FiveD20Set(FACSet) :
     def getSituation(self) :
         return 5
 
-    def handle_L(self) :
+
+    def changeMode(self, kicking=False) :
+        if not(kicking == self.kicking) : # changing modes
+            self.kicking = kicking
+            self.playDice.clearBooleanFunctionLabels()
+            self.defDice.clearBooleanFunctionLabels()
+            self.returnDice.clearBooleanFunctionLabels()
+            if (self.kicking) :
+                self.playDice.setTitle('Kick/Punt Dice')
+                self.playDice.attachBooleanFunctionLabel(( partial(self.fumbleCheck, self.offSet),  "Blocked? or Fumbled Kick Return?"))
+                self.playDice.attachBooleanFunctionLabel((partial(self.penaltyCheck, self.offSet), partial(self.getPenaltyReport, "Kick/Punt Penalty?", self.offSet)))
+
+                self.defDice.setTitle('Blocked Kick/Punt Dice')
+                self.defDice.attachBooleanFunctionLabel(( partial(self.fumbleCheck, self.defSet),  "Fumbled Return of Block?"))
+                self.defDice.attachBooleanFunctionLabel((partial(self.penaltyCheck, self.defSet), partial(self.getPenaltyReport, "Penalty?", self.defSet)))
+
+                self.returnDice.setTitle('Punt Return')
+                self.returnDice.attachBooleanFunctionLabel(( self.returnDice.allEqual,  "Fumbled Return?"))
+
+            else :
+                self.playDice.setTitle('Offense Dice')
+                self.playDice.attachBooleanFunctionLabel(( partial(self.fumbleCheck, self.offSet),  "Snap Fumpbled?"))
+                self.playDice.attachBooleanFunctionLabel((partial(self.penaltyCheck, self.offSet), partial(self.getPenaltyReport, "Snap Penalty?", self.offSet)))
+
+                self.defDice.setTitle('Defense Dice')
+                self.defDice.attachBooleanFunctionLabel((self.homeFieldCheck, "Home Field Advantage?"))
+                self.defDice.attachBooleanFunctionLabel(( partial(self.fumbleCheck, self.defSet),  "Fumble?"))
+                self.defDice.attachBooleanFunctionLabel((partial(self.penaltyCheck, self.defSet), partial(self.getPenaltyReport, "Penalty?", self.defSet)))
+
+                self.returnDice.setTitle('INT Return')
+
+
+
+    def rollAllOfTheDice(self) :
         self.playDice.roll()
         self.defDice.roll()
         self.defPenaltyDice.roll()
         self.offPenaltyDice.roll()
+        self.returnDice.roll()
+
+
+    def handle_L(self) :
+        self.changeMode(kicking=False)
+        self.rollAllOfTheDice()
         self.callPlays()
 
     def handle_K(self) :
-        self.playDice.roll()
+        self.changeMode(kicking=True)
+        self.rollAllOfTheDice()
