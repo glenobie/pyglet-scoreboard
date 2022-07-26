@@ -21,6 +21,7 @@ class Die :
     D_AQUA = (0,150,150)
     D_DARK_GREEN = (0,80,0)
     D_GOLD = (255,215,0)
+    D_YELLOW = (240,240,0)
 
     T_WHITE = (255,255,255,255)
     T_BLACK = (0,0,0,255)
@@ -30,7 +31,7 @@ class Die :
     TEXT_SIZE = 100
     INTERIOR_SPACING_PCT = 0.1
     FONT = 'Coolvetica'
-    
+
     def __init__(self, color, text_color=(0,0,0,255), sides=6, batch=None) :
         self.bg = pyglet.graphics.OrderedGroup(4)
         self.fg = pyglet.graphics.OrderedGroup(99)
@@ -41,6 +42,7 @@ class Die :
         self.sides = sides
         self.color = color
         self.text_color = text_color
+        self.border_color = (text_color[0], text_color[1], text_color[2])
         self.value = 1
         self.dieLabels = []
         self.colorConditions = []
@@ -49,8 +51,8 @@ class Die :
         self.baseTextSize = Die.TEXT_SIZE
         self.interiorSpacingPct = Die.INTERIOR_SPACING_PCT
 
-        self.border = pyglet.shapes.BorderedRectangle(0, 0, Die.WIDTH, Die.HEIGHT, 1, 
-                            border_color = (255,255,255), color=color, batch=self.batch, group = self.bg)
+        self.border = pyglet.shapes.BorderedRectangle(0, 0, Die.WIDTH, Die.HEIGHT, 1,
+                            border_color = self.border_color, color=color, batch=self.batch, group = self.bg)
         self.document = pyglet.text.document.UnformattedDocument(str(self.sides) )
         self.document.set_style(0, len(self.document.text), dict( dict(font_name = Die.FONT,  font_size = self.baseTextSize, color=text_color)))
         self.layout = pyglet.text.layout.TextLayout(self.document, batch=self.batch, group = self.fg)
@@ -61,7 +63,7 @@ class Die :
         self.adjustBaseTextSize()
         self.roll()
 
-  
+
     def addColorCondition(self, pair) :
         self.colorConditions.append(pair)
         self.update()
@@ -83,7 +85,7 @@ class Die :
         while self.border.height  - self.layout.content_height < desiredSpacing :
             self.baseTextSize -= 1
             self.document.set_style(0, len(self.document.text), dict(font_size=self.baseTextSize))
-        
+
 
     def getValue(self) :
         return self.value
@@ -153,9 +155,3 @@ class DieClone(Die) :
 
     def roll(self) :
         0 # don't roll the clones
-
-
-
-
-        
-        

@@ -77,12 +77,17 @@ class DiceSet :
 
     def updateLabels(self) :
         newLabel = ''
+        wasPreviousLabel = False
         for b in self.booleanFunctionLabels :
             if b[0]() :
-                if callable(b[1])  :
+                if wasPreviousLabel :
+                    newLabel += ' / '
+                if callable(b[1]) :
                     newLabel += b[1]()
                 else :
                     newLabel += b[1]
+                wasPreviousLabel = True
+
         self.labelDoc.text = newLabel
 
     def setPositionInternal(self, left, center, spacing, list) :

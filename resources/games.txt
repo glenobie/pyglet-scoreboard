@@ -124,4 +124,10 @@ LacrosseScoreboard
 lacrosse-blast.png
 blast_FAC
 LacrosseBlastSet
+5D20 Football
+football
+FootballScoreboard
+5d20.png
+fived20_FAC
+FiveD20Set
 EOF
