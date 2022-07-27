@@ -14,12 +14,12 @@ class FiveD20Set(FACSet) :
     YELLOW = 4
 
 
-    MINUTES_LEFT =  [5, 10, 15, 20]
-    SCORE_DIFF = [-2, -1, 0, 1, 2]
+    MINUTES_LEFT =  [5, 10, 15, 20, 90]
+    SCORE_DIFF = [-2, -1, 0, 1, 2, 10]
 
 
-    SITUATION_GRID = [ [-7, -5, -3, -1], [-4, -2, -1, 0], [0, 0, 0, 0],
-                        [4, 2, 1, 0], [7, 5, 3, 1]]
+    SITUATION_GRID = [ [-7, -5, -3, -1, 0], [-4, -2, -1, 0, 0], [0, 0, 0, 0, 0],
+                        [4, 2, 1, 0, 0], [7, 5, 3, 1, 1], [7, 5, 3, 3, 1]]
 
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
@@ -171,7 +171,7 @@ class FiveD20Set(FACSet) :
                 column += 1
             row = 0
             for diff in FiveD20Set.SCORE_DIFF :
-                if diff >= tdsAhead  :
+                if diff >= tdsAhead :
                     break
                 row += 1
 
