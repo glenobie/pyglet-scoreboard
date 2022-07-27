@@ -9,18 +9,18 @@ from element import HorizontalElement
 class FootballTeamState(TeamStateWithTimeouts) :
     def __init__(self, score, maxScore, maxTimeouts) :
         TeamStateWithTimeouts.__init__(self, score, maxScore, maxTimeouts)
-    
+
 #################################
 class FootballGameState(TimedGameState) :
 
     DOWN_STRINGS = ("1ST", "2ND", "3RD", "4TH")
 
     GOAL_TO_GO = -1000
-    
+
     def __init__(self, maxDowns=4, fieldSize=100):
-        #invoking the __init__ of the parent class 
-        TimedGameState.__init__(self) 
-        self.teams = [FootballTeamState(0, self.getMaxScore(), 3), 
+        #invoking the __init__ of the parent class
+        TimedGameState.__init__(self)
+        self.teams = [FootballTeamState(0, self.getMaxScore(), 3),
                        FootballTeamState(0, self.getMaxScore(), 3)]
 
         self.TIME_INTERVAL = 15
@@ -58,7 +58,7 @@ class FootballGameState(TimedGameState) :
         self.down += 1
         if (self.down > self.MaxDowns) :
             self.down = 1
-        
+
     def getPossessingTeam(self) :
         return self.teamPossessingBall
 
@@ -102,7 +102,7 @@ class FootballGameState(TimedGameState) :
 
     def resetDownAndDistance(self) :
         self.yardsToGain = 10
-        if self.fieldSize - self.lineOfScrimmage < 10 : 
+        if self.fieldSize - self.lineOfScrimmage < 10 :
             self.yardsToGain = FootballGameState.GOAL_TO_GO
         self.down = 1
 
@@ -145,9 +145,18 @@ class FootballScoreboard(Scoreboard) :
     def __init__(self) :
         self.state = FootballGameState()
         Scoreboard.__init__(self)
-        
+
         self.addElements()
-    
+
+    def attachFAC(self, fac) :
+        Scoreboard.attachFAC(self, fac)
+        self.reportDown()
+        self.reportTime()
+        self.reportQuarter()
+        self.reportFieldPosition()
+        self.reportScoreDifferential()
+
+
     def addElements(self) :
         self.addScores(2, 470)
         self.addClock(450)
@@ -156,68 +165,68 @@ class FootballScoreboard(Scoreboard) :
         self.addHorizontalElement(2, Scoreboard.CENTER, 162, 'Yards to Go:', self.state.getYardsToGain, Scoreboard.YELLOW )
         self.addYardsToEndzone(70)
         self.ballMarker = self.addBallLocation(250)
- 
+
     def changePossessingTeam(self) :
         pos = self.ballMarker.getCenter()
         if pos == Scoreboard.LEFT_CENTER :
             self.ballMarker.setCenterTop(Scoreboard.RIGHT_CENTER, self.ballMarker.getTop())
         else :
-            self.ballMarker.setCenterTop(Scoreboard.LEFT_CENTER, self.ballMarker.getTop())        
+            self.ballMarker.setCenterTop(Scoreboard.LEFT_CENTER, self.ballMarker.getTop())
 
     def addBallLocation(self, height) :
-        e = ScoreboardElement(text='Ball On', textFont=Scoreboard.TEXT_FONT, 
-                                textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
+        e = ScoreboardElement(text='Ball On', textFont=Scoreboard.TEXT_FONT,
+                                textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE,
                                 updateFunc=self.state.getLineOfScrimmage, digitFont=Scoreboard.DIGIT_FONT,
-                                digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2, 
+                                digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2,
                                 displayLeadingZeroes=False, batch=self.batch)
         e.setCenterTop(Scoreboard.LEFT_CENTER, height)
         self.elements.append(e)
         return e
 
     def addYardsToEndzone(self, height) :
-        e = HorizontalElement(text='Yards To Endzone:', textFont=Scoreboard.TEXT_FONT, 
-                                textSize=Scoreboard.SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE, 
+        e = HorizontalElement(text='Yards To Endzone:', textFont=Scoreboard.TEXT_FONT,
+                                textSize=Scoreboard.SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
                                 updateFunc=self.state.getYardsToEndzone, digitFont=Scoreboard.DIGIT_FONT,
-                                digitSize=Scoreboard.SMALL_DIGIT_SIZE, digitColor=Scoreboard.YELLOW, maxDigits=2, 
+                                digitSize=Scoreboard.SMALL_DIGIT_SIZE, digitColor=Scoreboard.YELLOW, maxDigits=2,
                                 displayLeadingZeroes=False, batch=self.batch)
         e.setCenterTop(Scoreboard.CENTER, height)
         self.elements.append(e)
 
     def reportFieldPosition(self) :
         if not(self.attachedFAC is None) :
-            self.attachedFAC.distanceChanged(self.state.getRawYardsToGain()) 
+            self.attachedFAC.distanceChanged(self.state.getRawYardsToGain())
 
     def reportDown(self) :
         if not(self.attachedFAC is None) :
-            self.attachedFAC.downChanged(self.state.getDown()) 
+            self.attachedFAC.downChanged(self.state.getDown())
 
     def reportScoreDifferential(self):
         if not(self.attachedFAC is None) :
             differential = self.state.getOffenseScore() - self.state.getDefenseScore()
-            self.attachedFAC.differentialChanged(differential) 
-        
+            self.attachedFAC.differentialChanged(differential)
+
     def reportQuarter(self) :
         if not(self.attachedFAC is None) :
-            self.attachedFAC.quarterChanged(self.state.getPeriod()) 
+            self.attachedFAC.quarterChanged(self.state.getPeriod())
 
     def reportTime(self) :
         if not(self.attachedFAC is None) :
-            self.attachedFAC.timeChanged(self.state.getSeconds()) 
+            self.attachedFAC.timeChanged(self.state.getSeconds())
 
     def handle_A(self, modified = False) :
         self.state.modifyLineOfScrimmage(1, modified)
         self.updateElements()
         self.reportFieldPosition()
- 
+
     def handle_D(self, modified = False) :
         if modified :
             self.state.resetDownAndDistance()
             self.reportFieldPosition()
         else :
             self.state.modifyDown()
-        
+
         self.updateElements()
- 
+
     def handle_Q(self, modified = False) :
         self.state.modifyLineOfScrimmage(10, modified)
         self.updateElements()
@@ -241,15 +250,15 @@ class FootballScoreboard(Scoreboard) :
     def handle_X(self, modified=False) :
         Scoreboard.handle_X(self, modified)
         self.reportTime()
-    
+
     def handle_S(self, modified=False) :
         Scoreboard.handle_S(self, modified)
         self.reportQuarter()
 
- 
+
 #################################
 class CFLScoreboard(FootballScoreboard) :
     def __init__(self) :
         Scoreboard.__init__(self)
-        self.state = FootballGameState(maxDowns = 3, fieldSize = 110)        
+        self.state = FootballGameState(maxDowns = 3, fieldSize = 110)
         self.addElements()
