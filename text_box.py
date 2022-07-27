@@ -37,24 +37,24 @@ class BorderedTextBox :
         self.contents.position = (self.x + self.width // 2, self.y + self.height // 2)
 
         self.drawBorder(self.x, self.y, self.width, self.height)
- 
+
     def drawBorder(self, x, y, width, height) :
         self.lines = []
-        self.lines.append(pyglet.shapes.Line(x, y, x, y + height, width=1, batch=self.batch, group=self.fg))  
-        self.lines.append(pyglet.shapes.Line(x+width, y, x+width, y + height, width=1, batch=self.batch, group=self.fg))  
-        self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch, group=self.fg))  
-        
+        self.lines.append(pyglet.shapes.Line(x, y, x, y + height, width=1, batch=self.batch, group=self.fg))
+        self.lines.append(pyglet.shapes.Line(x+width, y, x+width, y + height, width=1, batch=self.batch, group=self.fg))
+        self.lines.append(pyglet.shapes.Line(x, y, x+width, y, width=1, batch=self.batch, group=self.fg))
+
         if len(self.title.text) > 0 :
             title_x = x + (width - self.title.content_width) // 2
             self.title.position = (title_x, y+height)
-            self.lines.append(pyglet.shapes.Line(x, y+height, title_x - BorderedTextBox.LABEL_SPACING, 
-                                    y + height, width=1, batch=self.batch, group=self.fg))       
-            self.lines.append(pyglet.shapes.Line(title_x + self.title.content_width + BorderedTextBox.LABEL_SPACING, y+height, x+width, 
-                                 y + height, width=1, batch=self.batch, group=self.fg))       
+            self.lines.append(pyglet.shapes.Line(x, y+height, title_x - BorderedTextBox.LABEL_SPACING,
+                                    y + height, width=1, batch=self.batch, group=self.fg))
+            self.lines.append(pyglet.shapes.Line(title_x + self.title.content_width + BorderedTextBox.LABEL_SPACING, y+height, x+width,
+                                 y + height, width=1, batch=self.batch, group=self.fg))
         else :
-            self.lines.append(pyglet.shapes.Line(x, y+height, x+width, y+height, width=1, batch=self.batch, group=self.fg))       
-           
-         
+            self.lines.append(pyglet.shapes.Line(x, y+height, x+width, y+height, width=1, batch=self.batch, group=self.fg))
+
+
 
     def valueChanged(self, value):
         super().valueChanged(value)
@@ -64,3 +64,6 @@ class BorderedTextBox :
     def setLabel(self, text) :
         super().setLabel(text)
         self.drawBorder(self.x, self.y, self.width, self.height)
+
+    def setTitleFontSize(self, size) :
+        self.title.font_size = size

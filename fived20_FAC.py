@@ -13,6 +13,14 @@ class FiveD20Set(FACSet) :
     BLACK = 3
     YELLOW = 4
 
+
+    MINUTES_LEFT =  [5, 10, 15, 20]
+    SCORE_DIFF = [-2, -1, 0, 1, 2]
+
+
+    SITUATION_GRID = [ [-7, -5, -3, -1], [-4, -2, -1, 0], [0, 0, 0, 0],
+                        [4, 2, 1, 0], [7, 5, 3, 1]]
+
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
         self.kicking = False
@@ -24,13 +32,14 @@ class FiveD20Set(FACSet) :
 
         self.createDice()
 
-        #self.defPlayCall = BorderedTextBox('Defense', 300, 110, self.batch)
-        #self.defPlayCall.setPosition(200, 184)
+        self.defPlayCall = BorderedTextBox('Def Adj', 100, 100, self.batch)
+        self.defPlayCall.setTitleFontSize(16)
+        self.defPlayCall.setPosition(600, 30)
 
-        #self.offPlayCall = BorderedTextBox('Offense', 400, 110, self.batch)
-        #self.offPlayCall.setPosition(280, 26)
-        self.situation = self.getSituation()
-        self.callPlays()
+        self.offPlayCall = BorderedTextBox('Off Adj', 100, 100, self.batch)
+        self.offPlayCall.setTitleFontSize(16)
+        self.offPlayCall.setPosition(450, 30)
+        self.situation = self.updateSituation()
 
 
     def createDice(self) :
@@ -49,7 +58,6 @@ class FiveD20Set(FACSet) :
 
         self.playDice = BorderedDiceSet(self.offSet, spacing=18, batch=self.batch)
         self.playDice.setLabelFontSize(18)
-        self.playDice.setPosition(40, 394, 16)
 
         self.offPen = Die(Die.D_YELLOW, sides=20, batch=self.batch)
         self.offPen.scale(FiveD20Set.SCALE)
@@ -91,6 +99,7 @@ class FiveD20Set(FACSet) :
         self.returnDice.setTitleFontSize(16)
 
         self.changeMode(kicking=True)
+        self.playDice.setPosition(40, 394, 16)
         self.defDice.setPosition(40, 234, 16)
         self.returnDice.setPosition(40, 84, 16)
         self.offPenaltyDice.setPosition(640, 394, 16)
@@ -104,8 +113,6 @@ class FiveD20Set(FACSet) :
     def penaltyCheck(self, dice) :
         return dice[FiveD20Set.RED].getValue() == dice[FiveD20Set.BLUE].getValue() or dice[FiveD20Set.RED].getValue() == dice[FiveD20Set.WHITE].getValue() or  dice[FiveD20Set.BLUE].getValue() == dice[FiveD20Set.WHITE].getValue()
 
-    def callPlays(self) :
-        0
 
     def getPenaltyReport(self, text, dice) :
         report = text + " ["
@@ -118,31 +125,62 @@ class FiveD20Set(FACSet) :
 
     def downChanged(self, down) :
         self.down = down
-        self.situation = self.getSituation()
+        self.updateSituation()
 
     def distanceChanged(self, distance):
         self.distance = distance
-        self.situation = self.getSituation()
+        self.updateSituation()
 
     def differentialChanged(self, differential) :
         self.differential = differential
-        self.situation = self.getSituation()
+        self.updateSituation()
 
     def quarterChanged(self, quarter) :
         self.quarter = quarter
-        self.situation = self.getSituation()
+        self.updateSituation()
 
     def timeChanged(self, secondsLeftInQuarter) :
         self.secondsLeft = secondsLeftInQuarter
-        self.situation = self.getSituation()
+        self.updateSituation()
 
     def draw(self) :
         self.batch.draw()
 
+    def addPositiveSign(self, value) :
+        s = str(value)
+        if value > 0 :
+            s = '+' + s
+        return s
 
-    def getSituation(self) :
-        return 5
+    # returns offensive play adjustment
+    def updateSituation(self) :
+        offAdj = '0'
+        defAdj = '0'
 
+        minutesToGo = (4 - self.quarter) * 15 + self.secondsLeft // 60
+        tdsAhead = self.differential // 7
+        print(str(minutesToGo))
+        print(str(tdsAhead))
+
+        if minutesToGo <= 20 :
+            print("calculating adjustments")
+            column = 0
+            for minutes in FiveD20Set.MINUTES_LEFT :
+                if  minutes >= minutesToGo :
+                    break
+                column += 1
+            row = 0
+            for diff in FiveD20Set.SCORE_DIFF :
+                if diff >= tdsAhead  :
+                    break
+                row += 1
+
+
+            offAdj = self.addPositiveSign(FiveD20Set.SITUATION_GRID[row][column])
+            defAdj = self.addPositiveSign(- FiveD20Set.SITUATION_GRID[row][column])
+
+        self.offPlayCall.setText(offAdj)
+        self.defPlayCall.setText(defAdj)
 
     def changeMode(self, kicking=False) :
         if not(kicking == self.kicking) : # changing modes
@@ -152,8 +190,8 @@ class FiveD20Set(FACSet) :
             self.returnDice.clearBooleanFunctionLabels()
             if (self.kicking) :
                 self.playDice.setTitle('Kick/Punt Dice')
-                self.playDice.attachBooleanFunctionLabel(( partial(self.fumbleCheck, self.offSet),  "Blocked? or Fumbled Kick Return?"))
-                self.playDice.attachBooleanFunctionLabel((partial(self.penaltyCheck, self.offSet), partial(self.getPenaltyReport, "Kick/Punt Penalty?", self.offSet)))
+                self.playDice.attachBooleanFunctionLabel(( partial(self.fumbleCheck, self.offSet),  "Blocked? / KR Fumble?"))
+                self.playDice.attachBooleanFunctionLabel((partial(self.penaltyCheck, self.offSet), partial(self.getPenaltyReport, "Penalty?", self.offSet)))
 
                 self.defDice.setTitle('Blocked Kick/Punt Dice')
                 self.defDice.attachBooleanFunctionLabel(( partial(self.fumbleCheck, self.defSet),  "Fumbled Return of Block?"))
@@ -164,7 +202,7 @@ class FiveD20Set(FACSet) :
 
             else :
                 self.playDice.setTitle('Offense Dice')
-                self.playDice.attachBooleanFunctionLabel(( partial(self.fumbleCheck, self.offSet),  "Snap Fumpbled?"))
+                self.playDice.attachBooleanFunctionLabel(( partial(self.fumbleCheck, self.offSet),  "Snap Fumbled?"))
                 self.playDice.attachBooleanFunctionLabel((partial(self.penaltyCheck, self.offSet), partial(self.getPenaltyReport, "Snap Penalty?", self.offSet)))
 
                 self.defDice.setTitle('Defense Dice')
@@ -173,8 +211,6 @@ class FiveD20Set(FACSet) :
                 self.defDice.attachBooleanFunctionLabel((partial(self.penaltyCheck, self.defSet), partial(self.getPenaltyReport, "Penalty?", self.defSet)))
 
                 self.returnDice.setTitle('INT Return')
-
-
 
     def rollAllOfTheDice(self) :
         self.playDice.roll()
@@ -187,7 +223,6 @@ class FiveD20Set(FACSet) :
     def handle_L(self) :
         self.changeMode(kicking=False)
         self.rollAllOfTheDice()
-        self.callPlays()
 
     def handle_K(self) :
         self.changeMode(kicking=True)
