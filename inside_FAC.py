@@ -90,6 +90,22 @@ class InsideSportsSet(FACSet) :
                   (FACField.F_GRAY, 1, 'BREAKAWAY'), (FACField.F_GRAY, 1, 'PASS TO')
                 ) ]
 
+    minor_odds = [2, 4, 6, 8, 10, 12, 13, 16, 18, 22, 26, 30, 36, 38, 46, 60, 78, 83, 100, 122, 146, 200]
+    minors = ['Diving', 'Charging', 'Delay of game', 'Close hand on puck', 'Clipping',
+                'Elbowing', 'Boarding (INJ?)', 'Boarding', 'Kneeing', 'Unsportsmanlike conduct',
+                'Goatender interference', 'Holding the stick', 'Cross-checking', 'Slashing (INJ?)', 'Slashing', 'High Sticking',
+                'Interference', 'Rouging (INJ?)', 'Roughing', 'Tripping', 'Holding', 'Hooking']
+
+    major_odds = [1, 2, 4, 5, 6, 7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 200]
+    majors = ['Charging (INJ?)', 'Elbowing (INJ?)', 'Boarding (INJ?)', 'Kneeing (INJ?)', 'Slashing (INJ?)',
+                'Spearing (INJ?)', 'Fighting (1)', 'Fighting (2)', 'Fighting (3)', 'Fighting (4)', 'Fighting (5)',
+                'Fighting (6)', 'Fighting (7)', 'Fighting (8)', 'Fighting (9)', 'Fighting']
+
+    assist_odds = [6, 11, 15, 18, 20, 60, 95, 125, 150, 170, 185, 195, 200 ]
+    assists = ['Highest', '2nd Highest', '3rd Highest', '4th Highest', 'Lowest',
+            'x (1)', 'x (2)', 'x (3)', 'x (4)', 'x (5)', 'x (6)', 'x (7)', 'x (8)']
+
+
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
         self.paintBackground(FACSet.W_COLOR_WHITE)
@@ -155,7 +171,7 @@ class InsideSportsSet(FACSet) :
         for fieldIndex in range(0, 8) :
             self.valueFields[fieldIndex].setText(self.facs[self.deckIndex-1][fieldIndex].strip('\n'))
 
-    def getPenaltyText(self) :
+    def getPenaltyID(self) :
         pen = [ ' + OPP if PEN 5 or Higher',
                 ' + OPP if PEN 4 or Higher',
                 ' + OPP if PEN 3 or Higher',
@@ -194,81 +210,86 @@ class InsideSportsSet(FACSet) :
         text += self.positions[pos]
         if inj == 1 :
             text = 'FO: INJ? ' + text
-
         return text
 
+    def getTextViaOdds(self, value, odds, texts) :
+        for a in range(0, len(odds)) :
+            if value <= odds[a] :
+
+                break
+        return texts[a]
+
     def getRandomPenalty(self) :
-        minor_odds = [2, 4, 6, 8, 10, 12, 13, 16, 18, 22, 26, 30, 36, 38, 46, 60, 78, 83,100, 122, 146, 200]
-        minors = ['Diving', 'Charging', 'Delay of game', 'Close hand on puck', 'Clipping',
-                    'Elbowing', 'Boarding (INJ?)', 'Boarding', 'Kneeing', 'Unsportsmanlike conduct',
-                    'Goatender interference', 'Holding the stick', 'Cross-checking', 'Slashing (INJ?)', 'High Sticking',
-                    'interference', 'Rouging (INJ?)', 'Tripping', 'Holding', 'Hooking']
+        minorText = self.getTextViaOdds(random.randint(1, 200), InsideSportsSet.minor_odds, InsideSportsSet.minors)
+        majorText = self.getTextViaOdds(random.randint(1, 200), InsideSportsSet.major_odds, InsideSportsSet.majors)
 
-        major_odds = [1, 2, 4, 5, 6, 7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 200]
-        majors = ['Charging (INJ?)', 'Elbowing (INJ?)', 'Boarding (INJ?)', 'Kneeing (INJ?)', 'Slashing (INJ?)',
-                    'Spearing (INJ?)', 'Fighting (1)', 'Fighting (2)', 'Fighting (3)', 'Fighting (4)', 'Fighting (5)',
-                    'Fighting (6)', 'Fighting (7)', 'Fighting (8)', 'Fighting (9)', 'Fighting']
-        # Minors
-        # diving - 2
-        # charging - 2
-        # delay of game - 2
-        # close hand on puck - 2
-        # Clipping - 2
-        # Elbowing - 2
-        # boarding - 4, 1 with INJ
-        # kneeing - 2
-        # unsportsmanlike conduct - 4
-        # goaltender interference - 4
-        # holding the stick - 4
-        # cross-checking - 6
-        # slashing - 10, 2 with INJ
-        # high sticking - 14
-        # interference - 18
-        # roughing - 22, 5 with INJ
-        # tripping - 22
-        # holding - 24
-        # hooking - 54
-
-        # MAjors
-        # charging - 1 (INJ?)
-        # elbowing - 1 (INJ?)
-        # boarding - 2 both with INJ
-        # kneeing - 1 (INJ?)
-        # slashging - 1 inj
-        # spearing - 1(inj)
-        # fighting ((1 - 9), 5 each (45 total)
-        # fighting - 193 - 45
-
-
+        return minorText +'\n' + majorText
 
 
     def getAST(self) :
-        p = random.randint(1, 200)
-        odds = [6, 11, 15, 18, 20, 60, 95, 125, 150, 170, 185, 195, 200 ]
-        asts = ['HIGH', '2nd High', '3rd High', '4th High', 'Lowest',
-                'x (1)', 'x (2)', 'x (3)', 'x (4)', 'x (5)', 'x (6)', 'x (7)', 'x (8)']
-        for a in range(0, len(odds)) :
-            if p <= odds[a] :
 
-                break
-        text = asts[a]
-        return text.replace('x', self.positions[random.randint(0,4)])
+        text = self.getTextViaOdds(random.randint(1, 200), InsideSportsSet.assist_odds, InsideSportsSet.assists)
+        return text.replace('x', random.choice(self.positions))
 
-
-    def generateFAC(self) :
-        random.shuffle(self.positions)
-        self.valueFields[6].setText(self.positions[0])
-        self.valueFields[7].setText('(' + self.positions[1] + ')')
+    def getShotNumber(self) :
         shotNum = str(random.randint(1, 100))
         if int(shotNum) <= 99 and int(shotNum) >= 90 :
             shotNum += (' (BRK)')
-        self.valueFields[5].setText('# '+shotNum)
-        self.valueFields[13].setText('# ' + str(random.randint(1,40)))
-        self.valueFields[2].setText(self.getPenaltyText())
-        self.valueFields[3].setText(self.getLoosePuck())
-        self.valueFields[10].setText('# '+str(random.randint(1,40)))
-        self.valueFields[14].setText(self.getAST())
+        return '# ' + shotNum
 
+    def getRebound(self) :
+        rebound_odds =  [45, 65, 85, 115]
+        rebounds = ['Def x', 'Off x', 'Visiting x', 'Home x']
+        p = random.randint(1,200)
+        if p <= 115 :
+            text = self.getTextViaOdds(115, rebound_odds, rebounds)
+            text = text.replace('x', random.choice(self.positions))
+        elif p <= 165 :
+            adj = [ ['', ''],[' +1', ''],[' +2', ''],[' +3', ''],['', ' +1'],['', ' +2'],
+                    ['', ' +3'],['', ' +4'],['', ' +5'],['', ' +6']]
+            q = random.choice(adj)
+            text = 'Off ' + random.choice(self.positions) + q[0] + ' vs. '
+            text += 'Def ' + random.choice(self.positions)  + q[1]
+        elif p <= 195 :
+            adj = ['Def LD', 'Def LD +1', 'Def LD +2', 'Def LD +3',
+                    'Def RD', 'Def RD +1', 'Def RD +2', 'Def RD +3']
+            defense = []
+            text = 'Off ' + random.choice(self.positions) + ' vs. ' + random.choice(adj)
+        else :
+            leftovers = ['Off LW vs. Def RD',
+                         'Off RD vs. Def R',
+                         'Off RW vs. Def LD',
+                         'Off LD vs. Def RW',
+                         'Off RD vs. Def LW']
+            text = random.choice(leftovers)
+        return text
+
+    def getShootout(self) :
+        odds = [41, 69, 75, 87, 95, 98, 99, 100]
+        shots = ['Wrist', 'Backhand','Slap', 'Snap', 'Wide of the net', 'Goalpost', 'Over the net', 'Crossbar']
+        p = random.randint(1,100)
+        text = self.getTextViaOdds(p, odds, shots)
+        if p <= 87 :
+            text = '# ' + str(p) + ' ' + text
+        return text
+
+    def generateFAC(self) :
+        random.shuffle(self.positions)
+
+        self.valueFields[2].setText(self.getPenaltyID())
+        self.valueFields[3].setText(self.getLoosePuck())
+        self.valueFields[4].setText(self.getRebound())
+        self.valueFields[5].setText(self.getShotNumber())
+        self.valueFields[6].setText(self.positions[0])
+        self.valueFields[7].setText('(' + self.positions[1] + ')')
+        self.valueFields[8].setText(self.getRandomPenalty())
+
+        self.valueFields[10].setText('# '+str(random.randint(1,40)))
+
+
+        self.valueFields[13].setText('# ' + str(random.randint(1,40)))
+        self.valueFields[14].setText(self.getAST())
+        self.valueFields[15].setText(self.getShootout())
 
 
     def handle_L(self) :
