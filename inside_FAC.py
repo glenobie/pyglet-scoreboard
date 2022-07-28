@@ -197,6 +197,63 @@ class InsideSportsSet(FACSet) :
 
         return text
 
+    def getRandomPenalty(self) :
+        minor_odds = [2, 4, 6, 8, 10, 12, 13, 16, 18, 22, 26, 30, 36, 38, 46, 60, 78, 83,100, 122, 146, 200]
+        minors = ['Diving', 'Charging', 'Delay of game', 'Close hand on puck', 'Clipping',
+                    'Elbowing', 'Boarding (INJ?)', 'Boarding', 'Kneeing', 'Unsportsmanlike conduct',
+                    'Goatender interference', 'Holding the stick', 'Cross-checking', 'Slashing (INJ?)', 'High Sticking',
+                    'interference', 'Rouging (INJ?)', 'Tripping', 'Holding', 'Hooking']
+
+        major_odds = [1, 2, 4, 5, 6, 7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 200]
+        majors = ['Charging (INJ?)', 'Elbowing (INJ?)', 'Boarding (INJ?)', 'Kneeing (INJ?)', 'Slashing (INJ?)',
+                    'Spearing (INJ?)', 'Fighting (1)', 'Fighting (2)', 'Fighting (3)', 'Fighting (4)', 'Fighting (5)',
+                    'Fighting (6)', 'Fighting (7)', 'Fighting (8)', 'Fighting (9)', 'Fighting']
+        # Minors
+        # diving - 2
+        # charging - 2
+        # delay of game - 2
+        # close hand on puck - 2
+        # Clipping - 2
+        # Elbowing - 2
+        # boarding - 4, 1 with INJ
+        # kneeing - 2
+        # unsportsmanlike conduct - 4
+        # goaltender interference - 4
+        # holding the stick - 4
+        # cross-checking - 6
+        # slashing - 10, 2 with INJ
+        # high sticking - 14
+        # interference - 18
+        # roughing - 22, 5 with INJ
+        # tripping - 22
+        # holding - 24
+        # hooking - 54
+
+        # MAjors
+        # charging - 1 (INJ?)
+        # elbowing - 1 (INJ?)
+        # boarding - 2 both with INJ
+        # kneeing - 1 (INJ?)
+        # slashging - 1 inj
+        # spearing - 1(inj)
+        # fighting ((1 - 9), 5 each (45 total)
+        # fighting - 193 - 45
+
+
+
+
+    def getAST(self) :
+        p = random.randint(1, 200)
+        odds = [6, 11, 15, 18, 20, 60, 95, 125, 150, 170, 185, 195, 200 ]
+        asts = ['HIGH', '2nd High', '3rd High', '4th High', 'Lowest',
+                'x (1)', 'x (2)', 'x (3)', 'x (4)', 'x (5)', 'x (6)', 'x (7)', 'x (8)']
+        for a in range(0, len(odds)) :
+            if p <= odds[a] :
+
+                break
+        text = asts[a]
+        return text.replace('x', self.positions[random.randint(0,4)])
+
 
     def generateFAC(self) :
         random.shuffle(self.positions)
@@ -209,11 +266,10 @@ class InsideSportsSet(FACSet) :
         self.valueFields[13].setText('# ' + str(random.randint(1,40)))
         self.valueFields[2].setText(self.getPenaltyText())
         self.valueFields[3].setText(self.getLoosePuck())
+        self.valueFields[10].setText('# '+str(random.randint(1,40)))
+        self.valueFields[14].setText(self.getAST())
 
 
-        # Loose PUCK
-        # 6 chances for HOME/Visitor * position (1/6 of those injury?)
-        # 4 changces for Off/Def * position
 
     def handle_L(self) :
         #self.flipForward()
