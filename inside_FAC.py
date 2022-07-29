@@ -117,7 +117,11 @@ class InsideSportsSet(FACSet) :
                 'Takeaway if Defense FC = 3']
     loose_texts = ['No hit if Defense PHY = LOW', 'No hit if Defense PHY = LOW', '','','','AST if Offense FC = 3 and PASS',
                     'Loose Puck if Defense PHY = HIGH', 'Loose Puck if Defense PHY = HIGH'] 
-    interception_texts = ['','','','','','','','']
+    interception_texts = ['','No AST if Offense FC = 0 or 1','No AST if Offense FC = 0', 'No AST if Offense FC = 0',
+                        'No AST if Offense FC = 0 or 1','No AST if Offense FC = 0',
+                        'No AST if Offense FC = 0','No AST if Offense FC = 0']
+    penalty_texts = ['No penalty if Defense PHY = LOW', '','','','','AST if Offense FC = 3 and PASS',
+                    'Penalty check if Defense PHY = HIGH']
 
     fo_odds = [90, 108, 117, 126, 135, 144, 153, 162, 171, 180, 184, 186, 194, 195, 200]
     fo_texts = ['x, (y)','+1 x, (y)', '+2 x, (y)', '+3 x, (y)', '+4 x, (y)', '+5 x, (y)', 
@@ -346,7 +350,9 @@ class InsideSportsSet(FACSet) :
             if value >= 8 :
                 v = [8,12,16,20,25]
                 value = random.choice(v)
-                pos = 'Any'
+                pos = 'any defender'
+            else :
+                text2 = InsideSportsSet.penalty_texts[value-1]
             text1 = 'Penalty if ' + pos + ' PEN >= ' + str(value)
             
         else :
