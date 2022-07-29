@@ -13,8 +13,7 @@ class FACField() :
 
     FONT_SIZE = 18
     FONT_COLOR = (0, 0, 0, 255)
-    LINE_SPACING = 8
-
+    LINE_SPACING = 10
 
     def __init__(self, font_size, bgColor, width, height, text='', bold=False,
                               batch=None, fgGroup = None, bgGroup = None) :
@@ -85,7 +84,7 @@ class InsideSportsSet(FACSet) :
                     (FACField.F_BLUE, 2, 'FLIP')),
                 ( None, None, (FACField.F_GRAY, 1, 'SHOOTOUT'), None,
                  (FACField.F_WHITE, 1, 'FLIP'), (FACField.F_GRAY, 1, 'ASSIST'), None),
-                ( (FACField.F_GRAY, 1, 'MAJOR\nMINOR'), (FACField.F_GRAY, 1, 'DUMP INS'),
+                ( (FACField.F_GRAY, 1, 'MINOR\nMAJOR'), (FACField.F_GRAY, 1, 'DUMP INS'),
                   (FACField.F_WHITE, 1, 'FLIP'), None, (FACField.F_WHITE, 1, 'FLIP'),
                   (FACField.F_GRAY, 1, 'BREAKAWAY'), (FACField.F_GRAY, 1, 'PASS TO')
                 ) ]
@@ -274,7 +273,7 @@ class InsideSportsSet(FACSet) :
 
     def getShootout(self) :
         odds = [41, 69, 75, 87, 95, 98, 99, 100]
-        shots = ['Wrist', 'Backhand','Slap', 'Snap', 'Wide of the net', 'Goalpost', 'Over the net', 'Crossbar']
+        shots = ['\nWrist', '\nBackhand','\nSlap', '\nSnap', 'Wide of net', 'Goalpost', 'Over the net', 'Crossbar']
         p = random.randint(1,100)
         text = self.getTextViaOdds(p, odds, shots)
         if p <= 87 :
@@ -307,9 +306,20 @@ class InsideSportsSet(FACSet) :
             text = random.choice(forwards) + ' BRK >= ' + str(value) + InsideSportsSet.brk_texts[value-1]
         return text
 
+    def getFaceOff(self) :
+        return 'TODO'
+
+    def getDumpIn(self) :
+        return 'TODO'
+
+    def getDefenseText(self) :
+        return ('TODO', 'TODO')
+
     def generateFAC(self) :
         random.shuffle(self.positions)
-
+        defense = self.getDefenseText()
+        self.valueFields[0].setText(defense[0])
+        self.valueFields[1].setText(defense[1])
         self.valueFields[2].setText(self.getPenaltyID())
         self.valueFields[3].setText(self.getLoosePuck())
         self.valueFields[4].setText(self.getRebound())
@@ -317,10 +327,10 @@ class InsideSportsSet(FACSet) :
         self.valueFields[6].setText(self.positions[0])
         self.valueFields[7].setText('(' + self.positions[1] + ')')
         self.valueFields[8].setText(self.getRandomPenalty())
-
+        self.valueFields[9].setText(self.getDumpIn())
         self.valueFields[10].setText('# '+str(random.randint(1,40)))
-
         self.valueFields[11].setText(self.getBlockText())
+        self.valueFields[12].setText(self.getFaceOff())
         self.valueFields[13].setText('# ' + str(random.randint(1,40)))
         self.valueFields[14].setText(self.getAST())
         self.valueFields[15].setText(self.getShootout())
