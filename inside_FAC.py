@@ -105,6 +105,12 @@ class InsideSportsSet(FACSet) :
     assists = ['Highest', '2nd Highest', '3rd Highest', '4th Highest', 'Lowest',
             'x (1)', 'x (2)', 'x (3)', 'x (4)', 'x (5)', 'x (6)', 'x (7)', 'x (8)']
 
+    blk_texts = ['\nNo block if Defense FC = 3', '\nNo block if Defense FC = 3', '','','','',
+                 '\nBlocked if Defense FC = 0','\nBlocked if Defense FC = 0',
+                 '\nBlocked if Defense FC = 0 or 1', '\nBlocked if Defense FC = 0 or 1' ]
+    wide_texts = ['\nOn target if Defense FC = 3','\nOn target if Defense FC = 3','','','','',
+                  '\nWide shot if Defense FC = 0', '\nWide shot if Defense FC = 0',
+                  '\nWide shot if Defense FC = 0 or 1','\nWide shot if Defense FC = 0 or 1']
 
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
@@ -273,6 +279,19 @@ class InsideSportsSet(FACSet) :
             text = '# ' + str(p) + ' ' + text
         return text
 
+    def getBlockText(self) :
+        p = random.randint(1,4)
+        if p >= 3 :
+            return ''
+        else :
+            value = random.randint(1,10)
+            text = 'if ' + random.choice(self.positions) + ' DEF >= ' + str(value)
+            if p == 1 :
+                text = 'Blocked ' + text + InsideSportsSet.blk_texts[value-1]
+            elif p == 2 :
+                text = 'Wide shot ' + text + InsideSportsSet.wide_texts[value-1]
+            return text
+
     def generateFAC(self) :
         random.shuffle(self.positions)
 
@@ -286,7 +305,7 @@ class InsideSportsSet(FACSet) :
 
         self.valueFields[10].setText('# '+str(random.randint(1,40)))
 
-
+        self.valueFields[11].setText(self.getBlockText())
         self.valueFields[13].setText('# ' + str(random.randint(1,40)))
         self.valueFields[14].setText(self.getAST())
         self.valueFields[15].setText(self.getShootout())
