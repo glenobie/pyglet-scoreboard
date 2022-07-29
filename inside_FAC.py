@@ -112,6 +112,17 @@ class InsideSportsSet(FACSet) :
                   '\nWide shot if Defense FC = 0 or 1','\nWide shot if Defense FC = 0 or 1']
     brk_texts = ['\nNot if FC = 0', '\nNot if FC <= 1','','','','','','','',
                 '\nOr if FC = 3']
+    dump_texts = ['Use Pass # if Defense FC = 3','','','','','','Forced Dump In if Defense FC = 0','Forced Dump In if Defense FC = 0 or 1']
+    take_texts = ['Use Pass # if Defense FC = 0 or 1','Use Pass # if Defense FC = 0','','','','AST if Offense FC = 3 and PASS','',
+                'Takeaway if Defense FC = 3']
+    loose_texts = ['No hit if Defense PHY = LOW', 'No hit if Defense PHY = LOW', '','','','AST if Offense FC = 3 and PASS',
+                    'Loose Puck if Defense PHY = HIGH', 'Loose Puck if Defense PHY = HIGH'] 
+    interception_texts = ['','','','','','','','']
+
+    fo_odds = [90, 108, 117, 126, 135, 144, 153, 162, 171, 180, 184, 186, 194, 195, 200]
+    fo_texts = ['x, (y)','+1 x, (y)', '+2 x, (y)', '+3 x, (y)', '+4 x, (y)', '+5 x, (y)', 
+               '+6 x, (y)', '+7 x, (y)', '+8 x, (y)', '+9 x, (y)', 'KO: Low', 'KO: High', 
+               'KO: Visitor', 'KO: Both', 'KO: Home']
 
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
@@ -307,19 +318,49 @@ class InsideSportsSet(FACSet) :
         return text
 
     def getFaceOff(self) :
-        return 'TODO'
+        text = self.getTextViaOdds(random.randint(1, 200), InsideSportsSet.fo_odds, InsideSportsSet.fo_texts)
+        text = text.replace('y', 'H' if random.random() < 0.58 else 'V')
+        return text.replace('x', random.choice(self.positions))
 
     def getDumpIn(self) :
         return 'TODO'
 
     def getDefenseText(self) :
-        return ('TODO', 'TODO')
+        p = random.randint(1,5)
+        text2 = ''
+        if p == 1 :
+            value = random.randint(1,8)
+            text1 = 'Forced Dump In if ' + random.choice(self.positions) + ' DEF >= ' + str(value)
+            text2 = InsideSportsSet.dump_texts[value-1]
+        elif p == 2 :
+            value = random.randint(1,8)
+            text1 = 'Loose Puck if ' + random.choice(self.positions) + ' HIT >= ' + str(value)
+            text2 = InsideSportsSet.loose_texts[value-1]
+        elif p == 3 :
+            value = random.randint(1,8)
+            text1 = 'Takeaway if ' + random.choice(self.positions) + ' TAKE >= ' + str(value)
+            text2 = InsideSportsSet.take_texts[value-1]
+        elif p == 4 :
+            value = random.randint(1,8)
+            pos = random.choice(self.positions)
+            if value >= 8 :
+                v = [8,12,16,20,25]
+                value = random.choice(v)
+                pos = 'Any'
+            text1 = 'Penalty if ' + pos + ' PEN >= ' + str(value)
+            
+        else :
+            value = random.randint(5,12)
+            combos = ['LD+RD', 'LW+LD', 'RW+RD', 'C+LW', 'C+RW']
+            text1 = 'Interception if ' + random.choice(combos) + ' DEF >= ' + str(value)
+            text2 = InsideSportsSet.interception_texts[value-5]
+        return (text1, text2)
 
     def generateFAC(self) :
         random.shuffle(self.positions)
         defense = self.getDefenseText()
-        self.valueFields[0].setText(defense[0])
-        self.valueFields[1].setText(defense[1])
+        self.valueFields[0].setText(defense[1])
+        self.valueFields[1].setText(defense[0])
         self.valueFields[2].setText(self.getPenaltyID())
         self.valueFields[3].setText(self.getLoosePuck())
         self.valueFields[4].setText(self.getRebound())
