@@ -111,6 +111,8 @@ class InsideSportsSet(FACSet) :
     wide_texts = ['\nOn target if Defense FC = 3','\nOn target if Defense FC = 3','','','','',
                   '\nWide shot if Defense FC = 0', '\nWide shot if Defense FC = 0',
                   '\nWide shot if Defense FC = 0 or 1','\nWide shot if Defense FC = 0 or 1']
+    brk_texts = ['\nNot if FC = 0', '\nNot if FC <= 1','','','','','','','',
+                '\nOr if FC = 3']
 
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
@@ -292,6 +294,19 @@ class InsideSportsSet(FACSet) :
                 text = 'Wide shot ' + text + InsideSportsSet.wide_texts[value-1]
             return text
 
+    def getBreakaway(self) :
+        p = random.random()
+        forwards = ['C', 'RW','LW']
+        if p <= 0.4 :
+            text = 'None for ' + random.choice(forwards)
+            penalty = random.random()
+            if penalty < 0.0375 :
+                text += '\nPen. Shot?'
+        else :
+            value = random.randint(1,10)
+            text = random.choice(forwards) + ' BRK >= ' + str(value) + InsideSportsSet.brk_texts[value-1]
+        return text
+
     def generateFAC(self) :
         random.shuffle(self.positions)
 
@@ -309,6 +324,7 @@ class InsideSportsSet(FACSet) :
         self.valueFields[13].setText('# ' + str(random.randint(1,40)))
         self.valueFields[14].setText(self.getAST())
         self.valueFields[15].setText(self.getShootout())
+        self.valueFields[16].setText(self.getBreakaway())
 
 
     def handle_L(self) :
