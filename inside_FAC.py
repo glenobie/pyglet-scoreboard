@@ -122,7 +122,10 @@ class InsideSportsSet(FACSet) :
                         'No AST if Offense FC = 0','No AST if Offense FC = 0']
     penalty_texts = ['No penalty if Defense PHY = LOW', '','','','','AST if Offense FC = 3 and PASS',
                     'Penalty check if Defense PHY = HIGH']
-
+    dump_in_odds = [30, 54, 64, 104, 144, 184, 188, 194, 200]
+    dump_in_text = ['Goalie recovers,\nleaves for x', 'Defense x\nchases down puck', 'Goalie covers (faceoff)',
+                'Puck battle:\nOff. Cq vs. Def. Cz', 'Puck battle:\nOff. LWq vs. Def. RDz', 'Puck battle:\nOff. RWq vs. Def. LDz',
+                'Puck battle:\nVisiting C vs. Home C', 'Puck battle:\nVisiting LW vs. Home RDz', 'Puck battle:\nVisiting RW vs. Home LDz']
     fo_odds = [90, 108, 117, 126, 135, 144, 153, 162, 171, 180, 184, 186, 194, 195, 200]
     fo_texts = ['x, (y)','+1 x, (y)', '+2 x, (y)', '+3 x, (y)', '+4 x, (y)', '+5 x, (y)', 
                '+6 x, (y)', '+7 x, (y)', '+8 x, (y)', '+9 x, (y)', 'KO: Low', 'KO: High', 
@@ -327,7 +330,21 @@ class InsideSportsSet(FACSet) :
         return text.replace('x', random.choice(self.positions))
 
     def getDumpIn(self) :
-        return 'TODO'
+        p = random.randint(1,200)
+        text = self.getTextViaOdds(p, InsideSportsSet.dump_in_odds, InsideSportsSet.dump_in_text)
+        if p <= 54 :
+            defense = ['LD', 'RD']
+            text = text.replace('x', random.choice(defense))
+        elif p <= 184:
+            adjPairs = [['',''], ['',' +1'], ['',' +2'], ['',' +3'],['',' +4'],['',' +5'],['',' +6'],
+                    [' +1',''],[' +2',''],[' +3','']]
+            adj = random.choice(adjPairs)
+            text = text.replace('q', adj[0])
+            text = text.replace('z', adj[1])
+        else:
+            home_adv = ['',' +1', ' +2']
+            text= text.replace('z', random.choice(home_adv))
+        return text
 
     def getDefenseText(self) :
         p = random.randint(1,5)

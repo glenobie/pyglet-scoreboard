@@ -164,6 +164,7 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
         if modified :
             self.batch = pyglet.graphics.Batch()
             self.configScreen.setIconBatch(self.batch)
+            self.configScreen.checkForGit()
             self.activeScreen = self.configScreen
 
 

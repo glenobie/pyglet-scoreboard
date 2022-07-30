@@ -52,7 +52,9 @@ class ConfigScreen(KeyHandler) :
         self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
 
         self.scriptHome = str(Path.home()) + '/'
-
+        self.checkForGit()
+        
+    def checkForGit(self) :
         # run script to see if git-hub can be reached
         self.gitNotFound = subprocess.call(['sh',  self.scriptHome + ConfigScreen.FIND_GIT_HUB_SCRIPT])
         if (self.gitNotFound) :
