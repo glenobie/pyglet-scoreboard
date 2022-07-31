@@ -60,7 +60,7 @@ class FACField() :
         self.replaceComparators('>=')
         self.setPosition(self.left, self.bottom)
 
-
+########################################################################
 class InsideSportsSet(FACSet) :
 
     FIELD_WIDTH = 130
@@ -137,10 +137,6 @@ class InsideSportsSet(FACSet) :
         self.fg = pyglet.graphics.OrderedGroup(62)
         self.FACbg = pyglet.graphics.OrderedGroup(5)
 
-        #self.deckIndex = 0
-        #self.facs = self.readFACSFromFile('crease_FACs', 14)
-        #random.shuffle(self.facs)
-
         self.positions = ['C', 'LW', 'RW', 'LD', 'RD']
 
         self.createLayout()
@@ -171,30 +167,9 @@ class InsideSportsSet(FACSet) :
                 y += InsideSportsSet.FIELD_HEIGHT + InsideSportsSet.SPACE
             x += InsideSportsSet.FIELD_WIDTH + InsideSportsSet.SPACE
 
-    def readFACSFromFile(self, filename, numFACS) :
-        facs = []
-        f = self.loader.file(filename, mode='r')
-        for j in range(0, numFACS) :
-            list = f.readline().split(';')
-            strings = []
-            for s in list :
-                strings.append(s.replace('\n', '').replace('$', '\n'))
-            facs.append(strings)
-        return facs
-
     def draw(self) :
         self.batch.draw()
 
-    def flipForward(self) :
-        self.deckIndex += 1
-        if self.deckIndex >= len(self.facs) :
-            random.shuffle(self.facs)
-            self.deckIndex = 0
-
-        for fieldIndex in range(8, 17) :
-            self.valueFields[fieldIndex].setText(self.facs[self.deckIndex][fieldIndex].strip('\n'))
-        for fieldIndex in range(0, 8) :
-            self.valueFields[fieldIndex].setText(self.facs[self.deckIndex-1][fieldIndex].strip('\n'))
 
     def getPenaltyID(self) :
         pen = [ ' + OPP if PEN 5 or Higher',
@@ -252,7 +227,6 @@ class InsideSportsSet(FACSet) :
 
 
     def getAST(self) :
-
         text = self.getTextViaOdds(random.randint(1, 200), InsideSportsSet.assist_odds, InsideSportsSet.assists)
         return text.replace('x', random.choice(self.positions))
 
@@ -402,7 +376,6 @@ class InsideSportsSet(FACSet) :
 
 
     def handle_L(self) :
-        #self.flipForward()
         self.generateFAC()
 
 

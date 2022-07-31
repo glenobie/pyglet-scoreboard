@@ -32,11 +32,11 @@ class FiveD20Set(FACSet) :
 
         self.createDice()
 
-        self.defPlayCall = BorderedTextBox('Def Adj', 100, 100, self.batch)
+        self.defPlayCall = BorderedTextBox('Def Adj', 100, 100, batch=self.batch, text_size = 26)
         self.defPlayCall.setTitleFontSize(16)
         self.defPlayCall.setPosition(600, 30)
 
-        self.offPlayCall = BorderedTextBox('Off Adj', 100, 100, self.batch)
+        self.offPlayCall = BorderedTextBox('Off Adj', 100, 100, text_size = 26, batch=self.batch)
         self.offPlayCall.setTitleFontSize(16)
         self.offPlayCall.setPosition(450, 30)
         self.situation = self.updateSituation()
@@ -210,7 +210,7 @@ class FiveD20Set(FACSet) :
                 self.defDice.attachBooleanFunctionLabel(( partial(self.fumbleCheck, self.defSet),  "Fumble?"))
                 self.defDice.attachBooleanFunctionLabel((partial(self.penaltyCheck, self.defSet), partial(self.getPenaltyReport, "Penalty?", self.defSet)))
 
-                self.returnDice.setTitle('INT Return')
+                self.returnDice.setTitle('INT Return / YAC')
 
     def rollAllOfTheDice(self) :
         self.playDice.roll()

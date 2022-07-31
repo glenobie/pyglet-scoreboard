@@ -1,0 +1,6 @@
+#!/bin/bash
+
+if (./git-test) then
+	git -C /home/pi/myCode/pyglet-scoreboard/ pull
+fi
+

@@ -1,0 +1,21 @@
+#!/bin/bash
+# Give networking a chance to come up
+printf "Waiting for Internet connectivity\n"
+RESPONSE=0
+while [ $RESPONSE != 2 ] && [ $RESPONSE != 3 ]
+do
+        RESPONSE=$(curl -s --max-time 6 -I http://github.com | sed 's/^[^ ]*  *\([0-9]\).*/\1/; 1q')
+        case $RESPONSE in
+                [23])
+			printf "\nHTTP connectivity is up\n"
+			exit 0 ;;
+
+                5)
+			printf "\nAccess denied or server error\n"
+			exit 5 ;;
+                *)
+			printf "\nThe network is down or very slown\n"
+			exit 1;;
+        esac
+done
+$1

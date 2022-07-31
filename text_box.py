@@ -7,7 +7,7 @@ class BorderedTextBox :
     BORDER_SPACING = 24
     LABEL_SPACING = 8
 
-    def __init__(self, title='', width=100, height=100, batch=None) :
+    def __init__(self, title='', width=100, height=100, batch=None, text_size = 22) :
         self.batch = batch
         self.width = width
         self.height = height
@@ -19,7 +19,7 @@ class BorderedTextBox :
         self.title.anchor_x = 'left'
         self.title.anchor_y = 'center'
 
-        self.contents = pyglet.text.Label('', FACSet.TEXT_FONT, 22, batch=self.batch, group= self.fg)
+        self.contents = pyglet.text.Label('', FACSet.TEXT_FONT, text_size, batch=self.batch, group= self.fg)
         self.contents.anchor_x = 'center'
         self.contents.anchor_y = 'center'
 
