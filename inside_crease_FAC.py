@@ -1,92 +1,35 @@
 import random
 import pyglet
+from inside_FAC_field import InsideFACField
 from fac_set import FACSet
 
-class FACField() :
-    F_BLUE = (0, 255, 255)
-    F_YELLOW = (255,255,150)
-    F_GRAY = (180,180,180)
-    F_WHITE = (240,240,240)
-    F_GREEN = (102, 255, 102)
-    B_BLACK = (0,0,0)
-
-
-    FONT_SIZE = 18
-    FONT_COLOR = (0, 0, 0, 255)
-    LINE_SPACING = 10
-
-    def __init__(self, font_size, bgColor, width, height, text='', bold=False,
-                              batch=None, fgGroup = None, bgGroup = None) :
-        self.border = pyglet.shapes.BorderedRectangle(0, 0, width, height, color = bgColor, border_color=FACField.B_BLACK,
-                                                        batch = batch, group = bgGroup)
-        self.doc = pyglet.text.document.FormattedDocument(text)
-
-        self.doc.set_style(0, len(self.doc.text), dict(color=FACField.FONT_COLOR,
-                                                       font_size=font_size,
-                                                       font_name=FACSet.TEXT_FONT,
-                                                       align='center',
-                                                       bold=bold,
-                                                       line_spacing=font_size+FACField.LINE_SPACING))
-        self.layout = pyglet.text.layout.TextLayout(self.doc, multiline=True, width=width, batch=batch, group=fgGroup)
-        self.layout.anchor_x = 'left'
-        self.layout.anchor_y = 'bottom'
-        #self.layout.content_valign = 'bottom'
-
-    def setPosition(self, left, bottom) :
-        self.left = left
-        self.bottom = bottom
-        self.border.position = (left, bottom)
-
-        #center layout in border
-        x = left #+ (self.border.width - self.layout.content_width) / 2
-        y = bottom +  (self.border.height - self.layout.content_height + FACField.LINE_SPACING) // 2
-        self.layout.position = (x, y)
-
-    #replace all >= or <= in document text with underlined > or underline <
-    def replaceComparators(self, comparator) :
-       while (True) :
-            pos = self.doc.text.find(comparator)
-            if pos > 0  :
-                self.doc.delete_text(pos+1, pos+2)
-                self.doc.set_style(pos, pos+1, dict(baseline=1, underline=FACField.FONT_COLOR))
-            else :
-                break
-
-
-    def setText(self, text) :
-        # change <= and >=
-        self.doc.text = text
-        self.replaceComparators('<=')
-        self.replaceComparators('>=')
-        self.setPosition(self.left, self.bottom)
-
 ########################################################################
-class InsideSportsSet(FACSet) :
+class InsideCreaseSet(FACSet) :
 
     FIELD_WIDTH = 130
     FIELD_HEIGHT = 61
     SPACE = 3
 
-    TEXT_FIELD_COLOR = FACField.F_GRAY
+    TEXT_FIELD_COLOR = InsideFACField.F_GRAY
 
     # (color, width, title, index into list of card fields)
-    COLUMNS = [ ( (FACField.F_GRAY, 1, 'PENALTY'), (FACField.F_GRAY, 1, 'LOOSE\nPUCK'),
-                  (FACField.F_GRAY, 1, 'REBOUND'), (FACField.F_GRAY, 1, 'SHOTS'),
-                  (FACField.F_BLUE, 3, 'FLIP'), (FACField.F_BLUE, 3, 'FLIP'),
-                  (FACField.F_GRAY, 1, 'PASS TO')),
-                ( (FACField.F_WHITE, 2, 'FLIP'), (FACField.F_WHITE, 2, 'FLIP'),
-                  (FACField.F_YELLOW, 2, 'FLIP'), (FACField.F_GREEN, 2, 'FLIP'),
-                  None, None, (FACField.F_BLUE, 1, 'FLIP')  ),
-                ( None, None, None, None, None, None, (FACField.F_BLUE, 1, 'FLIP') ),
-                ( (FACField.F_WHITE, 2, 'FLIP'), (FACField.F_WHITE, 2, 'FLIP'),
-                    (FACField.F_YELLOW, 1, 'FLIP'), (FACField.F_GREEN, 3, 'FLIP'),
-                    (FACField.F_WHITE, 1, 'FLIP'), (FACField.F_GRAY, 1, 'FO'),
-                    (FACField.F_BLUE, 2, 'FLIP')),
-                ( None, None, (FACField.F_GRAY, 1, 'SHOOTOUT'), None,
-                 (FACField.F_WHITE, 1, 'FLIP'), (FACField.F_GRAY, 1, 'ASSIST'), None),
-                ( (FACField.F_GRAY, 1, 'MINOR\nMAJOR'), (FACField.F_GRAY, 1, 'DUMP INS'),
-                  (FACField.F_WHITE, 1, 'FLIP'), None, (FACField.F_WHITE, 1, 'FLIP'),
-                  (FACField.F_GRAY, 1, 'BREAKAWAY'), (FACField.F_GRAY, 1, 'PASS TO')
+    COLUMNS = [ ( (InsideFACField.F_GRAY, 1, 'PENALTY'), (InsideFACField.F_GRAY, 1, 'LOOSE\nPUCK'),
+                  (InsideFACField.F_GRAY, 1, 'REBOUND'), (InsideFACField.F_GRAY, 1, 'SHOTS'),
+                  (InsideFACField.F_BLUE, 3, 'FLIP'), (InsideFACField.F_BLUE, 3, 'FLIP'),
+                  (InsideFACField.F_GRAY, 1, 'PASS TO')),
+                ( (InsideFACField.F_WHITE, 2, 'FLIP'), (InsideFACField.F_WHITE, 2, 'FLIP'),
+                  (InsideFACField.F_YELLOW, 2, 'FLIP'), (InsideFACField.F_GREEN, 2, 'FLIP'),
+                  None, None, (InsideFACField.F_BLUE, 1, 'FLIP')  ),
+                ( None, None, None, None, None, None, (InsideFACField.F_BLUE, 1, 'FLIP') ),
+                ( (InsideFACField.F_WHITE, 2, 'FLIP'), (InsideFACField.F_WHITE, 2, 'FLIP'),
+                    (InsideFACField.F_YELLOW, 1, 'FLIP'), (InsideFACField.F_GREEN, 3, 'FLIP'),
+                    (InsideFACField.F_WHITE, 1, 'FLIP'), (InsideFACField.F_GRAY, 1, 'FO'),
+                    (InsideFACField.F_BLUE, 2, 'FLIP')),
+                ( None, None, (InsideFACField.F_GRAY, 1, 'SHOOTOUT'), None,
+                 (InsideFACField.F_WHITE, 1, 'FLIP'), (InsideFACField.F_GRAY, 1, 'ASSIST'), None),
+                ( (InsideFACField.F_GRAY, 1, 'MINOR\nMAJOR'), (InsideFACField.F_GRAY, 1, 'DUMP INS'),
+                  (InsideFACField.F_WHITE, 1, 'FLIP'), None, (InsideFACField.F_WHITE, 1, 'FLIP'),
+                  (InsideFACField.F_GRAY, 1, 'BREAKAWAY'), (InsideFACField.F_GRAY, 1, 'PASS TO')
                 ) ]
 
     minor_odds = [2, 4, 6, 8, 10, 12, 13, 16, 18, 22, 26, 30, 36, 38, 46, 60, 78, 83, 100, 122, 146, 200]
@@ -145,27 +88,27 @@ class InsideSportsSet(FACSet) :
     def createLayout(self)  :
         self.textFields = []
         self.valueFields = []
-        x = InsideSportsSet.SPACE
-        for col in InsideSportsSet.COLUMNS :
-            y = InsideSportsSet.SPACE
+        x = InsideCreaseSet.SPACE
+        for col in InsideCreaseSet.COLUMNS :
+            y = InsideCreaseSet.SPACE
             for spot in col :
                 if not(spot is None) :
-                    if spot[0] == InsideSportsSet.TEXT_FIELD_COLOR :
+                    if spot[0] == InsideCreaseSet.TEXT_FIELD_COLOR :
 
-                        f = FACField(16, spot[0], InsideSportsSet.FIELD_WIDTH * spot[1] + InsideSportsSet.SPACE * (spot[1] - 1),
-                                    InsideSportsSet.FIELD_HEIGHT, spot[2], batch=self.batch, fgGroup=self.fg,
+                        f = InsideFACField(16, spot[0], InsideCreaseSet.FIELD_WIDTH * spot[1] + InsideCreaseSet.SPACE * (spot[1] - 1),
+                                    InsideCreaseSet.FIELD_HEIGHT, spot[2], batch=self.batch, fgGroup=self.fg,
                                     bgGroup=self.FACbg, bold=True)
 
                         self.textFields.append(f)
                     else :
-                        f = FACField(16, spot[0], InsideSportsSet.FIELD_WIDTH * spot[1] + InsideSportsSet.SPACE * (spot[1] - 1),
-                                    InsideSportsSet.FIELD_HEIGHT, spot[2], batch=self.batch, fgGroup=self.fg,
+                        f = InsideFACField(16, spot[0], InsideCreaseSet.FIELD_WIDTH * spot[1] + InsideCreaseSet.SPACE * (spot[1] - 1),
+                                    InsideCreaseSet.FIELD_HEIGHT, spot[2], batch=self.batch, fgGroup=self.fg,
                                     bgGroup=self.FACbg)
                         self.valueFields.append(f)
                     f.setPosition(x, y)
 
-                y += InsideSportsSet.FIELD_HEIGHT + InsideSportsSet.SPACE
-            x += InsideSportsSet.FIELD_WIDTH + InsideSportsSet.SPACE
+                y += InsideCreaseSet.FIELD_HEIGHT + InsideCreaseSet.SPACE
+            x += InsideCreaseSet.FIELD_WIDTH + InsideCreaseSet.SPACE
 
     def draw(self) :
         self.batch.draw()
@@ -220,14 +163,14 @@ class InsideSportsSet(FACSet) :
         return texts[a]
 
     def getRandomPenalty(self) :
-        minorText = self.getTextViaOdds(random.randint(1, 200), InsideSportsSet.minor_odds, InsideSportsSet.minors)
-        majorText = self.getTextViaOdds(random.randint(1, 200), InsideSportsSet.major_odds, InsideSportsSet.majors)
+        minorText = self.getTextViaOdds(random.randint(1, 200), InsideCreaseSet.minor_odds, InsideCreaseSet.minors)
+        majorText = self.getTextViaOdds(random.randint(1, 200), InsideCreaseSet.major_odds, InsideCreaseSet.majors)
 
         return minorText +'\n' + majorText
 
 
     def getAST(self) :
-        text = self.getTextViaOdds(random.randint(1, 200), InsideSportsSet.assist_odds, InsideSportsSet.assists)
+        text = self.getTextViaOdds(random.randint(1, 200), InsideCreaseSet.assist_odds, InsideCreaseSet.assists)
         return text.replace('x', random.choice(self.positions))
 
     def getShotNumber(self) :
@@ -280,9 +223,9 @@ class InsideSportsSet(FACSet) :
             value = random.randint(1,10)
             text = 'if ' + random.choice(self.positions) + ' DEF >= ' + str(value)
             if p == 1 :
-                text = 'Blocked ' + text + InsideSportsSet.blk_texts[value-1]
+                text = 'Blocked ' + text + InsideCreaseSet.blk_texts[value-1]
             elif p == 2 :
-                text = 'Wide shot ' + text + InsideSportsSet.wide_texts[value-1]
+                text = 'Wide shot ' + text + InsideCreaseSet.wide_texts[value-1]
             return text
 
     def getBreakaway(self) :
@@ -295,17 +238,17 @@ class InsideSportsSet(FACSet) :
                 text += '\nPen. Shot?'
         else :
             value = random.randint(1,10)
-            text = random.choice(forwards) + ' BRK >= ' + str(value) + InsideSportsSet.brk_texts[value-1]
+            text = random.choice(forwards) + ' BRK >= ' + str(value) + InsideCreaseSet.brk_texts[value-1]
         return text
 
     def getFaceOff(self) :
-        text = self.getTextViaOdds(random.randint(1, 200), InsideSportsSet.fo_odds, InsideSportsSet.fo_texts)
+        text = self.getTextViaOdds(random.randint(1, 200), InsideCreaseSet.fo_odds, InsideCreaseSet.fo_texts)
         text = text.replace('y', 'H' if random.random() < 0.58 else 'V')
         return text.replace('x', random.choice(self.positions))
 
     def getDumpIn(self) :
         p = random.randint(1,200)
-        text = self.getTextViaOdds(p, InsideSportsSet.dump_in_odds, InsideSportsSet.dump_in_text)
+        text = self.getTextViaOdds(p, InsideCreaseSet.dump_in_odds, InsideCreaseSet.dump_in_text)
         if p <= 54 :
             defense = ['LD', 'RD']
             text = text.replace('x', random.choice(defense))
@@ -326,15 +269,15 @@ class InsideSportsSet(FACSet) :
         if p == 1 :
             value = random.randint(1,8)
             text1 = 'Forced Dump In if ' + random.choice(self.positions) + ' DEF >= ' + str(value)
-            text2 = InsideSportsSet.dump_texts[value-1]
+            text2 = InsideCreaseSet.dump_texts[value-1]
         elif p == 2 :
             value = random.randint(1,8)
             text1 = 'Loose Puck if ' + random.choice(self.positions) + ' HIT >= ' + str(value)
-            text2 = InsideSportsSet.loose_texts[value-1]
+            text2 = InsideCreaseSet.loose_texts[value-1]
         elif p == 3 :
             value = random.randint(1,8)
             text1 = 'Takeaway if ' + random.choice(self.positions) + ' TAKE >= ' + str(value)
-            text2 = InsideSportsSet.take_texts[value-1]
+            text2 = InsideCreaseSet.take_texts[value-1]
         elif p == 4 :
             value = random.randint(1,8)
             pos = random.choice(self.positions)
@@ -343,14 +286,14 @@ class InsideSportsSet(FACSet) :
                 value = random.choice(v)
                 pos = 'any defender'
             else :
-                text2 = InsideSportsSet.penalty_texts[value-1]
+                text2 = InsideCreaseSet.penalty_texts[value-1]
             text1 = 'Penalty if ' + pos + ' PEN >= ' + str(value)
             
         else :
             value = random.randint(5,12)
             combos = ['LD+RD', 'LW+LD', 'RW+RD', 'C+LW', 'C+RW']
             text1 = 'Interception if ' + random.choice(combos) + ' DEF >= ' + str(value)
-            text2 = InsideSportsSet.interception_texts[value-5]
+            text2 = InsideCreaseSet.interception_texts[value-5]
         return (text1, text2)
 
     def generateFAC(self) :

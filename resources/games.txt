@@ -68,8 +68,8 @@ Inside the Crease
 hockey
 HockeyScoreboard
 inside-crease.png
-inside_FAC
-InsideSportsSet
+inside_crease_FAC
+InsideCreaseSet
 Hockey Blast
 hockey
 HockeyScoreboard
@@ -86,8 +86,8 @@ Inside the Paint
 basketball
 BasketballScoreboard
 inside-paint.png
-hmg_FAC
-HistoryMakerGolfSet
+inside_paint_FAC
+InsidePaintSet
 Centre Court Tennis
 tennis
 TennisScoreboard
