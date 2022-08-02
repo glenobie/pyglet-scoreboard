@@ -130,4 +130,16 @@ FootballScoreboard
 5d20.png
 fived20_FAC
 FiveD20Set
+Scoreboard Baseball
+baseball
+BaseballScoreboard
+scoreboard-baseball.png
+hmg_FAC
+HistoryMakerGolfSet
+Inside Volley
+tennis
+TennisScoreboard
+inside-volley.png
+inside_volley
+InsideVolleySet
 EOF
