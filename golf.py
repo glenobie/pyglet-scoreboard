@@ -281,9 +281,9 @@ class GolfScoreboard(Scoreboard) :
         self.createLeaderBoardColumn(GolfScoreboard.LEADERBOARD_COLS[3], 'BACK', self.state.getShotsBackAsString)
 
     def createLeaderBoardColumn(self, x, title, func) :
-
+        fg = pyglet.graphics.OrderedGroup(2)
         header = pyglet.text.Label(title, GolfScoreboard.LEADERBOARD_FONT, GolfScoreboard.LEADERBOARD_FONT_SIZE,
-                                        batch=self.batch  )
+                                        batch=self.batch, group=fg )
         header.position = (x, 450)
         header.anchor_x = 'right'
         self.leaderLabels.append(header)

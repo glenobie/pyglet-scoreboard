@@ -196,6 +196,13 @@
          d="M 0,1559.578 H 2163.12 V 0 H 0 Z"
          id="path392-9" />
     </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath122-3">
+      <path
+         d="M 0,1559.578 H 2163.12 V 0 H 0 Z"
+         id="path120-6" />
+    </clipPath>
   </defs>
   <sodipodi:namedview
      id="namedview4"
@@ -207,9 +214,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="0.76095916"
-     inkscape:cx="955.37322"
-     inkscape:cy="721.4579"
+     inkscape:zoom="0.66245342"
+     inkscape:cx="1151.7791"
+     inkscape:cy="1394.815"
      inkscape:window-width="1920"
      inkscape:window-height="1011"
      inkscape:window-x="0"
@@ -361,7 +368,8 @@
          sodipodi:role="line"
          id="tspan86">CRICKET</tspan></text>
     <g
-       id="g90">
+       id="g90"
+       transform="translate(-13.036713,-0.76920071)">
       <g
          id="g92"
          clip-path="url(#clipPath96)">
@@ -385,29 +393,36 @@
     </g>
     <text
        xml:space="preserve"
-       transform="matrix(1,0,0,-1,509.7007,1241.4648)"
+       transform="scale(1,-1)"
        style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:133.404px;font-family:'Baseball Icons';-inkscape-font-specification:BaseballIcons;writing-mode:lr-tb;fill:#231f20;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       id="text108"><tspan
-         x="0"
-         y="0"
+       id="text108"
+       x="496.664"
+       y="-1240.6956"><tspan
+         x="496.664"
+         y="-1240.6956"
          id="tspan106">H</tspan></text>
     <text
        xml:space="preserve"
-       transform="matrix(1,0,0,-1,545.0376,1197.2246)"
+       transform="scale(1,-1)"
        style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:44px;font-family:'Built Titling Sb';-inkscape-font-specification:BuiltTitlingSb-Regular;writing-mode:lr-tb;fill:#231f20;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       id="text114"><tspan
-         x="0 16.983999 34.188 51.48"
-         y="0"
+       id="text114"
+       x="532.00092"
+       y="-1196.4554"><tspan
+         x="532.00092 548.98486 566.1889 583.4809"
+         y="-1196.4554"
          sodipodi:role="line"
          id="tspan110">APBA</tspan><tspan
-         x="-29.48 -12.188 4.4879999 20.548 35.771999 53.063999 70.047997 83.996002"
-         y="44"
+         x="502.52087 519.81287 536.48889 552.54889 567.77289 585.06488 602.04889 615.99689"
+         y="-1152.4554"
          sodipodi:role="line"
          id="tspan112">BASEBALL</tspan></text>
     <g
        id="g90-7"
        transform="translate(-283.18775,0.0709618)"
-       style="fill:#6ca8ae;fill-opacity:1">
+       style="fill:#6ca8ae;fill-opacity:1"
+       inkscape:export-filename="scoreboard-baseball.png"
+       inkscape:export-xdpi="72.955719"
+       inkscape:export-ydpi="72.955719">
       <g
          id="g92-5"
          clip-path="url(#clipPath96-3)"
@@ -445,23 +460,24 @@
     <text
        xml:space="preserve"
        transform="matrix(1,0,0,-1,-140.02148,5.0020134)"
-       style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:44px;font-family:'Built Titling Sb';-inkscape-font-specification:BuiltTitlingSb-Regular;writing-mode:lr-tb;white-space:pre;inline-size:179.685;fill:#231f20;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:44px;font-family:'Built Titling Sb';-inkscape-font-specification:BuiltTitlingSb-Regular;writing-mode:lr-tb;white-space:pre;inline-size:179.685;display:inline;fill:#231f20;fill-opacity:1;fill-rule:nonzero;stroke:none"
        id="text114-2"
        x="346.19769"
        y="-1197.2957"><tspan
          x="346.19769"
          y="-1197.2957"
-         id="tspan2721"><tspan
+         id="tspan2049"><tspan
            style="text-align:center;text-anchor:middle"
-           id="tspan2719">scoreboard
+           id="tspan2047">scoreboard
 </tspan></tspan><tspan
          x="346.19769"
          y="-1142.1973"
-         id="tspan2725"><tspan
+         id="tspan2053"><tspan
            style="text-align:center;text-anchor:middle"
-           id="tspan2723">BASEBALL</tspan></tspan></text>
+           id="tspan2051">BASEBALL</tspan></tspan></text>
     <g
-       id="g116">
+       id="g116"
+       transform="translate(-9.9293679,-1.5722265)">
       <g
          id="g118"
          clip-path="url(#clipPath122)">
@@ -485,23 +501,27 @@
     </g>
     <text
        xml:space="preserve"
-       transform="matrix(1,0,0,-1,777.0718,1241.4648)"
+       transform="scale(1,-1)"
        style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:133.404px;font-family:'Baseball Icons';-inkscape-font-specification:BaseballIcons;writing-mode:lr-tb;fill:#231f20;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       id="text134"><tspan
-         x="0"
-         y="0"
+       id="text134"
+       x="767.14246"
+       y="-1239.8926"><tspan
+         x="767.14246"
+         y="-1239.8926"
          id="tspan132">s</tspan></text>
     <text
        xml:space="preserve"
-       transform="matrix(1,0,0,-1,754.8857,1197.2246)"
+       transform="scale(1,-1)"
        style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:44px;font-family:'Built Titling Sb';-inkscape-font-specification:BuiltTitlingSb-Regular;writing-mode:lr-tb;fill:#231f20;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       id="text140"><tspan
-         x="0 15.532 29.48 44.571999 60.411999 69.036003 85.096001 99.087997 116.292 133.57961"
-         y="0"
+       id="text140"
+       x="744.95636"
+       y="-1195.6523"><tspan
+         x="744.95636 760.48834 774.43634 789.52832 805.36835 813.99231 830.05231 844.04431 861.24835 878.53595"
+         y="-1195.6523"
          sodipodi:role="line"
          id="tspan136">Statis-PRO</tspan><tspan
-         x="11.704 28.996 45.672001 61.731998 76.956001 94.248001 111.232 125.18"
-         y="44"
+         x="756.66034 773.95233 790.62836 806.68835 821.91235 839.20435 856.18835 870.13635"
+         y="-1151.6523"
          sodipodi:role="line"
          id="tspan138">BASEBALL</tspan></text>
     <g
@@ -959,7 +979,10 @@
     <g
        id="g388-7"
        transform="translate(0.98818139,-247.84593)"
-       style="fill:#8a9b5a;fill-opacity:1">
+       style="fill:#8a9b5a;fill-opacity:1"
+       inkscape:export-filename="inside-volley.png"
+       inkscape:export-xdpi="72.321335"
+       inkscape:export-ydpi="72.321335">
       <g
          id="g390-3"
          clip-path="url(#clipPath394-8)"
@@ -1333,6 +1356,62 @@
        xml:space="preserve"
        transform="matrix(0.75000002,0,0,-0.75000002,0,1559.58)"
        id="text696"
-       style="fill:#000000;text-align:center;white-space:pre;shape-inside:url(#rect698)" />
+       style="text-align:center;white-space:pre;shape-inside:url(#rect698);display:inline;fill:#000000" />
+    <g
+       id="g116-7"
+       transform="translate(-3.7499519,-1029.0958)"
+       style="fill:#c2846a;fill-opacity:1">
+      <g
+         id="g118-5"
+         clip-path="url(#clipPath122-3)"
+         style="fill:#c2846a;fill-opacity:1">
+        <g
+           id="g124-3"
+           transform="translate(942.625,1150.7916)"
+           style="fill:#c2846a;fill-opacity:1">
+          <path
+             d="M 0,0 C 0,-8.213 -6.72,-14.933 -14.933,-14.933 H -209.067 C -217.28,-14.933 -224,-8.213 -224,0 v 194.133 c 0,8.214 6.72,14.934 14.933,14.934 H -14.933 C -6.72,209.067 0,202.347 0,194.133 Z"
+             style="fill:#c2846a;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             id="path126-5" />
+        </g>
+        <g
+           id="g128-6"
+           transform="translate(942.625,1150.7916)"
+           style="fill:#c2846a;fill-opacity:1">
+          <path
+             d="M 0,0 C 0,-8.213 -6.72,-14.933 -14.933,-14.933 H -209.067 C -217.28,-14.933 -224,-8.213 -224,0 v 194.133 c 0,8.214 6.72,14.934 14.933,14.934 H -14.933 C -6.72,209.067 0,202.347 0,194.133 Z"
+             style="fill:#c2846a;stroke:#231f20;stroke-width:2.987;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+             id="path130-2" />
+        </g>
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       transform="scale(1,-1)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:133.404px;font-family:'Baseball Icons';-inkscape-font-specification:BaseballIcons;writing-mode:lr-tb;fill:#231f20;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text134-9"
+       x="773.3219"
+       y="-212.36903"><tspan
+         x="773.3219"
+         y="-212.36903"
+         id="tspan132-1">8</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,-235.22844,-0.27599045)"
+       style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:44px;line-height:1;font-family:'Built Titling Sb';-inkscape-font-specification:BuiltTitlingSb-Regular;writing-mode:lr-tb;white-space:pre;inline-size:284.574;fill:#231f20;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text140-2"
+       x="919.4873"
+       y="-168.92616"><tspan
+         x="919.4873"
+         y="-168.92616"
+         id="tspan2057"><tspan
+           style="text-align:center;text-anchor:middle"
+           id="tspan2055">DUGOUT STEPS
+</tspan></tspan><tspan
+         x="919.4873"
+         y="-124.82785"
+         id="tspan2061"><tspan
+           style="text-align:center;text-anchor:middle"
+           id="tspan2059">BASEBALL</tspan></tspan></text>
   </g>
 </svg>
