@@ -32,13 +32,13 @@ class Die :
     INTERIOR_SPACING_PCT = 0.1
     FONT = 'Coolvetica'
 
-    def __init__(self, color, text_color=(0,0,0,255), sides=6, batch=None) :
+    def __init__(self, color, text_color=(0,0,0,255), sides=6, batch=None, startAtZero=False) :
         self.bg = pyglet.graphics.OrderedGroup(4)
         self.fg = pyglet.graphics.OrderedGroup(99)
         self.batch = batch
 
         self.listeners = []
-
+        self.startAtZero = startAtZero
         self.sides = sides
         self.color = color
         self.text_color = text_color
@@ -100,7 +100,7 @@ class Die :
         return c
 
     def roll(self) :
-        self.value = random.randint(1, self.sides)
+        self.value = random.randint(0,self.sides-1) if self.startAtZero else random.randint(1, self.sides)
         for ear in self.listeners :
             ear.valueChanged(self.value)
         self.update()
@@ -113,6 +113,7 @@ class Die :
     def update(self) :
         if len(self.dieLabels) > 0 :
             text = self.dieLabels[self.value-1]
+            # TODO won't work if start at zero
         else :
             text = str(self.value)
         for c in self.colorConditions :

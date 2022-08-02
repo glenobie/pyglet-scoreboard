@@ -117,9 +117,7 @@ class InsidePaintSet(FACSet) :
         self.valueFields[4].setText(passes[0])
         self.valueFields[8].setText(passes[1])
         self.valueFields[10].setText(passes[2])
-        self.valueFields[19].setText(self.getJump())
-
-    
+        self.valueFields[19].setText(self.getJump())    
 
     def handle_L(self) :
         self.generateFAC()

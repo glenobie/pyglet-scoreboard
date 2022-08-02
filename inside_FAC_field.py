@@ -29,7 +29,6 @@ class InsideFACField() :
         self.layout = pyglet.text.layout.TextLayout(self.doc, multiline=True, width=width, batch=batch, group=fgGroup)
         self.layout.anchor_x = 'left'
         self.layout.anchor_y = 'bottom'
-        #self.layout.content_valign = 'bottom'
 
     def setPosition(self, left, bottom) :
         self.left = left

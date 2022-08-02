@@ -39,6 +39,9 @@ class DiceSet :
     def setLabelFontSize(self, value) :
         self.labelDoc.set_style(0, len(self.labelDoc.text), dict(font_size = value))
 
+    def always(self) :
+        return True
+
     # are all the dice equal in value
     def allEqual(self) :
         d1 = self.dice[0].getValue()
@@ -60,6 +63,14 @@ class DiceSet :
 
     def totalAsString(self) :
         return str(self.computeTotal())
+
+    def diceAsBase10String(self) :
+        total = 0
+        power = 1
+        for d in reversed(self.dice) :
+            total += d.getValue() * power
+            power *= 10
+        return str(total)
 
     def valueChanged(self, value) :
         self.computeTotal()
