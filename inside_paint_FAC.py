@@ -38,6 +38,10 @@ class InsidePaintSet(FACSet) :
                 (None,None,None,None,(InsideFACField.F_GRAY, 1, 'SHOT'), None,None,(InsideFACField.F_GRAY, 1, 'PASS\nTO')) ]
 
 
+    jump_odds = [10, 20, 110, 128, 137, 146, 155, 164, 173, 182, 191, 200]
+    jump_texts = ['OB: HOME', 'OB: AWAY', 'x', '+1 x', '+1 x', '+2 x', '+3 x', '+4 x', '+5 x', '+6 x', '+7 x', '+8 x', '+9 x']
+
+
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
         self.paintBackground(FACSet.W_COLOR_WHITE)
@@ -75,6 +79,12 @@ class InsidePaintSet(FACSet) :
     def draw(self) :
         self.batch.draw()
 
+    def getTextViaOdds(self, value, odds, texts) :
+        for a in range(0, len(odds)) :
+            if value <= odds[a] :
+                break
+        return texts[a]
+
     # returns a list of 3 pass To values
     def getPassTo(self) :
         texts = ['','','']
@@ -88,17 +98,15 @@ class InsidePaintSet(FACSet) :
             if value <= 12 :
                 texts[0] += '*'
             texts[0] += '(' + str(value) + ')'
-            texts[1] = self.positions[1] + ' (' + str(11 - value % 10) + ')'
+            texts[1] = self.positions[1] + ' (' + ('1' if value == 20 else str(11 - value % 10) ) + ')'
             if value >= 17 :
                 texts[2] = 'Any ' + str(random.randint(21, 30) )
-
-
         return texts
-        # 20 for each position
-        # each position (1-20), with (1-12) asterisked
- 
-        # function -> second number = (11 - first % 10 )
-        # if first >= 17, third elemnt is 'Any ' + a random 21-30
+
+    def getJump(self) :
+        text = self.getTextViaOdds(random.randint(1,200), InsidePaintSet.jump_odds, InsidePaintSet.jump_texts)
+        text = text.replace('x', random.choice(self.positions))
+        return text
 
     def generateFAC(self) :
         random.shuffle(self.positions)
@@ -109,6 +117,7 @@ class InsidePaintSet(FACSet) :
         self.valueFields[4].setText(passes[0])
         self.valueFields[8].setText(passes[1])
         self.valueFields[10].setText(passes[2])
+        self.valueFields[19].setText(self.getJump())
 
     
 
