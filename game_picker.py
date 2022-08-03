@@ -26,7 +26,7 @@ class GamePicker(KeyHandler, pyglet.window.Window) :
         self.timeSinceAutosave = 0
  
         # center points for the icons
-        self.controlPoints = ( (400, 240, 0.95),   # 0: front, center
+        self.controlPoints = ( (400, 240, 1),   # 0: front, center
                                (220, 260, 0.6),   # 1: front, left of center
                                (100, 300, 0.48),  # 2: front, just before apex
                                (60, 330, 0.4),    # 3: left apex

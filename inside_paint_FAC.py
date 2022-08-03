@@ -13,7 +13,7 @@ class InsidePaintSet(FACSet) :
     TEXT_FIELD_COLOR = InsideFACField.F_GRAY
 
     # (color, width, title, index into list of card fields)
-    COLUMNS = [ ( (InsideFACField.F_GRAY, 2, 'REBOUND'), (InsideFACField.F_GRAY, 2, 'F(2) ?\nWHO?'),
+    COLUMNS = [ ( (InsideFACField.F_GRAY, 2, 'REBOUND'), (InsideFACField.F_GRAY, 2, 'F(2)?\nWHO?'),
                   (InsideFACField.F_GRAY, 2, 'ASSIST TO'), 
                   (InsideFACField.F_YELLOW, 6, 'FLIP'), (InsideFACField.F_GRAY, 1, 'SHOT'),
                   (InsideFACField.F_BLUE, 7, 'FLIP'), (InsideFACField.F_BLUE, 7, 'FLIP'),
