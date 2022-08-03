@@ -14,28 +14,28 @@ class InsidePaintSet(FACSet) :
 
     # (color, width, title, index into list of card fields)
     COLUMNS = [ ( (InsideFACField.F_GRAY, 2, 'REBOUND'), (InsideFACField.F_GRAY, 2, 'F(2)?\nWHO?'),
-                  (InsideFACField.F_GRAY, 2, 'ASSIST TO'), 
+                  (InsideFACField.F_GRAY, 1, 'AST\nTO'), 
                   (InsideFACField.F_YELLOW, 6, 'FLIP'), (InsideFACField.F_GRAY, 1, 'SHOT'),
                   (InsideFACField.F_BLUE, 7, 'FLIP'), (InsideFACField.F_BLUE, 7, 'FLIP'),
                   (InsideFACField.F_GRAY, 1, 'PASS\nTO')),
-                (None, None, None, None, (InsideFACField.F_YELLOW, 5, 'FLIP'),
+                ( None, None, (InsideFACField.F_BLUE, 1, 't'), None, (InsideFACField.F_YELLOW, 1, 'G'),
                                     None,None,(InsideFACField.F_BLUE, 2, 'FLIP')),
                 ( (InsideFACField.F_GREEN, 4, 'FLIP'), (InsideFACField.F_WHITE, 4, 'FLIP'),
-                                    (InsideFACField.F_BLUE, 2, 'FLIP'), None, None, None, None, None ),
+                                    (InsideFACField.F_BLUE, 2, 'FLIP'), None, (InsideFACField.F_YELLOW, 4, 'FLIP'), None, None, None ),
                 ( None, None, None, None, None, None, None, (InsideFACField.F_BLUE, 2, 'FLIP')),
-                ( None, None, (InsideFACField.F_BLUE, 2, 'FLIP'), None, None, None, None, None),
-                (None,None,None,None,None,None,None,(InsideFACField.F_BLUE, 2, 'FLIP') ),
+                ( None, None, (InsideFACField.F_BLUE, 2, 'FLIP or\nFLIP'), None, None, None, None, None),
+                ( None,None,None,None,None,None,None,(InsideFACField.F_BLUE, 2, 'FLIP') ),
                 ( (InsideFACField.F_GREEN, 3, 'Offensive Rebound\nFLIP'), (InsideFACField.F_WHITE, 3, 'FLIP'),
                     (InsideFACField.F_GRAY, 3, 'Regular\nASSIST LOOKUP'), (InsideFACField.F_YELLOW, 6, 'FLIP'),
                     (InsideFACField.F_YELLOW, 5, 'FLIP'), None,
                     None, None),
-                (None,None,None,None,None,(InsideFACField.F_WHITE, 3, 'FLIP'),(InsideFACField.F_GRAY, 3, 'FASTBREAK #'),(InsideFACField.F_BLUE, 4, 'FLIP')),
-                (None, None, None,None,None,None,None,None),
+                ( None,None,None,None,None,(InsideFACField.F_WHITE, 3, 'FLIP'),(InsideFACField.F_GRAY, 3, 'FASTBREAK #'),(InsideFACField.F_BLUE, 4, 'FLIP')),
+                ( None, None, None,None,None,None,None,None),
                  ( (InsideFACField.F_GREEN, 3, 'Fastbreak\nFLIP'), (InsideFACField.F_WHITE, 3, 'FLIP'),
                 (InsideFACField.F_GRAY, 3, 'Fastbreak/Alternate\nASSIST LOOKUP'), None,None,None,None,None),
                 ( None, None, None,  None, None, 
                         (InsideFACField.F_WHITE, 2, 'FLIP'),(InsideFACField.F_GRAY, 2, 'JUMP'), None),
-                (None,None,None,None,(InsideFACField.F_GRAY, 1, 'SHOT'), None,None,(InsideFACField.F_GRAY, 1, 'PASS\nTO')) ]
+                ( None,None,None,None,(InsideFACField.F_GRAY, 1, 'SHOT'), None,None,(InsideFACField.F_GRAY, 1, 'PASS\nTO')) ]
 
 
     jump_odds = [10, 20, 110, 128, 137, 146, 155, 164, 173, 182, 191, 200]
@@ -76,6 +76,11 @@ class InsidePaintSet(FACSet) :
                 y += InsidePaintSet.FIELD_HEIGHT + InsidePaintSet.SPACE
             x += InsidePaintSet.FIELD_WIDTH + InsidePaintSet.SPACE
 
+        self.valueFields[3].setFont(FACSet.DINGBAT_FONT, InsideFACField.FONT_RED, 44)
+        self.valueFields[3].setBaseline(-12)
+        self.valueFields[4].setFont(FACSet.DINGBAT_FONT, InsideFACField.FONT_RED, 44)
+        self.valueFields[4].setBaseline(-12)
+
     def draw(self) :
         self.batch.draw()
 
@@ -108,16 +113,42 @@ class InsidePaintSet(FACSet) :
         text = text.replace('x', random.choice(self.positions))
         return text
 
+    def getAssists(self) :
+        t1 = random.choice(self.positions)
+        mom = ''
+        t2 = 'y or\nx'
+        if (random.random() < 0.5) :
+            mom = 'G'
+        else :
+            t1 += ' (x)'
+        return [mom,t1,t2]
+
+    def getShotNumber(self) :
+        p = random.randint(1, 100)
+        mom = ''
+        num = '# ' + str(p)
+        if p <= 20 :
+            mom = 'G'
+        return [mom,num]
+
+
     def generateFAC(self) :
         random.shuffle(self.positions)
-        self.valueFields[16].setText('# '+str(random.randint(1,40)))
-        self.valueFields[15].setText('# '+str(random.randint(1,40)))
-        self.valueFields[11].setText('Offensive Rebound\n# '+str(random.randint(1,40)))
+        shot = self.getShotNumber()
+        self.valueFields[4].setText(shot[0])
+        self.valueFields[9].setText(shot[1])
+        self.valueFields[18].setText('# '+str(random.randint(1,40)))
+        self.valueFields[17].setText('# '+str(random.randint(1,40)))
+        self.valueFields[13].setText('Offensive Rebound\n# '+str(random.randint(1,40)))
         passes = self.getPassTo()
-        self.valueFields[4].setText(passes[0])
-        self.valueFields[8].setText(passes[1])
-        self.valueFields[10].setText(passes[2])
-        self.valueFields[19].setText(self.getJump())    
+        self.valueFields[5].setText(passes[0])
+        self.valueFields[10].setText(passes[1])
+        self.valueFields[12].setText(passes[2])
+        assists = self.getAssists()
+        self.valueFields[3].setText(assists[0])
+        self.valueFields[8].setText(assists[1])
+        self.valueFields[11].setText(assists[2])
+        self.valueFields[21].setText(self.getJump())    
 
     def handle_L(self) :
         self.generateFAC()

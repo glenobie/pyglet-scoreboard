@@ -6,6 +6,7 @@ class FACSet() :
     W_COLOR_BLACK = (30,30,30)
 
     TEXT_FONT = 'Roboto'
+    DINGBAT_FONT = 'Fire'
 
     def __init__(self, loader=None) :
         self.loader = loader

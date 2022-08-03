@@ -7,11 +7,13 @@ class InsideFACField() :
     F_GRAY = (180,180,180)
     F_WHITE = (240,240,240)
     F_GREEN = (102, 255, 102)
+    
     B_BLACK = (0,0,0)
 
 
     FONT_SIZE = 18
     FONT_COLOR = (0, 0, 0, 255)
+    FONT_RED  = (255,0,0, 255)
     LINE_SPACING = 10
 
     def __init__(self, font_size, bgColor, width, height, text='', bold=False,
@@ -58,3 +60,11 @@ class InsideFACField() :
         self.replaceComparators('>=')
         self.setPosition(self.left, self.bottom)
 
+    def setFont(self, fontName, fontColor, fontSize) :
+        self.doc.set_style(0, len(self.doc.text), dict(color=fontColor,
+                                                       font_size=fontSize,
+                                                       font_name=fontName))
+
+    def setBaseline(self, b) :
+        self.doc.set_style(0, len(self.doc.text), dict(baseline=b))    
+    
