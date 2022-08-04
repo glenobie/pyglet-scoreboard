@@ -202,7 +202,7 @@ class InsidePaintSet(FACSet) :
         elif p >= 93 and random.random() < 0.5 :
             text = '# 1 if HOME and HRF >= ' + str(101-p)
         elif p >= 76 :
-            text = '# 100 if team Momentum >= +' + str(((101-p)//5 +1 ))
+            text = '# 1 if team Momentum >= +' + str(((101-p)//5 +1 ))
         return [mom,num, text]
 
     def getFastBreak(self) :
@@ -212,6 +212,36 @@ class InsidePaintSet(FACSet) :
         if random.random() < 0.5 :
             text += ' STL only'
         return text
+
+    def getRebound(self) :
+        return 'TODO'
+        # PG/SG/PF/F/C (x) twice for 1 to 10, -> 100
+        #
+        # All pos once each for 11 to 15 -> 25
+        # Non center, once for 16-20 = 20
+        #
+        # any(x) (26, 26, 27,27, 28, 28, 29, 29, 30, 30, 31, 31, 32, 32, 32, 33, 34, 34, 35, 35) -> 20
+        #
+        #
+        # PF or F(x) (16, 17, 17, 18, 19, 20) -> 6
+        # C or PF (11, 12, 13, 14, 15) -> 5
+        # F or G (11, 12, 13, 14, 15) -> 5
+        # G or PG (16, 17, 18, 19, 20) -> 5
+        # PG (or PG, essesntially) (11, 12, 13, 14, 15, 21, 21, 22, 22, 23, 23, 24, 25, 25) -> 9
+
+        # 165 + 30 = 1950
+
+
+    def getFouler(self) :
+        return 'TODO'
+
+    def getRegularAssist(self) :
+        return 'TODO'
+    
+    def getFBAssist(self) :
+        return 'TODO'
+
+
 
     def generateFAC(self) :
         random.shuffle(self.positions)
@@ -236,6 +266,10 @@ class InsidePaintSet(FACSet) :
         shotDefs = self.getShotDefense()
         self.valueFields[16].setText(shotDefs[1])
         self.valueFields[21].setText(shotDefs[0])
+        self.valueFields[6].setText(self.getRebound())
+        self.valueFields[7].setText(self.getFouler())
+        self.valueFields[14].setText(self.getRegularAssist())
+        self.valueFields[20].setText(self.getFBAssist())
 
     def handle_L(self) :
         self.generateFAC()
