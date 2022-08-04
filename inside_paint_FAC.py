@@ -114,13 +114,26 @@ class InsidePaintSet(FACSet) :
         return text
 
     def getAssists(self) :
-        t1 = random.choice(self.positions)
+        random.shuffle(self.positions)
+        t1 = self.positions[0]
         mom = ''
         t2 = 'y or\nx'
         if (random.random() < 0.5) :
             mom = 'G'
         else :
-            t1 += ' (x)'
+            t1 += ' ('
+            t1 += str(random.randint(1,20))
+            t1 += ')'
+        
+        if random.random() < 0.45 :
+            x = random.randint(6,10)
+            y = 11 - x
+        else :
+            x = random.randint(1,5)
+            y = 6 - x
+        t2 = self.positions[1] + ' (' +str(x)+ ') or\n' + self.positions[2] + ' (' +str(y) + ')'
+        #90 add up to 11, 110 add up to 6
+
         return [mom,t1,t2]
 
     def getShotNumber(self) :
