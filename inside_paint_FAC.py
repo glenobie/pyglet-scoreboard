@@ -27,13 +27,13 @@ class InsidePaintSet(FACSet) :
                 ( None,None,None,None,None,None,None,(InsideFACField.F_BLUE, 2, 'FLIP') ),
                 ( (InsideFACField.F_GREEN, 3, 'Offensive Rebound\nFLIP'), (InsideFACField.F_WHITE, 3, 'FLIP'),
                     (InsideFACField.F_GRAY, 3, 'Regular\nASSIST LOOKUP'), (InsideFACField.F_YELLOW, 6, 'FLIP'),
-                    (InsideFACField.F_YELLOW, 5, 'FLIP'), None,
+                    (InsideFACField.F_YELLOW, 4, 'FLIP'), None,
                     None, None),
                 ( None,None,None,None,None,(InsideFACField.F_WHITE, 3, 'FLIP'),(InsideFACField.F_GRAY, 3, 'FASTBREAK #'),(InsideFACField.F_BLUE, 4, 'FLIP')),
                 ( None, None, None,None,None,None,None,None),
                  ( (InsideFACField.F_GREEN, 3, 'Fastbreak\nFLIP'), (InsideFACField.F_WHITE, 3, 'FLIP'),
                 (InsideFACField.F_GRAY, 3, 'Fastbreak/Alternate\nASSIST LOOKUP'), None,None,None,None,None),
-                ( None, None, None,  None, None, 
+                ( None, None, None,  None, (InsideFACField.F_YELLOW, 1, 'G'), 
                         (InsideFACField.F_WHITE, 2, 'FLIP'),(InsideFACField.F_GRAY, 2, 'JUMP'), None),
                 ( None,None,None,None,(InsideFACField.F_GRAY, 1, 'SHOT'), None,None,(InsideFACField.F_GRAY, 1, 'PASS\nTO')) ]
 
@@ -90,6 +90,8 @@ class InsidePaintSet(FACSet) :
         self.valueFields[3].setBaseline(-12)
         self.valueFields[4].setFont(FACSet.DINGBAT_FONT, InsideFACField.FONT_RED, 44)
         self.valueFields[4].setBaseline(-12)
+        self.valueFields[21].setFont(FACSet.DINGBAT_FONT, InsideFACField.FONT_RED, 44)
+        self.valueFields[21].setBaseline(-12)
 
     def draw(self) :
         self.batch.draw()
@@ -147,7 +149,7 @@ class InsidePaintSet(FACSet) :
         return [mom,t1,t2]
 
     def getShotDefense(self) :
-        return ''
+        return 'Blocked by Defender if\nBLK >= 23'
         # missed if [pos] def >= (3, 6, 9) -> 15
         # missed if defender def >= (1, 2, 4, 5, 6, 7, 8, 9, 10, 11) 4 each, (12) 5 -> 45
         # blocked if defender BLK >= (1, 2, 3), 5 each -> 15
@@ -207,9 +209,10 @@ class InsidePaintSet(FACSet) :
         self.valueFields[3].setText(assists[0])
         self.valueFields[8].setText(assists[1])
         self.valueFields[11].setText(assists[2])
-        self.valueFields[21].setText(self.getJump())   
+        self.valueFields[22].setText(self.getJump())   
         self.valueFields[19].setText(self.getFastBreak()) 
         self.valueFields[2].setText(self.getDefense())
+        self.valueFields[16].setText(self.getShotDefense())
 
     def handle_L(self) :
         self.generateFAC()
