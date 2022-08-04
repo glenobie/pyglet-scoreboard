@@ -140,16 +140,33 @@ class InsidePaintSet(FACSet) :
         p = random.randint(1, 100)
         mom = ''
         num = '# ' + str(p)
+        text = ''
         if p <= 20 :
             mom = 'G'
-        return [mom,num]
+        if p <= 8 and random.random() < 0.5 :
+            text = '# 100 if AWAY and HRF >= ' + str(p)
+        elif p <= 25 :
+            text = '# 100 if team Momentum <= ' + str(-((p-1)//5 +1 ))
+        elif p >= 93 and random.random() < 0.5 :
+            text = '# 1 if HOME and HRF >= ' + str(101-p)
+        elif p >= 76 :
+            text = '# 100 if team Momentum >= +' + str(((101-p)//5 +1 ))
+        return [mom,num, text]
 
+    def getFastBreak(self) :
+        pos = random.choice(self.positions)
+        text = 'Fastbreak\n'
+        text += pos + ' (' + str(random.randint(1,20)) + ')'
+        if random.random() < 0.5 :
+            text += ' STL only'
+        return text
 
     def generateFAC(self) :
         random.shuffle(self.positions)
         shot = self.getShotNumber()
         self.valueFields[4].setText(shot[0])
         self.valueFields[9].setText(shot[1])
+        self.valueFields[0].setText(shot[2])
         self.valueFields[18].setText('# '+str(random.randint(1,40)))
         self.valueFields[17].setText('# '+str(random.randint(1,40)))
         self.valueFields[13].setText('Offensive Rebound\n# '+str(random.randint(1,40)))
@@ -161,7 +178,8 @@ class InsidePaintSet(FACSet) :
         self.valueFields[3].setText(assists[0])
         self.valueFields[8].setText(assists[1])
         self.valueFields[11].setText(assists[2])
-        self.valueFields[21].setText(self.getJump())    
+        self.valueFields[21].setText(self.getJump())   
+        self.valueFields[19].setText(self.getFastBreak()) 
 
     def handle_L(self) :
         self.generateFAC()
