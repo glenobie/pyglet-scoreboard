@@ -41,6 +41,22 @@ class InsidePaintSet(FACSet) :
     jump_odds = [10, 20, 110, 128, 137, 146, 155, 164, 173, 182, 191, 200]
     jump_texts = ['OB: HOME', 'OB: AWAY', 'x', '+1 x', '+1 x', '+2 x', '+3 x', '+4 x', '+5 x', '+6 x', '+7 x', '+8 x', '+9 x']
 
+      # stl each position (2, 4, 6, 8) -> 20
+        # stl defender (1, 3, 5, 7, 9, 10), 5 each -> 30
+        # f(1) defender (10, 30, 50, 70. 90, 100) 5 each -> 30
+        # f(1) each position (20,40, 60, 80) -> 20
+        # TO , opposing team >= (1-10) -> 10
+
+    defense_odds = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 200]
+    defense_texts = ['Steal if x STL >= 2', 'Steal if x STL >= 4','Steal if x STL >= 6','Steal if x STL >= 8',
+                     'F(1) if x CF >= 20', 'F(1) if x CF >= 40', 'F(1) if x CF >= 60', 'F(1) if x CF >= 80', 
+                      'Steal if Defender STL >= 1', 'Steal if Defender STL >= 3', 'Steal if Defender STL >= 5', 
+                      'Steal if Defender STL >= 7', 'Steal if Defender STL >= 9', 'Steal if Defender STL >= 10', 
+                      'F(1) if Defender CF >= 10', 'F(1) if Defender CF >= 30','F(1) if Defender CF >= 50',
+                      'F(1) if Defender CF >= 70','F(1) if Defender CF >= 90','F(1) if Defender CF >= 100',
+                      'TO if Opposing Team TO >= 1', 'TO if Opposing Team TO >= 2', 'TO if Opposing Team TO >= 3', 'TO if Opposing Team TO >= 4', 
+                      'TO if Opposing Team TO >= 5', 'TO if Opposing Team TO >= 6', 'TO if Opposing Team TO >= 7', 'TO if Opposing Team TO >= 8', 
+                      'TO if Opposing Team TO >= 9', 'TO if Opposing Team TO >= 10', '']
 
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
@@ -136,6 +152,9 @@ class InsidePaintSet(FACSet) :
 
         return [mom,t1,t2]
 
+    def getDefense(self) :
+        text = self.getTextViaOdds(random.randint(1,200), InsidePaintSet.defense_odds, InsidePaintSet.defense_texts)
+        return text.replace('x', random.choice(self.positions))
     def getShotNumber(self) :
         p = random.randint(1, 100)
         mom = ''
@@ -180,6 +199,7 @@ class InsidePaintSet(FACSet) :
         self.valueFields[11].setText(assists[2])
         self.valueFields[21].setText(self.getJump())   
         self.valueFields[19].setText(self.getFastBreak()) 
+        self.valueFields[2].setText(self.getDefense())
 
     def handle_L(self) :
         self.generateFAC()
