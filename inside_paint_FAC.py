@@ -149,18 +149,39 @@ class InsidePaintSet(FACSet) :
         return [mom,t1,t2]
 
     def getShotDefense(self) :
-        return 'Blocked by Defender if\nBLK >= 23'
-        # missed if [pos] def >= (3, 6, 9) -> 15
-        # missed if defender def >= (1, 2, 4, 5, 6, 7, 8, 9, 10, 11) 4 each, (12) 5 -> 45
-        # blocked if defender BLK >= (1, 2, 3), 5 each -> 15
-        # blocked if center BLK >= (4-20) -> 17
-        # " " PF >= (4-16) -> 12
-        # forward .+ (4-10) -> 7
-        #, g, pg, (4, 5, 6) -> 6
-        # total blocked = 57
-        # F(2) WHO : (1-30) with + (3pt) if divisble by 4: -> 30
-        # total = 60 + 57 + 30 = 147
+        p = random.randint(1,200)
+        text = ''
+        mom = ''
+        if p <= 60 :
+            text = 'Missed Shot if\n'
+            if p <= 15 :
+                text += random.choice(self.positions) + ' DEF >= ' + str(3*random.randint(1,3))
+            else :
+                defs = [1,1,1,1,2,2,2,2,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,12,12,12,12,12]
+                text += 'Defender DEF >= ' + str(random.choice(defs))
 
+        elif p <= 117 :
+            text = 'Blocked Shot if\n'
+            if p <= 75 :
+                text += 'Defender BLK >= ' + str(random.randint(1,3))
+                mom = 'G'
+            elif p <= 92 :
+                text += 'C BLK >= ' + str(random.randint(4,20))
+            elif p <= 104 :
+                text += 'PF BLK >= ' + str(random.randint(4,16))
+            elif p <= 111 :
+                text += 'F BLK >= ' + str(random.randint(4,10))
+            elif p <= 114 :
+                text += 'SG BLK >= ' + str(random.randint(4,6))
+            else :
+                text += 'PG BLK >= ' + str(random.randint(4,6))
+            
+        elif p <= 147 :
+            q = random.randint(1,30)
+            text = 'Shooting Foul if\n Shooter FD >= ' + str(q)
+            if q // 4 == 0 :
+                text += ' (3pt) '
+        return [mom,text]
 
     def getDefense(self) :
         text = self.getTextViaOdds(random.randint(1,200), InsidePaintSet.defense_odds, InsidePaintSet.defense_texts)
@@ -212,7 +233,9 @@ class InsidePaintSet(FACSet) :
         self.valueFields[22].setText(self.getJump())   
         self.valueFields[19].setText(self.getFastBreak()) 
         self.valueFields[2].setText(self.getDefense())
-        self.valueFields[16].setText(self.getShotDefense())
+        shotDefs = self.getShotDefense()
+        self.valueFields[16].setText(shotDefs[1])
+        self.valueFields[21].setText(shotDefs[0])
 
     def handle_L(self) :
         self.generateFAC()
