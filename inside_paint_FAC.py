@@ -41,12 +41,6 @@ class InsidePaintSet(FACSet) :
     jump_odds = [10, 20, 110, 128, 137, 146, 155, 164, 173, 182, 191, 200]
     jump_texts = ['OB: HOME', 'OB: AWAY', 'x', '+1 x', '+1 x', '+2 x', '+3 x', '+4 x', '+5 x', '+6 x', '+7 x', '+8 x', '+9 x']
 
-      # stl each position (2, 4, 6, 8) -> 20
-        # stl defender (1, 3, 5, 7, 9, 10), 5 each -> 30
-        # f(1) defender (10, 30, 50, 70. 90, 100) 5 each -> 30
-        # f(1) each position (20,40, 60, 80) -> 20
-        # TO , opposing team >= (1-10) -> 10
-
     defense_odds = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 200]
     defense_texts = ['Steal if x STL >= 2', 'Steal if x STL >= 4','Steal if x STL >= 6','Steal if x STL >= 8',
                      'F(1) if x CF >= 20', 'F(1) if x CF >= 40', 'F(1) if x CF >= 60', 'F(1) if x CF >= 80', 
@@ -152,9 +146,25 @@ class InsidePaintSet(FACSet) :
 
         return [mom,t1,t2]
 
+    def getShotDefense(self) :
+        return ''
+        # missed if [pos] def >= (3, 6, 9) -> 15
+        # missed if defender def >= (1, 2, 4, 5, 6, 7, 8, 9, 10, 11) 4 each, (12) 5 -> 45
+        # blocked if defender BLK >= (1, 2, 3), 5 each -> 15
+        # blocked if center BLK >= (4-20) -> 17
+        # " " PF >= (4-16) -> 12
+        # forward .+ (4-10) -> 7
+        #, g, pg, (4, 5, 6) -> 6
+        # total blocked = 57
+        # F(2) WHO : (1-30) with + (3pt) if divisble by 4: -> 30
+        # total = 60 + 57 + 30 = 147
+
+
     def getDefense(self) :
         text = self.getTextViaOdds(random.randint(1,200), InsidePaintSet.defense_odds, InsidePaintSet.defense_texts)
         return text.replace('x', random.choice(self.positions))
+
+
     def getShotNumber(self) :
         p = random.randint(1, 100)
         mom = ''
