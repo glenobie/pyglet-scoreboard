@@ -58,6 +58,7 @@ class InsidePaintSet(FACSet) :
                       
                       ['','']]
     defs = [1,1,1,1,2,2,2,2,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,12,12,12,12,12]
+
     rebound_odds = [24, 44, 57, 67, 77, 88, 99, 106, 111, 116, 137, 151, 161, 166, 170, 178, 183, 190, 195, 200]
     rebound_texts = [['Def C (x) or Off', 36], ['Def PF (x) or Off', 35], ['Def F (x) or Off', 25],
                     ['Def SG (x) or Off', 19], ['Def PG (x) or Off', 19], ['Off C (x) or Def', 21],
@@ -272,8 +273,6 @@ class InsidePaintSet(FACSet) :
                         'PG (25)', 'PG (25)']
             text = random.choice(leftovers)
             pos = text[0:-5]
-            print(str(pos))
-
         return [text, pos]
 
     def getFouler(self) :
@@ -285,10 +284,7 @@ class InsidePaintSet(FACSet) :
         if result[1] > 0 :
             text = text.replace('x', str(random.randint(1, result[1])))
         return text + ' TODO'
-    
-
-
-
+  
 
     def generateFAC(self) :
         random.shuffle(self.positions)
@@ -316,8 +312,8 @@ class InsidePaintSet(FACSet) :
         self.valueFields[16].setText(shotDefs[1])
         self.valueFields[15].setText(shotDefs[2])
         self.valueFields[21].setText(shotDefs[0])
-        self.valueFields[6].setText(self.getRebound())
-        self.valueFields[7].setText(self.getFouler())
+        self.valueFields[6].setText(self.getRebound()) # not done
+        self.valueFields[7].setText(self.getFouler())  # not done
         lookup1 = self.getAssistLookup()
         self.valueFields[14].setText(lookup1[0])
         lookup2 = self.getAssistLookup()
