@@ -52,6 +52,15 @@ class InsidePaintSet(FACSet) :
                       'TO if Opposing Team TO >= 5', 'TO if Opposing Team TO >= 6', 'TO if Opposing Team TO >= 7', 'TO if Opposing Team TO >= 8', 
                       'TO if Opposing Team TO >= 9', 'TO if Opposing Team TO >= 10', '']
 
+    rebound_odds = [24, 44, 57, 67, 77, 88, 99, 106, 111, 116, 137, 151, 161, 166, 170, 178, 183, 190, 195, 200]
+    rebound_texts = [['Def C (x) or Off', 36], ['Def PF (x) or Off', 35], ['Def F (x) or Off', 25],
+                    ['Def SG (x) or Off', 19], ['Def PG (x) or Off', 19], ['Off C (x) or Def', 21],
+                    ['Off PF (x) or Def', 21], ['Off F (x) or Def', 13], ['Off SG (x) or Def', 9], 
+                    ['Off PG (x) or Def', 9], ['Def C (x) or Def', 36], ['Def PF (x) or Def', 27],
+                    ['Def F (x) or Def', 19], ['Def SG (x) or Def', 9], ['Def PG (x) or Def', 7],
+                    ['Loose Ball Foul',0], ['OFF OB',0], ['DEF OB',0], ['Jump',0], ['HOME y',0]]
+
+
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
         self.paintBackground(FACSet.W_COLOR_WHITE)
@@ -213,7 +222,7 @@ class InsidePaintSet(FACSet) :
             text += ' STL only'
         return text
 
-    def getRebound(self) :
+    def getRegularAssist(self) :
         return 'TODO'
         # PG/SG/PF/F/C (x) twice for 1 to 10, -> 100
         #
@@ -227,16 +236,20 @@ class InsidePaintSet(FACSet) :
         # C or PF (11, 12, 13, 14, 15) -> 5
         # F or G (11, 12, 13, 14, 15) -> 5
         # G or PG (16, 17, 18, 19, 20) -> 5
-        # PG (or PG, essesntially) (11, 12, 13, 14, 15, 21, 21, 22, 22, 23, 23, 24, 25, 25) -> 9
+        # PG (no or) (11, 12, 13, 14, 15, 21, 21, 22, 22, 23, 23, 24, 25, 25) -> 14
 
-        # 165 + 30 = 1950
+
 
 
     def getFouler(self) :
         return 'TODO'
 
-    def getRegularAssist(self) :
-        return 'TODO'
+    def getRebound(self) :
+        result = self.getTextViaOdds(random.randint(1,200), InsidePaintSet.rebound_odds, InsidePaintSet.rebound_texts)
+        text = result[0]
+        if result[1] > 0 :
+            text = text.replace('x', str(random.randint(1, result[1])))
+        return text
     
     def getFBAssist(self) :
         return 'TODO'
