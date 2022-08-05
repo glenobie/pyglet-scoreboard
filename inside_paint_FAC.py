@@ -60,8 +60,9 @@ class InsidePaintSet(FACSet) :
     defs = [1,1,1,1,2,2,2,2,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,12,12,12,12,12]
 
     rebound_odds = [ 170, #positions
-                     178, 183, 190, 195, 200 ]
-    rebound_texts = [0, 'Loose Ball foul', 'Offense OB', 'Defense OB', 'Jump x', 'HOME y']
+                     175, 178, 183, 190, 193, 195, 200 ]
+    rebound_texts = [0, 'Loose Ball Foul\nCheck Defense First', 'Loose Ball Foul\nCheck Offense First', 'Offense OB', 
+                        'Defense OB', 'Jump Ball (H)', 'Jump Ball (V)', 'HOME x']
 
     # [position, [Odds out of 39 for OFF OFF, 77 for DEF, 54 for Defensive paired with max value]
     reb1 = [['C',  [11, 21], [24, 36], [21, 36]],
@@ -316,7 +317,7 @@ class InsidePaintSet(FACSet) :
             for t in row2[2] :
                 total += InsidePaintSet.reb1[t][column+1][0]
                 c.append( [total, InsidePaintSet.reb1[t][0], t] )
-            print(c)    
+            #print(c)    
             p = random.randint(1, total)
             for i in c :
                 if p <= i[0] :
@@ -328,7 +329,8 @@ class InsidePaintSet(FACSet) :
 
 
         else :
-            text = result
+            text = result.replace('x', random.choice(self.positions))
+
         
         return text
   
