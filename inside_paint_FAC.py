@@ -59,15 +59,32 @@ class InsidePaintSet(FACSet) :
                       ['','']]
     defs = [1,1,1,1,2,2,2,2,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,12,12,12,12,12]
 
-    rebound_odds = [24, 44, 57, 67, 77, 88, 99, 106, 111, 116, 137, 151, 161, 166, 170, 178, 183, 190, 195, 200]
-    rebound_texts = [['Def C (x) or Off', 36], ['Def PF (x) or Off', 35], ['Def F (x) or Off', 25],
-                    ['Def SG (x) or Off', 19], ['Def PG (x) or Off', 19], ['Off C (x) or Def', 21],
-                    ['Off PF (x) or Def', 21], ['Off F (x) or Def', 13], ['Off SG (x) or Def', 9], 
-                    ['Off PG (x) or Def', 9], ['Def C (x) or Def', 36], ['Def PF (x) or Def', 27],
-                    ['Def F (x) or Def', 19], ['Def SG (x) or Def', 9], ['Def PG (x) or Def', 7],
-                    ['Loose Ball Foul',0], ['OFF OB',0], ['DEF OB',0], ['Jump',0], ['HOME y',0]]
+    rebound_odds = [ 170, #positions
+                     178, 183, 190, 195, 200 ]
+    rebound_texts = [0, 'Loose Ball foul', 'Offense OB', 'Defense OB', 'Jump x', 'HOME y']
 
+    # [position, [Odds out of 39 for OFF OFF, 77 for DEF, 54 for Defensive paired with max value]
+    reb1 = [['C',  [11, 21], [24, 36], [21, 36]],
+            ['PF', [11, 21], [20, 35], [14, 27]],
+            ['F',  [7, 13],  [13, 25], [10, 19]],
+            ['SG', [5, 9],   [10, 19], [5, 9]],
+            ['PG', [5, 9],   [10, 19], [4, 9]]]
 
+    # [position, [Odds out of 77 for OFF, 39 for DEF, 54 for Defensive], [indices into reb1 for possible positions]]
+    reb2 = [['C',          [13, 88, 121],  [1,2,3,4]],
+            ['High C/F',   [13, 88, 125],  [1,3,4]],
+            ['High C/PF',  [26, 91, 125],  [2,3,4]],
+            ['High PF/F',  [35, 92, 135],  [0,3,4]],
+            ['High SG/PG', [39, 96, 137],  [0,1,2]],
+            ['High F/SG',  [39, 97, 138],  [0,1,4]],
+            ['High F/PG',  [39, 98, 140],  [0,1,3]],
+            ['F',          [48, 100, 147], [0,1,3,4]],
+            ['PF',         [61, 110, 162],  [0,2,3,4]],
+            ['SG',         [69, 113, 166],  [0,1,2,4]],
+            ['PG',         [77, 116, 170],  [0,1,2,3]] ]
+
+    reb_options = [['Off', 'Def'], ['Def', 'Off'], ['Def', 'Def']]
+    
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
         self.paintBackground(FACSet.W_COLOR_WHITE)
@@ -232,7 +249,7 @@ class InsidePaintSet(FACSet) :
             text = '# 1 if HOME and HRF >= ' + str(101-p)
         elif p >= 76 :
             text = '# 1 if team Momentum >= +' + str(((101-p)//5 +1 ))
-        return [mom,num, text]
+        return [mom, num, text]
 
     def getFastBreak(self) :
         pos = random.choice(self.positions)
@@ -260,11 +277,11 @@ class InsidePaintSet(FACSet) :
             anys = [26, 26, 27,27, 28, 28, 29, 29, 30, 30, 31, 31, 32, 32, 32, 33, 34, 34, 35, 35]
             text = pos + ' ('+ str(random.choice(anys)) + ')'
         elif p <= 175 : 
-            subset = ['C or PF', 'F or G']
+            subset = ['C or PF', 'F or SG']
             pos = random.choice(subset)
             text = pos + ' (' + str(random.randint(11,15)) + ')'
         elif p <= 185 :
-            subset = ['PF or C', 'G or PG']
+            subset = ['PF or C', 'SG or PG']
             pos = random.choice(subset)
             text = pos + ' (' + str(random.randint(16,20)) + ')'
         else : 
@@ -279,11 +296,41 @@ class InsidePaintSet(FACSet) :
         return 'TODO'
 
     def getRebound(self) :
+        text=''
         result = self.getTextViaOdds(random.randint(1,200), InsidePaintSet.rebound_odds, InsidePaintSet.rebound_texts)
-        text = result[0]
-        if result[1] > 0 :
-            text = text.replace('x', str(random.randint(1, result[1])))
-        return text + ' TODO'
+        if result == 0 :
+            p = random.randint(1, 170)
+            found = False
+            row = column = 0
+            for i in [0, 1, 2] :
+                for j in InsidePaintSet.reb2 :
+                    if p <= j[1][i] :
+                        row2 = j
+                        column = i
+                        found = True
+                        break
+                if found : break
+            # construct next odds table
+            c = []
+            total = 0
+            for t in row2[2] :
+                total += InsidePaintSet.reb1[t][column+1][0]
+                c.append( [total, InsidePaintSet.reb1[t][0], t] )
+            print(c)    
+            p = random.randint(1, total)
+            for i in c :
+                if p <= i[0] :
+                    row1 = InsidePaintSet.reb1[i[2]]
+                    break
+            text = InsidePaintSet.reb_options[column][0] + ' ' + row1[0] + ' ('
+            text += str( random.randint(1, row1[column+1][1]) ) + ') or\n' 
+            text += InsidePaintSet.reb_options[column][1] + ' ' + row2[0]
+
+
+        else :
+            text = result
+        
+        return text
   
 
     def generateFAC(self) :
@@ -294,7 +341,7 @@ class InsidePaintSet(FACSet) :
         self.valueFields[0].setText(shot[2])
         self.valueFields[18].setText('# '+str(random.randint(1,40)))
         self.valueFields[17].setText('# '+str(random.randint(1,40)))
-        self.valueFields[13].setText('Offensive Rebound\n# '+str(random.randint(1,40)))
+        self.valueFields[13].setText('Offensive Rebound\n# ' + str(random.randint(1,40)))
         passes = self.getPassTo()
         self.valueFields[5].setText(passes[0])
         self.valueFields[10].setText(passes[1])
