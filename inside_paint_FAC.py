@@ -241,7 +241,7 @@ class InsidePaintSet(FACSet) :
             text += ' STL only'
         return text
 
-    def getRegularAssist(self) :
+    def getAssistLookup(self) :
         text = 'TODO'
         p = random.randint(1,200)
         if p <= 100 :
@@ -277,8 +277,7 @@ class InsidePaintSet(FACSet) :
             text = text.replace('x', str(random.randint(1, result[1])))
         return text + ' TODO'
     
-    def getFBAssist(self) :
-        return 'TODO'
+
 
 
 
@@ -310,8 +309,8 @@ class InsidePaintSet(FACSet) :
         self.valueFields[21].setText(shotDefs[0])
         self.valueFields[6].setText(self.getRebound())
         self.valueFields[7].setText(self.getFouler())
-        self.valueFields[14].setText(self.getRegularAssist())
-        self.valueFields[20].setText(self.getFBAssist())
+        self.valueFields[14].setText(self.getAssistLookup())
+        self.valueFields[20].setText(self.getAssistLookup())
 
     def handle_L(self) :
         self.generateFAC()
