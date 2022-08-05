@@ -41,17 +41,23 @@ class InsidePaintSet(FACSet) :
     jump_odds = [10, 20, 110, 128, 137, 146, 155, 164, 173, 182, 191, 200]
     jump_texts = ['OB: HOME', 'OB: AWAY', 'x', '+1 x', '+1 x', '+2 x', '+3 x', '+4 x', '+5 x', '+6 x', '+7 x', '+8 x', '+9 x']
 
-    defense_odds = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 200]
-    defense_texts = ['Steal if x STL >= 2', 'Steal if x STL >= 4','Steal if x STL >= 6','Steal if x STL >= 8',
-                     'F(1) if x CF >= 20', 'F(1) if x CF >= 40', 'F(1) if x CF >= 60', 'F(1) if x CF >= 80', 
-                      'Steal if Defender STL >= 1', 'Steal if Defender STL >= 3', 'Steal if Defender STL >= 5', 
-                      'Steal if Defender STL >= 7', 'Steal if Defender STL >= 9', 'Steal if Defender STL >= 10', 
-                      'F(1) if Defender CF >= 10', 'F(1) if Defender CF >= 30','F(1) if Defender CF >= 50',
-                      'F(1) if Defender CF >= 70','F(1) if Defender CF >= 90','F(1) if Defender CF >= 100',
-                      'TO if Opposing Team TO >= 1', 'TO if Opposing Team TO >= 2', 'TO if Opposing Team TO >= 3', 'TO if Opposing Team TO >= 4', 
-                      'TO if Opposing Team TO >= 5', 'TO if Opposing Team TO >= 6', 'TO if Opposing Team TO >= 7', 'TO if Opposing Team TO >= 8', 
-                      'TO if Opposing Team TO >= 9', 'TO if Opposing Team TO >= 10', '']
-
+    defense_odds = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 
+                    120, 125, 130, 135, 140, 145, 150, 200]
+    defense_texts = [ ['Steal if x STL >= 2','No Steal if x is SAFE'], ['Steal if x STL >= 4',''], ['Steal if x STL >= 6',''], ['Steal if x STL >= 8',''],
+                      ['F(1) if x CF >= 20','No Foul if x in SAFE'], ['F(1) if x CF >= 40',''], ['F(1) if x CF >= 60',''], ['F(1) if x CF >= 80',''], 
+                      ['Steal if Defender STL >= 1','No Steal if Defender in SAFE'], ['Steal if Defender STL >= 3',''], ['Steal if Defender STL >= 5',''], 
+                      ['Steal if Defender STL >= 7',''], ['Steal if Defender STL >= 9','Steal if Defense in PRESS'], ['Steal if Defender STL >= 10','Steal if Defense in PRESS'], 
+                      ['F(1) if Defender CF >= 10','No Foul if Defender in SAFE'], ['F(1) if Defender CF >= 30',''], ['F(1) if Defender CF >= 50',''],
+                      ['F(1) if Defender CF >= 70',''], ['F(1) if Defender CF >= 90','F(1) if Defense in PRESS'], ['F(1) if Defender CF >= 100','F(1) if Defense in PRESS'],
+                      ['TO if Opposing Team TO >= 1',''], ['TO if Opposing Team TO >= 2',''], ['TO if Opposing Team TO >= 3',''], ['TO if Opposing Team TO >= 4',''],
+                      ['TO if Opposing Team TO >= 5',''], ['TO if Opposing Team TO >= 6',''], ['TO if Opposing Team TO >= 7',''], ['TO if Opposing Team TO >= 8',''] ,
+                      ['TO if Opposing Team TO >= 9',''], ['TO if Opposing Team TO >= 10', ''] , ['','TO if opposing team in PRESS'],
+                      ['', 'AST if Defense in PRESS and x AST >= 4'], ['', 'AST if Defense in PRESS and x AST >= 8'], ['', 'AST if Defense in PRESS and x AST >= 12'], 
+                      ['', 'AST if Defense in PRESS and x AST >= 16'], ['', 'AST if Defense in PRESS and x AST >= 20'],['', 'AST if Defense in PRESS and x AST >= 24'],
+                      
+                      
+                      ['','']]
+    defs = [1,1,1,1,2,2,2,2,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,12,12,12,12,12]
     rebound_odds = [24, 44, 57, 67, 77, 88, 99, 106, 111, 116, 137, 151, 161, 166, 170, 178, 183, 190, 195, 200]
     rebound_texts = [['Def C (x) or Off', 36], ['Def PF (x) or Off', 35], ['Def F (x) or Off', 25],
                     ['Def SG (x) or Off', 19], ['Def PG (x) or Off', 19], ['Off C (x) or Def', 21],
@@ -159,42 +165,55 @@ class InsidePaintSet(FACSet) :
 
     def getShotDefense(self) :
         p = random.randint(1,200)
-        text = ''
+        text1 = ''
+        text2 = ''
         mom = ''
         if p <= 60 :
-            text = 'Missed Shot if\n'
+            text1 = 'Missed Shot if\n'
             if p <= 15 :
-                text += random.choice(self.positions) + ' DEF >= ' + str(3*random.randint(1,3))
-            else :
-                defs = [1,1,1,1,2,2,2,2,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,12,12,12,12,12]
-                text += 'Defender DEF >= ' + str(random.choice(defs))
+                text1 += random.choice(self.positions) + ' DEF >= ' + str(3*random.randint(1,3))
+            else :                
+                value = random.choice(InsidePaintSet.defs)
+                if value >= 11 :
+                    text2 = 'Missed Shot if Shooter is DOUBLED'
+                elif value <= 2 :
+                    text2 = 'Not Missed if Shot Defender is\nSAFE or DOUBLING'
+
+                text1 += 'Defender DEF >= ' + str(value)
+                
 
         elif p <= 117 :
-            text = 'Blocked Shot if\n'
+            text1 = 'Blocked Shot if\n'
             if p <= 75 :
-                text += 'Defender BLK >= ' + str(random.randint(1,3))
+                value = random.randint(1,3)
+                if value <= 2 :
+                    text2 = 'No Block if Shot Defender is SAFE'
+                text1 += 'Defender BLK >= ' + str(value)
                 mom = 'G'
             elif p <= 92 :
-                text += 'C BLK >= ' + str(random.randint(4,20))
+                text1 += 'C BLK >= ' + str(random.randint(4,20))
             elif p <= 104 :
-                text += 'PF BLK >= ' + str(random.randint(4,16))
+                text1 += 'PF BLK >= ' + str(random.randint(4,16))
             elif p <= 111 :
-                text += 'F BLK >= ' + str(random.randint(4,10))
+                text1 += 'F BLK >= ' + str(random.randint(4,10))
             elif p <= 114 :
-                text += 'SG BLK >= ' + str(random.randint(4,6))
+                text1 += 'SG BLK >= ' + str(random.randint(4,6))
             else :
-                text += 'PG BLK >= ' + str(random.randint(4,6))
+                text1 += 'PG BLK >= ' + str(random.randint(4,6))
             
         elif p <= 147 :
             q = random.randint(1,30)
             text = 'Shooting Foul if\n Shooter FD >= ' + str(q)
             if q // 4 == 0 :
                 text += ' (3pt) '
-        return [mom,text]
+        return [mom, text1, text2]
 
-    def getDefense(self) :
-        text = self.getTextViaOdds(random.randint(1,200), InsidePaintSet.defense_odds, InsidePaintSet.defense_texts)
-        return text.replace('x', random.choice(self.positions))
+    def getPassDefense(self) :
+        data = self.getTextViaOdds(random.randint(1,200), InsidePaintSet.defense_odds, InsidePaintSet.defense_texts)
+        pos = random.choice(self.positions)
+        text1 = data[0].replace('x', pos )
+        text2 = data[1].replace('x', pos )
+        return [ text1, text2 ]
 
 
     def getShotNumber(self) :
@@ -275,9 +294,12 @@ class InsidePaintSet(FACSet) :
         self.valueFields[11].setText(assists[2])
         self.valueFields[22].setText(self.getJump())   
         self.valueFields[19].setText(self.getFastBreak()) 
-        self.valueFields[2].setText(self.getDefense())
+        passDefs = self.getPassDefense()
+        self.valueFields[1].setText(passDefs[1])
+        self.valueFields[2].setText(passDefs[0])
         shotDefs = self.getShotDefense()
         self.valueFields[16].setText(shotDefs[1])
+        self.valueFields[15].setText(shotDefs[2])
         self.valueFields[21].setText(shotDefs[0])
         self.valueFields[6].setText(self.getRebound())
         self.valueFields[7].setText(self.getFouler())
