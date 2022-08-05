@@ -242,23 +242,30 @@ class InsidePaintSet(FACSet) :
         return text
 
     def getRegularAssist(self) :
-        return 'TODO'
-        # PG/SG/PF/F/C (x) twice for 1 to 10, -> 100
-        #
-        # All pos once each for 11 to 15 -> 25
-        # Non center, once for 16-20 = 20
-        #
-        # any(x) (26, 26, 27,27, 28, 28, 29, 29, 30, 30, 31, 31, 32, 32, 32, 33, 34, 34, 35, 35) -> 20
-        #
-        #
-        # PF or F(x) (16, 17, 17, 18, 19, 20) -> 6
-        # C or PF (11, 12, 13, 14, 15) -> 5
-        # F or G (11, 12, 13, 14, 15) -> 5
-        # G or PG (16, 17, 18, 19, 20) -> 5
-        # PG (no or) (11, 12, 13, 14, 15, 21, 21, 22, 22, 23, 23, 24, 25, 25) -> 14
-
-
-
+        text = 'TODO'
+        p = random.randint(1,200)
+        if p <= 100 :
+            text = random.choice(self.positions) + ' (' + str(random.randint(1,10)) + ')'
+        elif p <= 125 :
+            text = random.choice(self.positions) + ' (' + str(random.randint(11,15)) + ')'
+        elif p <= 145 :
+            subset = ['PF','PG','SG','F']
+            text = random.choice(subset) + ' (' + str(random.randint(16,20)) + ')'
+        elif p <= 165 :
+            anys = [26, 26, 27,27, 28, 28, 29, 29, 30, 30, 31, 31, 32, 32, 32, 33, 34, 34, 35, 35]
+            text = 'Any ('+ str(random.choice(anys)) + ')'
+        elif p <= 175 : 
+            subset = ['C or PF', 'F or G']
+            text = random.choice(subset) + ' (' + str(random.randint(11,15)) + ')'
+        elif p <= 185 :
+            subset = ['PF or C', 'G or PG']
+            text = random.choice(subset) + ' (' + str(random.randint(16,20)) + ')'
+        else : 
+            leftovers = ['PF or F (17)', 'PG (11)', 'PG (12)', 'PG (13)', 'PG (14)', 'PG (15)', 
+                        'PG (21)', 'PG (21)', 'PG (22)', 'PG (22)', 'PG (23)', 'PG (23)', 'PG (24)', 
+                        'PG (25)', 'PG (25)']
+            text = random.choice(leftovers)
+        return text
 
     def getFouler(self) :
         return 'TODO'
@@ -268,7 +275,7 @@ class InsidePaintSet(FACSet) :
         text = result[0]
         if result[1] > 0 :
             text = text.replace('x', str(random.randint(1, result[1])))
-        return text
+        return text + ' TODO'
     
     def getFBAssist(self) :
         return 'TODO'
