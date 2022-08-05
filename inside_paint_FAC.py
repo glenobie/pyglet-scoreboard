@@ -187,7 +187,7 @@ class InsidePaintSet(FACSet) :
             if p <= 75 :
                 value = random.randint(1,3)
                 if value <= 2 :
-                    text2 = 'No Block if Shot Defender is SAFE'
+                    text2 = 'Not Blocked if Shot Defender is SAFE'
                 text1 += 'Defender BLK >= ' + str(value)
                 mom = 'G'
             elif p <= 92 :
@@ -245,27 +245,36 @@ class InsidePaintSet(FACSet) :
         text = 'TODO'
         p = random.randint(1,200)
         if p <= 100 :
-            text = random.choice(self.positions) + ' (' + str(random.randint(1,10)) + ')'
+            pos = random.choice(self.positions)
+            text = pos + ' (' + str(random.randint(1,10)) + ')'
         elif p <= 125 :
-            text = random.choice(self.positions) + ' (' + str(random.randint(11,15)) + ')'
+            pos = random.choice(self.positions)
+            text = pos + ' (' + str(random.randint(11,15)) + ')'
         elif p <= 145 :
             subset = ['PF','PG','SG','F']
-            text = random.choice(subset) + ' (' + str(random.randint(16,20)) + ')'
+            pos = random.choice(subset)
+            text = pos + ' (' + str(random.randint(16,20)) + ')'
         elif p <= 165 :
+            pos = 'Any'
             anys = [26, 26, 27,27, 28, 28, 29, 29, 30, 30, 31, 31, 32, 32, 32, 33, 34, 34, 35, 35]
-            text = 'Any ('+ str(random.choice(anys)) + ')'
+            text = pos + ' ('+ str(random.choice(anys)) + ')'
         elif p <= 175 : 
             subset = ['C or PF', 'F or G']
-            text = random.choice(subset) + ' (' + str(random.randint(11,15)) + ')'
+            pos = random.choice(subset)
+            text = pos + ' (' + str(random.randint(11,15)) + ')'
         elif p <= 185 :
             subset = ['PF or C', 'G or PG']
-            text = random.choice(subset) + ' (' + str(random.randint(16,20)) + ')'
+            pos = random.choice(subset)
+            text = pos + ' (' + str(random.randint(16,20)) + ')'
         else : 
             leftovers = ['PF or F (17)', 'PG (11)', 'PG (12)', 'PG (13)', 'PG (14)', 'PG (15)', 
                         'PG (21)', 'PG (21)', 'PG (22)', 'PG (22)', 'PG (23)', 'PG (23)', 'PG (24)', 
                         'PG (25)', 'PG (25)']
             text = random.choice(leftovers)
-        return text
+            pos = text[0:-5]
+            print(str(pos))
+
+        return [text, pos]
 
     def getFouler(self) :
         return 'TODO'
@@ -309,8 +318,12 @@ class InsidePaintSet(FACSet) :
         self.valueFields[21].setText(shotDefs[0])
         self.valueFields[6].setText(self.getRebound())
         self.valueFields[7].setText(self.getFouler())
-        self.valueFields[14].setText(self.getAssistLookup())
-        self.valueFields[20].setText(self.getAssistLookup())
+        lookup1 = self.getAssistLookup()
+        self.valueFields[14].setText(lookup1[0])
+        lookup2 = self.getAssistLookup()
+        while lookup2[1] == lookup1[1] :
+            lookup2 = self.getAssistLookup()
+        self.valueFields[20].setText(lookup2[0])
 
     def handle_L(self) :
         self.generateFAC()
