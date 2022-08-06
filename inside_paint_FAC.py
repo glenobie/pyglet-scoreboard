@@ -294,7 +294,20 @@ class InsidePaintSet(FACSet) :
         return [text, pos]
 
     def getFouler(self) :
-        return 'TODO'
+        if random.random() < 0.9 :
+            value = 2 * random.randint(1, 36)
+            asterisks = ''
+            if value <= 24 :
+                asterisks = '**'
+            text = random.choice(self.positions) + ' (' + str(value) + ')' + asterisks + '\nor Defensive High'
+        else :
+            value = 5 * random.randint(1,20)
+            text = 'Defender (' + str(value) + ')\n or Offensive Foul'
+        return text
+
+        # all 5 positions,  even numbers 2 thru 72 -> 36 * 5 = 180 or DEF(HIGH)
+        # DEF (5 - 100 by 5) = 20 or OFF FL
+        # ** on some  position <= 24
 
     def getRebound(self) :
         text=''
