@@ -79,9 +79,9 @@ class InsidePaintSet(FACSet) :
             ['High F/SG',  [39, 97, 138],  [0,1,4]],
             ['High F/PG',  [39, 98, 140],  [0,1,3]],
             ['F',          [48, 100, 147], [0,1,3,4]],
-            ['PF',         [61, 110, 162],  [0,2,3,4]],
-            ['SG',         [69, 113, 166],  [0,1,2,4]],
-            ['PG',         [77, 116, 170],  [0,1,2,3]] ]
+            ['PF',         [61, 110, 162], [0,2,3,4]],
+            ['SG',         [69, 113, 166], [0,1,2,4]],
+            ['PG',         [77, 116, 170], [0,1,2,3]] ]
 
     reb_options = [['Off', 'Def'], ['Def', 'Off'], ['Def', 'Def']]
     
@@ -252,11 +252,15 @@ class InsidePaintSet(FACSet) :
         return [mom, num, text]
 
     def getFastBreak(self) :
-        pos = random.choice(self.positions)
+        p = random.random() 
         text = 'Fastbreak\n'
-        text += pos + ' (' + str(random.randint(1,20)) + ')'
-        if random.random() < 0.5 :
-            text += ' STL only'
+        if p < 0.02 :
+            text += 'X Chart'
+        else :
+            pos = random.choice(self.positions)
+            text += pos + ' (' + str(random.randint(1,20)) + ')'
+            if p > 0.51 :
+                text += ' STL only'
         return text
 
     def getAssistLookup(self) :
@@ -296,7 +300,6 @@ class InsidePaintSet(FACSet) :
         return 'TODO'
 
     def getRebound(self) :
-        text=''
         result = self.getTextViaOdds(random.randint(1,200), InsidePaintSet.rebound_odds, InsidePaintSet.rebound_texts)
         if result == 0 :
             p = random.randint(1, 170)
@@ -325,8 +328,6 @@ class InsidePaintSet(FACSet) :
             text = InsidePaintSet.reb_options[column][0] + ' ' + row1[0] + ' ('
             text += str( random.randint(1, row1[column+1][1]) ) + ') or\n' 
             text += InsidePaintSet.reb_options[column][1] + ' ' + row2[0]
-
-
         else :
             text = result
         
