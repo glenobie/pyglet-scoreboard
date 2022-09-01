@@ -339,12 +339,8 @@ class InsidePaintSet(FACSet) :
             text = InsidePaintSet.reb_options[column][0] + ' ' + row1[0] + ' ('
             text += str( random.randint(1, row1[column+1][1]) ) + ') or\n' 
             text += InsidePaintSet.reb_options[column][1] + ' ' + row2[0]
-
-
         else :
-            text = result.replace('x', random.choice(self.positions))
-
-        
+            text = result.replace('x', random.choice(self.positions))        
         return text
   
 

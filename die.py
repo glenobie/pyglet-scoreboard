@@ -5,6 +5,8 @@ import math
 ##########################################
 class Die :
 
+    InteriorSpaces = {}
+
     D_GREEN = (0, 153,0)
     D_BLUE = (0,0,204)
     D_WHITE = (255,255,255)
@@ -28,9 +30,13 @@ class Die :
 
     WIDTH = 100
     HEIGHT = 100
-    TEXT_SIZE = 100
+    TEXT_SIZE = 60
     INTERIOR_SPACING_PCT = 0.1
     FONT = 'Coolvetica'
+
+    @classmethod
+    def updateDictionary(cls, key, value):
+        cls.InteriorSpaces[key] = value
 
     def __init__(self, color, text_color=(0,0,0,255), sides=6, batch=None, startAtZero=False) :
         self.bg = pyglet.graphics.OrderedGroup(4)
@@ -41,6 +47,7 @@ class Die :
         self.startAtZero = startAtZero
         self.sides = sides
         self.color = color
+        self.dieScale = 1
         self.text_color = text_color
         self.border_color = (text_color[0], text_color[1], text_color[2])
         self.value = 1
@@ -75,16 +82,24 @@ class Die :
 
     def adjustBaseTextSize(self) :
         # find longest possible string
-        testString = str(self.sides)
-        for t in self.dieLabels :
-            if len(t) > len(testString) :
-                testString = t
 
-        desiredSpacing = self.border.height * self.interiorSpacingPct
-        self.document.text = testString
-        while self.border.height  - self.layout.content_height < desiredSpacing :
-            self.baseTextSize -= 1
-            self.document.set_style(0, len(self.document.text), dict(font_size=self.baseTextSize))
+        key = Die.FONT + str(self.interiorSpacingPct) + str(self.dieScale)
+        if key in Die.InteriorSpaces :
+            value = Die.InteriorSpaces[key]
+            print ('Found key: ' + key)
+            self.document.set_style(0, len(self.document.text), dict(font_size=value))
+        else :
+            testString = str(self.sides)
+            for t in self.dieLabels :
+                if len(t) > len(testString) :
+                    testString = t
+
+            desiredSpacing = self.border.height * self.interiorSpacingPct
+            self.document.text = testString
+            while self.border.height  - self.layout.content_height < desiredSpacing :
+                self.baseTextSize -= 1
+                self.document.set_style(0, len(self.document.text), dict(font_size=self.baseTextSize))
+            Die.InteriorSpaces[key] = self.baseTextSize
 
 
     def getValue(self) :
@@ -125,6 +140,7 @@ class Die :
 
 
     def scale(self, value) :
+        self.dieScale = value
         self.border.width = math.floor(Die.WIDTH * value)
         self.border.height = math.floor(Die.HEIGHT * value)
         self.adjustBaseTextSize()
