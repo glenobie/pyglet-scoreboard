@@ -31,7 +31,7 @@ class Die :
     WIDTH = 100
     HEIGHT = 100
     TEXT_SIZE = 60
-    INTERIOR_SPACING_PCT = 0.1
+    INTERIOR_SPACING_PCT = 0.05
     FONT = 'Coolvetica'
 
     @classmethod
@@ -81,8 +81,6 @@ class Die :
         self.update()
 
     def adjustBaseTextSize(self) :
-        # find longest possible string
-
         key = Die.FONT + str(self.interiorSpacingPct) + str(self.dieScale)
         if key in Die.InteriorSpaces :
             value = Die.InteriorSpaces[key]
@@ -99,6 +97,7 @@ class Die :
             while self.border.height  - self.layout.content_height < desiredSpacing :
                 self.baseTextSize -= 1
                 self.document.set_style(0, len(self.document.text), dict(font_size=self.baseTextSize))
+            # record new value in dictionary
             Die.InteriorSpaces[key] = self.baseTextSize
 
 
