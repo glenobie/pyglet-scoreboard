@@ -86,7 +86,7 @@ class Die :
         key = Die.FONT + str(self.interiorSpacingPct) + str(self.dieScale)
         if key in Die.InteriorSpaces :
             value = Die.InteriorSpaces[key]
-            print ('Found key: ' + key)
+            #print ('Found key: ' + key)
             self.document.set_style(0, len(self.document.text), dict(font_size=value))
         else :
             testString = str(self.sides)
