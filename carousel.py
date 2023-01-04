@@ -48,9 +48,10 @@ class Carousel :
         self.conotrlPoints = controlPoints
         self.listFront = None
         self.build()
+        # self.printList()
 
     def build(self) :
-        print("building")
+        # print("building")
         tempFront = None
         for c in self.conotrlPoints :
             newNode = MenuLocationNode(c)

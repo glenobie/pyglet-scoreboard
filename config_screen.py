@@ -28,17 +28,15 @@ class ConfigScreen(KeyHandler) :
     FIND_GIT_HUB_SCRIPT = 'git-test'
     GIT_PULL_SCRIPT = 'git-pull-scoreboard'
 
-    def __init__(self, loader, iconBatch) :
+    def __init__(self, loader) :
         self.loader = loader
 
         self.batch = pyglet.graphics.Batch()
         self.scoreboards = []
-        self.iconBatch = iconBatch
 
         # border will go in the background group, all others foreground
         self.bg = pyglet.graphics.OrderedGroup(0)
         self.fg = pyglet.graphics.OrderedGroup(1)
-
 
         self.createUserConfigFiles()
 
@@ -54,6 +52,9 @@ class ConfigScreen(KeyHandler) :
         self.scriptHome = str(Path.home()) + '/'
         self.checkForGit()
         
+    def draw(self) :
+        self.batch.draw()
+
     def checkForGit(self) :
         # run script to see if git-hub can be reached
         self.gitNotFound = subprocess.call(['sh',  self.scriptHome + ConfigScreen.FIND_GIT_HUB_SCRIPT])
@@ -90,13 +91,11 @@ class ConfigScreen(KeyHandler) :
         self.configFile.write(ConfigScreen.END_OF_FILE + '\n')
         self.configFile.close()
 
-    def setIconBatch(self, batch) :
-        self.iconBatch = batch
-
     # create objects from text descriptions in games
     # (game name, scoreboard module, scoreboard class, icon/sprite, fac module, fac class)
     def objectsFromGames(self, gameList) :
         print("generating")
+        self.iconBatch = pyglet.graphics.Batch()
         objectList = []
         for g in gameList :    
             s = []
@@ -129,17 +128,19 @@ class ConfigScreen(KeyHandler) :
     def getBatch(self) :
         return self.batch
 
+    def getIconBatch(self) :
+        return self.iconBatch
+
     def getScoreboards(self) :
         return self.scoreboards
 
+    def getNumGamesChosen(self) :
+        return len(self.chosenGameLayout.getGames())
+
     # on exit, write to file and save scoraboards to list for picker
-    def handleExit(self, menuScreen) :   
-        if (len(self.chosenGameLayout.getGames()) > 0) :
-            self.recordToFile(self.chosenGameLayout.getGames())
-            self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
-            menuScreen.createMenu()
-            return 1
-        return 0
+    def handleExit(self) :   
+        self.recordToFile(self.chosenGameLayout.getGames())
+        self.scoreboards = self.objectsFromGames(self.chosenGameLayout.getGames())
 
     # keyboard handlers
 

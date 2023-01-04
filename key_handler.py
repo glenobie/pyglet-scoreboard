@@ -1,7 +1,7 @@
 class KeyHandler :
     def __init__(self) :  0
 
-    def handle_Z(self, modified=False) :   0
+    def handle_Z(self, modified=False) : 0
 
     def handle_C(self, modified=False) : 0
 

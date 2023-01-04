@@ -1,5 +1,5 @@
 import pyglet
-from fac_set import FACSet
+from fac_set import FACSet, ChoiceFAC
 from die import Die
 from random import seed
 import time
@@ -10,7 +10,7 @@ class FastActionWindow(pyglet.window.Window) :
     def __init__(self, width, height, fullscreen, screen=None) :
         pyglet.window.Window.__init__(self, width, height, fullscreen=fullscreen, screen=screen)
         seed(time.time_ns())
-        self.fac = FACSet()
+        self.fac = ChoiceFAC()
 
     def on_draw(self) :
         self.clear()
@@ -26,6 +26,6 @@ class FastActionWindow(pyglet.window.Window) :
         self.fac.handle_K()
     
     def clearFACSet(self) :
-        self.fac = FACSet()
+        self.fac = ChoiceFAC()
 
 

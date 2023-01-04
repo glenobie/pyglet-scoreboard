@@ -48,6 +48,8 @@ class Scoreboard(KeyHandler) :
         dir = pyglet.resource.get_settings_path('Scoreboard')
         self.autosaveFilename = os.path.join(dir, Scoreboard.AUTOSAVE_FILE + '.' + self.__class__.__name__)
 
+    def draw(self) :
+        self.batch.draw()
 
     def loadFromAutosaveFile(self) :
         if (os.path.exists(self.autosaveFilename)) :
@@ -126,7 +128,7 @@ class Scoreboard(KeyHandler) :
         e.setCenterTop(Scoreboard.CENTER, height)
         self.elements.append(e)
 
-    def handleExit(self, menuScreen):
+    def handleExit(self):
         self.autosave()
         return 1
 
