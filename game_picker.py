@@ -18,22 +18,24 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
     AUTOSAVE_INTERVAL = 60 # scoreboards will autosave every AUTOSAVE_INTERVAL seconds
 
     def __init__(self, width, height, isPi = False) :
-        self.path = ['resources', 'resources/icons', 'resources/fonts']
-        self.loader = self.findResources(self.path)
-        pyglet.clock.schedule_interval(self.autosave, MainWindow.AUTOSAVE_INTERVAL)
 
+        # create window(s)
         display = pyglet.canvas.get_display()
         screens = display.get_screens()
         pyglet.window.Window.__init__(self, width, height, fullscreen=isPi, screen=screens[0])
-        
         self.displayingFAC = (isPi and len(screens) > 1) or not(isPi)
         if self.displayingFAC :
             self.createFACWindow(isPi, width, height)
 
+        pyglet.clock.schedule_interval(self.autosave, MainWindow.AUTOSAVE_INTERVAL)
+
+        self.path = ['resources', 'resources/icons', 'resources/fonts']
+        self.loader = self.findResources(self.path)
         self.configScreen = ConfigScreen(self.loader)
         self.pickerScreen = GamePicker(self.configScreen.getScoreboards(), self.configScreen.getIconBatch())
 
-        if len(self.pickerScreen.scoreboardTuples) > 0 :
+        # determine which screen to load first
+        if self.configScreen.getNumGamesChosen() > 0 :
             self.activeScreen = self.pickerScreen
         else :
             self.activeScreen = self.configScreen
@@ -78,6 +80,25 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
 
         else : 
             self.windowFAC = FastActionWindow(width, height, fullscreen=False)
+
+    def autosave(self, dt) :
+        self.activeScreen.autosave()
+
+    # called from startup.py, update position of icons
+    # can probably remove in pyglet 2.0 and just use app.run(interval=1/30.0)
+    def update(self, dt) :
+        if self.activeScreen == self.pickerScreen :
+            self.pickerScreen.update(dt)
+
+    def on_draw(self) :
+        self.clear()
+        self.activeScreen.draw() 
+
+    def on_close(self):
+        if self.displayingFAC :
+            self.windowFAC.close()
+        return super().on_close()
+
 
     def on_key_press(self, symbol, modifiers):
         modified = modifiers & pyglet.window.key.LSHIFT
@@ -148,22 +169,8 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
             self.windowFAC.setFACSet(fac)
             self.activeScreen.attachFAC(fac) # for messages bewteen FAC and Scoreboard
 
-    def autosave(self, dt) :
-        self.activeScreen.autosave()
 
-    def update(self, dt) :
-        if self.activeScreen == self.pickerScreen :
-            self.pickerScreen.update(dt)
-
-    def on_draw(self) :
-        self.clear()
-        self.activeScreen.draw() 
-
-    def on_close(self):
-        if self.displayingFAC :
-            self.windowFAC.close()
-        return super().on_close()
-
+##################################################################
 class GamePicker(KeyHandler) :
 
     def __init__(self, scoreboardTuples, batch) :
@@ -207,7 +214,9 @@ class GamePicker(KeyHandler) :
     def handle_D(self, modified = False) :
         self.options.rotate(-1)        
 
-
+    # only scoreboards do autosave
+    def autosave(self) :
+        0
 
 
 
