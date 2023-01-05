@@ -129,6 +129,8 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
                 if self.activeScreen == self.pickerScreen :
                     self.configScreen.checkForGit()
                     self.activeScreen = self.configScreen
+                else :
+                    self.activeScreen.handle_Q(modified)
             else :
                 self.activeScreen.handle_Q(modified)
         elif symbol == pyglet.window.key.E :
