@@ -117,7 +117,7 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
         elif symbol == pyglet.window.key.Z :
             self.activeScreen.handle_Z(modified)
         elif symbol == pyglet.window.key.C :
-            if modified :
+            if modified and self.activeScreen == self.pickerScreen:
                 if self.displayingFAC :
                     self.windowFAC.close()
                 self.close()
@@ -134,7 +134,7 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
             else :
                 self.activeScreen.handle_Q(modified)
         elif symbol == pyglet.window.key.E :
-            if modified :
+            if modified and self.activeScreen == self.pickerScreen :
                 self.processSelection(loadAutoSave=False)
 
             self.activeScreen.handle_E(modified)

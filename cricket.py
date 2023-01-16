@@ -1,6 +1,7 @@
 
 from scoreboard import Scoreboard
 from element import HorizontalElement
+from element import ClockElement
 from game_state import GameState
 from functools import partial
 
@@ -44,6 +45,7 @@ class CricketGameState(GameState) :
         self.balls = 0
         self.lockedTotal = 0
         self.batters = [CricketBatter(1), CricketBatter(2)]
+        self.partnership = 0
         self.changeSides()
   
     def getOvers(self) :
@@ -57,6 +59,9 @@ class CricketGameState(GameState) :
 
     def getExtras(self) :
         return self.extras
+
+    def getPartnership(self) :
+        return self.partnership
 
     def changeSides(self) :
         self.lastInnings = self.total
@@ -74,7 +79,8 @@ class CricketGameState(GameState) :
         self.batters[1].resetRuns()
 
     def recordScore(self):
-        self.lastWicket = self.total        
+        self.lastWicket = self.total    
+        self.partnership = 0    
 
     def modifyTime(self, doDecrement=False) :
         # add/subtract overs from team in field
@@ -107,6 +113,7 @@ class CricketGameState(GameState) :
         adj = 1
         if doDecrement : adj = -1
         self.batters[id].modifyRuns(adj)
+        self.partnership += adj
         self.total = self.lockedTotal + self.batters[0].getRuns() + self.batters[1].getRuns() + self.extras
 
     def modifyExtras(self, doDecrement = False) :
@@ -129,7 +136,7 @@ class CricketGameState(GameState) :
 
     def changeBatter(self, id) :
         self.lockedTotal += self.batters[id].getRuns()
-        self.leftBatter.resetRuns()
+        self.batters[id].resetRuns()
         
     def swapBatters(self) :
         temp = self.batters[0]
@@ -170,14 +177,11 @@ class CricketGameState(GameState) :
 ##################################
 class CricketScoreboard(Scoreboard) :
     def __init__(self) :
-        self.state = CricketGameState()
+        #self.state = CricketGameState()
         Scoreboard.__init__(self)
-
         
         self.addLargeElement(3, Scoreboard.CENTER, 470, 'Total', self.state.getTotal, Scoreboard.RED)
         self.addMediumElement(1, Scoreboard.CENTER, 290, 'Wickets', self.state.getWickets, Scoreboard.GREEN)
-        self.addMediumElement(2, Scoreboard.CENTER, 150, 'Overs', self.state.getOvers, Scoreboard.GREEN)
-        self.addMediumElement(1, Scoreboard.LEFT_CENTER, 150, 'Balls', self.state.getBalls, Scoreboard.GREEN)
         self.addMediumElement(3, Scoreboard.RIGHT_CENTER, 150, 'Last Innings', self.state.getLastInnings, Scoreboard.GREEN)
         self.addMediumElement(2, Scoreboard.LEFT_CENTER, 290, 'Extras', self.state.getExtras, Scoreboard.RED)
         self.addMediumElement(3, Scoreboard.RIGHT_CENTER, 290, 'Last Wicket', self.state.getLastWicket, Scoreboard.RED)
@@ -205,11 +209,17 @@ class CricketScoreboard(Scoreboard) :
         self.updateElements()
 
     def handle_Q(self, modified = False) :
-        self.state.incrementBatterNumber(0)
+        if (modified) :
+            self.state.changeBatter(0)
+        else :
+            self.state.incrementBatterNumber(0)
         self.updateElements()
 
     def handle_E(self, modified = False) :
-        self.state.incrementBatterNumber(1)
+        if (modified) :
+            self.state.changeBatter(1)
+        else :
+            self.state.incrementBatterNumber(1)
         self.updateElements()
 
     def handle_Z(self, modified = False) :
@@ -226,3 +236,55 @@ class CricketScoreboard(Scoreboard) :
         else :
             self.state.recordScore()
         self.updateElements()
+
+#########################################################################
+
+class ODICricketScoreboard(CricketScoreboard) :
+    def __init__(self) :
+        self.state = CricketGameState()
+        CricketScoreboard.__init__(self)    
+        self.addMediumElement(2, Scoreboard.CENTER, 150, 'Overs', self.state.getOvers, Scoreboard.GREEN)
+        self.addMediumElement(1, Scoreboard.LEFT_CENTER, 150, 'Balls', self.state.getBalls, Scoreboard.GREEN)
+
+
+#########################################################################
+
+class TestCricketGameState(CricketGameState) :
+
+    ONE_PM = 780
+
+    def __init__(self):
+        #invoking the __init__ of the parent class 
+        CricketGameState.__init__(self) 
+        self.timeOfDay = 660 # minutes after midnight
+
+    def getTimeInMinutes(self) :
+
+        return self.timeOfDay
+
+    def modifyTime(self, doDecrement=False) :
+        if doDecrement :
+            self.timeOfDay -= 1
+            if self.timeOfDay == 59 :
+                self.timeOfDay = TestCricketGameState.ONE_PM - 1
+        else :
+            self.timeOfDay += 1
+            if self.timeOfDay == TestCricketGameState.ONE_PM :
+                self.timeOfDay = 60
+
+
+
+################################################################################
+class TestCricketScoreboard(CricketScoreboard) :
+    def __init__(self) :
+        self.state = TestCricketGameState()
+        CricketScoreboard.__init__(self)
+        e = ClockElement(text="Time", textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
+                              updateFunc=self.state.getTimeInMinutes, digitFont=Scoreboard.DIGIT_FONT,
+                              digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.YELLOW, maxDigits=2, 
+                              batch=self.batch)
+
+        e.setCenterTop(Scoreboard.LEFT_CENTER, 150)
+        self.elements.append(e)
+
+        self.addMediumElement(3, Scoreboard.CENTER, 150, 'Partnership', self.state.getPartnership, Scoreboard.RED)

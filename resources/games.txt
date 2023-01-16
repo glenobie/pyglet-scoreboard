@@ -54,7 +54,13 @@ lob_FAC
 LegendsOfBoxingSet
 International Cricket
 cricket
-CricketScoreboard
+ODICricketScoreboard
+cricket.png
+hmg_FAC
+HistoryMakerGolfSet
+Minden Cricket
+cricket
+TestCricketScoreboard
 cricket.png
 hmg_FAC
 HistoryMakerGolfSet
