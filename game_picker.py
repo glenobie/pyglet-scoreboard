@@ -5,6 +5,7 @@ from fac_set import FACSet
 from key_handler import KeyHandler
 from config_screen import ConfigScreen
 from fast_action_window import FastActionWindow
+from playing_cards import PlayingCardDeck
 from carousel import Carousel
 import importlib    
 import os
@@ -49,9 +50,11 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
         loader.add_font('Roboto-Bold.ttf')
         loader.add_font('cool.otf')
         loader.add_font('Fire.ttf')
+        loader.add_font('cards.TTF')
         font.load(Scoreboard.DIGIT_FONT)
         font.load(Scoreboard.TEXT_FONT)   
         font.load(FACSet.TEXT_FONT)
+        font.load(PlayingCardDeck.CARD_FONT)
         # find user save directory. If does not exist, create it
         dir = pyglet.resource.get_settings_path('Scoreboard')
         if not os.path.exists(dir):
@@ -144,6 +147,9 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
         elif symbol == pyglet.window.key.K :
             if self.displayingFAC :
                 self.windowFAC.handle_K()
+        elif symbol == pyglet.window.key.J :
+            if self.displayingFAC :
+                self.windowFAC.handle_J()
 
     # handle the modified S key
     def handle_modified_S(self) :

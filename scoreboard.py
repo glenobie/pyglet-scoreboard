@@ -8,7 +8,7 @@ from key_handler import KeyHandler
 
 class Scoreboard(KeyHandler) :
 
-    # THree main columns top scorebaord screen
+    # Three main columns top scorebaord screen
     LEFT_CENTER = 140
     RIGHT_CENTER = 660
     CENTER = 400

@@ -76,7 +76,7 @@ class BorderedDiceSet(DiceSet) :
         super().valueChanged(value)
         self.drawBorder(self.x, self.y, self.width, self.height)
 
-    # instead of boolean function labels
+    # alternative to boolean function labels
     def setLabel(self, text) :
         super().setLabel(text)
         self.drawBorder(self.x, self.y, self.width, self.height)

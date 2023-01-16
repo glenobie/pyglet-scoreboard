@@ -24,7 +24,10 @@ class FastActionWindow(pyglet.window.Window) :
 
     def handle_K(self) :
         self.fac.handle_K()
-    
+
+    def handle_J(self) :
+        self.fac.handle_J()
+
     def clearFACSet(self) :
         self.fac = ChoiceFAC()
 

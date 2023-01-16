@@ -61,9 +61,9 @@ HistoryMakerGolfSet
 Minden Cricket
 cricket
 TestCricketScoreboard
-cricket.png
-hmg_FAC
-HistoryMakerGolfSet
+minden.png
+minden_FAC
+MindenCricketSet
 History Maker Golf
 golf
 GolfScoreboard

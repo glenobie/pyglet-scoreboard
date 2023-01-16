@@ -27,13 +27,6 @@ class FACSet() :
         return self.batch
 
 
-    def handle_L(self) :
-        0
-
-    def handle_K(self):
-        0
-
-
 class ChoiceFAC(FACSet) :
     def __init__(self, loader=None) :
         FACSet.__init__(self, loader)
