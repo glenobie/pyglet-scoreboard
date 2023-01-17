@@ -46,6 +46,8 @@ class CricketGameState(GameState) :
         self.lockedTotal = 0
         self.batters = [CricketBatter(1), CricketBatter(2)]
         self.partnership = 0
+        self.timeOfDay = 660 # minutes after midnight
+
         self.changeSides()
   
     def getOvers(self) :
@@ -155,7 +157,8 @@ class CricketGameState(GameState) :
         self.batters[0].runs= int(stateList.pop(0).strip('\n'))
         self.batters[1].number = int(stateList.pop(0).strip('\n'))
         self.batters[1].runs = int(stateList.pop(0).strip('\n'))
-
+        self.partnership = int(stateList.pop(0).strip('\n'))
+        self.timeOfDay = int(stateList.pop(0).strip('\n'))
 
     def getStateAsList(self) :
         stateList = []
@@ -170,7 +173,8 @@ class CricketGameState(GameState) :
         stateList.append(str(self.batters[0].runs)+'\n')
         stateList.append(str(self.batters[1].number)+'\n')
         stateList.append(str(self.batters[1].runs)+'\n')
-
+        stateList.append(str(self.partnership)+'\n')
+        stateList.append(str(self.timeOfDay)+'\n')
         return stateList
 
 
@@ -256,8 +260,7 @@ class TestCricketGameState(CricketGameState) :
     def __init__(self):
         #invoking the __init__ of the parent class 
         CricketGameState.__init__(self) 
-        self.timeOfDay = 660 # minutes after midnight
-
+        
     def getTimeInMinutes(self) :
 
         return self.timeOfDay

@@ -42,7 +42,8 @@ class CardDisplay() :
     THREES = [67, 80, 99, 112]
     JACKS = [75, 88, 107, 120]
     COURT = [74, 75, 76, 77, 87, 88, 89, 90, 106, 107, 108, 109, 119, 120, 121, 122]
-
+    SEVENS = [71, 84, 103, 116
+    ]
     BLACK = (0,0,0,255)
     RED = (255,0,0,255)
 
@@ -64,7 +65,7 @@ class CardDisplay() :
 
         self.cardBack = pyglet.shapes.Rectangle(0, 0, 164, 220, color=(255,255,255), batch=self.batch, group = self.bg)
 
-        self.labelDoc = pyglet.text.document.UnformattedDocument('test')
+        self.labelDoc = pyglet.text.document.UnformattedDocument('Shuffled')
         self.labelDoc.set_style(0, len(self.labelDoc.text),  dict(font_name = FACSet.TEXT_FONT,
                                                                        font_size = 20,
                                                                        color=(255,255,255,255)))
@@ -93,4 +94,6 @@ class CardDisplay() :
             text = 'Extras? / Dismissal?'
         elif card in CardDisplay.COURT :
             text = 'Dismissal?'
+        elif card in CardDisplay.SEVENS :
+            text = 'Close? / Extras (Hi/VH)?'
         self.labelDoc.text = text
