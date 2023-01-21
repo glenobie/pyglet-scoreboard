@@ -41,9 +41,11 @@ class CardDisplay() :
 
     THREES = [67, 80, 99, 112]
     JACKS = [75, 88, 107, 120]
+    QUEENS = [76, 89, 108, 121]
     COURT = [74, 75, 76, 77, 87, 88, 89, 90, 106, 107, 108, 109, 119, 120, 121, 122]
-    SEVENS = [71, 84, 103, 116
-    ]
+    SEVENS = [71, 84, 103, 116]
+
+
     BLACK = (0,0,0,255)
     RED = (255,0,0,255)
 
@@ -92,8 +94,11 @@ class CardDisplay() :
             text = 'Extras?'
         elif card in CardDisplay.JACKS :
             text = 'Extras? / Dismissal?'
+        elif card in CardDisplay.QUEENS :
+            text = "Far? / Dismissal?"
         elif card in CardDisplay.COURT :
             text = 'Dismissal?'
         elif card in CardDisplay.SEVENS :
             text = 'Close? / Extras (Hi/VH)?'
+        
         self.labelDoc.text = text
