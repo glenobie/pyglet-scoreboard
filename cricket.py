@@ -79,6 +79,7 @@ class CricketGameState(GameState) :
         self.batters[0].resetRuns()
         self.batters[1].setNumber(2)
         self.batters[1].resetRuns()
+        self.partnership = 0
 
     def recordScore(self):
         self.lastWicket = self.total    
