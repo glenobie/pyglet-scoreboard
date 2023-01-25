@@ -268,13 +268,11 @@ class TestCricketGameState(CricketGameState) :
 
     def modifyTime(self, doDecrement=False) :
         if doDecrement :
-            self.timeOfDay -= 1
-            if self.timeOfDay == 59 :
-                self.timeOfDay = TestCricketGameState.ONE_PM - 1
+            self.timeOfDay += 60
         else :
             self.timeOfDay += 1
-            if self.timeOfDay == TestCricketGameState.ONE_PM :
-                self.timeOfDay = 60
+        if self.timeOfDay >= TestCricketGameState.ONE_PM :
+            self.timeOfDay = 60 + self.timeOfDay % 60
 
 
 
