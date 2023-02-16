@@ -8,12 +8,13 @@ class ShadowBorder() :
     BORDER_SPACING = 3
     BG_COLOR = (22,22,22)
 
-    def __init__(self, width, height, batch, bg, fg) :
+    def __init__(self, width, textHeight, batch, bg, fg) :
         self.batch = batch
         self.fg = fg
         self.bg = bg
         self.width = width + ShadowBorder.BORDER_SPACING * 2
-        self.height = height + ShadowBorder.BORDER_SPACING * 2 
+        self.height = textHeight + ShadowBorder.BORDER_SPACING * 2
+
 
     def drawLines(self) :
         self.border = shapes.Rectangle(self.x1, self.y1, self.width, self.height, color=ShadowBorder.BG_COLOR, batch=self.batch, group=self.bg  )
@@ -39,6 +40,9 @@ class ShadowBorder() :
     def getHeight(self) :
         return self.height
 
+    def getVerticalTextOffsetFromBottom(self) :
+        return ShadowBorder.BORDER_SPACING+1
+
     def getWidth(self) :
         return self.width
 
@@ -50,12 +54,13 @@ class ShadowBorder() :
         #self.border.position = pos
 
 ############################################
-# A border around a layout with digits filled by a function that returns an inteter
-# maybe with a laberl above it
+# A border around a layout with digits filled by a function that returns an integer
+# maybe with a label above it
 class ScoreboardElement :
 
     DIGIT_KERNING = 6
     VERTICAL_SPACING = -2
+    FUDGE = 0 # not sure why needed
 
     def __init__(self, text=None, textFont='', textSize=44, textColor=None, 
                    updateFunc=None, digitFont='', digitSize=80, digitColor=None, 
@@ -82,7 +87,7 @@ class ScoreboardElement :
         self.doc.set_style(0, len(self.doc.text), dict(maxWidth=self.layout.content_width, maxHeight = self.layout.content_height))
 
         width = self.layout.document.get_style('maxWidth', 0)
-        height = self.layout.document.get_style('maxHeight', 0)
+        height = self.doc.get_font(0).ascent # was self.layout.document.get_style('maxHeight', 0) 
         self.border = ShadowBorder( width, height, batch, self.bg, self.fg)
 
         self.computeHeight()
@@ -135,7 +140,7 @@ class ScoreboardElement :
     def computeHeight(self) :
         self.height = self.border.getHeight()
         if not(self.label is None) :
-            self.height += self.label.content_height
+            self.height += self.label.content_height 
 
    # base class assumes a single layout
     def setCenterTop(self, x, y) :
@@ -178,12 +183,11 @@ class ScoreboardElement :
         self.border.setPosition((x, y))
 
         self.layout.anchor_x = 'right'
-        self.layout.anchor_y = 'bottom'
+        self.layout.anchor_y = 'baseline'
 
         width = self.layout.document.get_style('maxWidth', 0)
-        height = self.layout.document.get_style('maxHeight', 0)
         self.layout.position = ( x + self.border.getWidth() - (self.border.getWidth() - width) // 2,
-                                     y + 2 + (self.border.getHeight()  - height ) // 2) # added a fudge of 2
+                                     y  + self.border.getVerticalTextOffsetFromBottom() ) 
  
     def getHeight(self) :
         return self.height
