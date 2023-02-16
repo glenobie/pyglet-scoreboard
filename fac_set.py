@@ -11,8 +11,8 @@ class FACSet() :
     def __init__(self, loader=None) :
         self.loader = loader
         self.batch = pyglet.graphics.Batch()
-        self.bg = pyglet.graphics.OrderedGroup(0)
-        self.fg = pyglet.graphics.OrderedGroup(1)
+        self.bg = pyglet.graphics.Group(order=0)
+        self.fg = pyglet.graphics.Group(order=1)
 
         self.paintBackground(FACSet.W_COLOR_BLACK)
 
@@ -34,6 +34,6 @@ class ChoiceFAC(FACSet) :
         self.msgDoc.set_style(0,len(self.msgDoc.text), dict(color=(255,255,255,255), font_name=FACSet.TEXT_FONT,  font_size = 28 ))
         self.msgLayout = pyglet.text.layout.TextLayout(self.msgDoc, batch=self.batch, group = self.fg)
         self.msgLayout.anchor_x = 'center'
-        self.msgLayout.position = (400, 300)
+        self.msgLayout.position = (400, 300, 0)
 
 

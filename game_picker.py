@@ -25,9 +25,10 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
         screens = display.get_screens()
         pyglet.window.Window.__init__(self, width, height, fullscreen=isPi, screen=screens[0])
         self.displayingFAC = (isPi and len(screens) > 1) or not(isPi)
+        
         if self.displayingFAC :
             self.createFACWindow(isPi, width, height)
-
+        
         pyglet.clock.schedule_interval(self.autosave, MainWindow.AUTOSAVE_INTERVAL)
 
         self.path = ['resources', 'resources/icons', 'resources/fonts']
@@ -87,15 +88,18 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
     def autosave(self, dt) :
         self.activeScreen.autosave()
 
+    """   
     # called from startup.py, update position of icons
     # can probably remove in pyglet 2.0 and just use app.run(interval=1/30.0)
     def update(self, dt) :
         if self.activeScreen == self.pickerScreen :
             self.pickerScreen.update(dt)
-
+    """
+    
     def on_draw(self) :
         self.clear()
-        self.activeScreen.draw() 
+        if not self.activeScreen is None :
+            self.activeScreen.draw() 
 
     def on_close(self):
         if self.displayingFAC :
@@ -114,6 +118,7 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
                 self.handle_modified_S()
             else :
                 if self.activeScreen == self.pickerScreen :
+                    #self.activeScreen = None
                     self.processSelection()
                 else :
                     self.activeScreen.handle_S(modified)
@@ -166,6 +171,7 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
 
     # open the selected scoreboard
     def processSelection(self, loadAutoSave=True) :
+        self.activeScreen = None
         picked = self.pickerScreen.scoreboardTuples[self.pickerScreen.getSelection()]
         scoreboardClass = getattr(importlib.import_module(picked[1]), picked[2])
         self.activeScreen = scoreboardClass()
@@ -208,9 +214,8 @@ class GamePicker(KeyHandler) :
     def draw(self) :
         self.batch.draw()
 
-    def update(self, dt) :
         for t in self.scoreboardTuples :
-            t[3].update(dt)
+            t[3].update()
 
     def getSelection(self) :
         return self.options.getSelection()

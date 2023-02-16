@@ -20,7 +20,7 @@ class ScoreboardIconSprite :
 
         # larger scales are drawn in front of smaller scales so use scale to create groups
         groupNum = math.floor(self.icon.scale * 1000000000) 
-        self.icon.group = pyglet.graphics.OrderedGroup(groupNum)
+        self.icon.group = pyglet.graphics.Group(order=groupNum)
 
     def setPath(self, path) :
         self.path = path
@@ -46,7 +46,7 @@ class ScoreboardIconSprite :
         return math.sqrt((self.centerX() - dest_x) ** 2 + (self.centerY() - dest_y) ** 2)
 
 
-    def update(self, dt) :
+    def update(self) :
         if self.moving :
             x_d = self.currentDest[0] - self.centerX()
             y_d = self.currentDest[1] - self.centerY()
