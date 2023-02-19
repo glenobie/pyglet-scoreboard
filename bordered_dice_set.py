@@ -52,7 +52,7 @@ class BorderedDiceSet(DiceSet) :
         if len(self.titleDoc.text) > 0 :
             title_x = x + (width - self.titleLayout.content_width) // 2
             title_y = y + height
-            self.titleLayout.position = (title_x, title_y)
+            self.titleLayout.position = (title_x, title_y, 0)
             self.lines.append(pyglet.shapes.Line(x, y+height, title_x - BorderedDiceSet.LABEL_SPACING,
                                     y + height, width=1, color=self.borderColor,batch=self.batch, group=self.fg))
             self.lines.append(pyglet.shapes.Line(title_x + self.titleLayout.content_width + BorderedDiceSet.LABEL_SPACING, y+height, x+width,
@@ -63,7 +63,7 @@ class BorderedDiceSet(DiceSet) :
 
         if len(self.labelDoc.text) > 0 :
             label_x = x + (width - self.labelLayout.content_width) // 2
-            self.labelLayout.position = (label_x, y)
+            self.labelLayout.position = (label_x, y, 0)
             self.lines.append(pyglet.shapes.Line(x, y, label_x - BorderedDiceSet.LABEL_SPACING,
                                     y, width=1, color=self.borderColor,batch=self.batch, group=self.fg))
             self.lines.append(pyglet.shapes.Line(label_x + self.labelLayout.content_width + BorderedDiceSet.LABEL_SPACING,

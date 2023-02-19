@@ -23,8 +23,15 @@ class GameList() :
         #TODO handle empty list
 
         self.doc = self.createDocument()
-
-        self.layout = self.makeLayout(0)
+ 
+        self.layout = pyglet.text.layout.IncrementalTextLayout(self.doc, GameList.WIDTH, GameList.HEIGHT,  
+                                                                multiline=True, 
+                                                                batch=self.batch, group=textGroup)
+        self.layout.anchor_x = 'left'
+        self.layout.y = GameList.BOTTOM
+        self.layout.x = self.xPos
+        self.layout.selection_color = GameList.HIGHLIGHT_COLOR
+        self.layout.selection_background_color = (0,0,0,255)
 
         label_y = GameList.BOTTOM + GameList.HEIGHT + 20
   
@@ -44,34 +51,37 @@ class GameList() :
             self.selectedGameIndex = 0
             self.highlightSelectedRow()
 
+    
+
     def createDocument(self) :
         d = pyglet.text.document.FormattedDocument('')
         for g in self.gameList :
             d.insert_text(len(d.text), g[0])
             d.insert_text(len(d.text), u'\u2029') # denote a new paragraph
+        
+        d.set_style(0,len(d.text), dict(color=GameList.DEFAULT_COLOR))
         return d
 
     def zeroGames(self) :
         return len(self.gameList) == 0
 
 
+
     def highlightSelectedRow(self) :
         if not(self.zeroGames()) :
-            self.layout.delete()
             j=0
             while j < len(self.doc.text) :
                 end = self.doc.get_paragraph_end(j)
                 text = self.doc.text[j:end-1] # subtract off newline character
                 if text == self.gameList[self.selectedGameIndex][0] :
-                    self.doc.set_style(j, end, dict(color=GameList.HIGHLIGHT_COLOR))
-                else :
-                    self.doc.set_style(j, end, dict(color=GameList.DEFAULT_COLOR))
+                    self.layout.set_selection(j, end-1)
+                    break
                 j = end
+            #self.layout.ensure_line_visible(self.layout.get_line_from_position(j-2))
             if (self.selectedGameIndex > 4) :
-                scroll_y = self.selectedGameIndex * -10
+                self.layout.view_y = self.selectedGameIndex * -10
             else :
-                scroll_y = 0
-            self.layout = self.makeLayout(scroll_y)
+                self.layout.view_y = 0
 
     # move the selected game up in the list by deleting and inserting
     def moveUp(self) :
@@ -81,6 +91,7 @@ class GameList() :
             self.selectedGameIndex = self.selectedGameIndex - 1
             self.gameList.insert(self.selectedGameIndex, g)
             self.doc = self.createDocument()
+            self.layout.document = self.doc
             self.highlightSelectedRow()
 
     # move the selected game down in the list by deleting and inserting
@@ -91,6 +102,7 @@ class GameList() :
             self.selectedGameIndex = self.selectedGameIndex + 1
             self.gameList.insert(self.selectedGameIndex, g)
             self.doc = self.createDocument()
+            self.layout.document = self.doc
             self.highlightSelectedRow()
 
     def removeSelectedGame(self) :
@@ -99,6 +111,7 @@ class GameList() :
             g = self.gameList[self.selectedGameIndex]
             del self.gameList[self.selectedGameIndex]
             self.doc = self.createDocument()
+            self.layout.document = self.doc
             self.selectedGameIndex -= 1
   
             if not(self.zeroGames()) :
@@ -106,29 +119,17 @@ class GameList() :
                     self.selectedGameIndex = 0
                 self.highlightSelectedRow()
             else :
-                self.layout.delete()
-                self.selectedGameIndex = GameList.EMPTY
-                self.layout = self.makeLayout(0)
+                self.selectedGameIndex = GameList.EMPTY 
         return g
 
     def addGame(self, game) :
         self.gameList.insert(self.selectedGameIndex+1, game)
         self.selectedGameIndex += 1
         self.doc = self.createDocument()
+        self.layout.document = self.doc
         self.highlightSelectedRow()
 
-    # make/remake the layout after changes in  document
-    # TODO: could use event listener??
-    def makeLayout(self, scroll_y) :
-        layout = pyglet.text.layout.ScrollableTextLayout(self.doc, GameList.WIDTH, GameList.HEIGHT,  
-                                                         multiline=True, 
-                                                         batch=self.batch, group=self.textGroup)
-        layout.anchor_x = 'left'
-        layout.y = GameList.BOTTOM
-        layout.x = self.xPos
-        layout.view_y = scroll_y
-        return layout
-        
+
     def selectNext(self, direction) :
         if not(self.zeroGames()) :
             self.selectedGameIndex = (self.selectedGameIndex + direction) % len(self.gameList)

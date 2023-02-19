@@ -9,7 +9,7 @@ class DiceSet :
     # pass me a list of Die objects
     def __init__(self, dice, batch) :
 
-        self.fg = pyglet.graphics.OrderedGroup(59)
+        self.fg = pyglet.graphics.Group(order=59)
         self.batch = batch
         self.dice = dice
         self.computeTotal()
@@ -103,13 +103,13 @@ class DiceSet :
             self.labelDoc.text = newLabel
 
     def setPositionInternal(self, left, center, spacing, list) :
-        self.titleLayout.position = (left, center)
+        self.titleLayout.position = (left, center, 0)
         left += self.titleLayout.content_width
         for d in list :
             x = left + d.getWidth() // 2
             d.setCenter(x, center)
             left += d.getWidth() + spacing
-        self.labelLayout.position = (left, center)
+        self.labelLayout.position = (left, center, 0)
 
 
     def setPosition(self, left, center, spacing=12) :

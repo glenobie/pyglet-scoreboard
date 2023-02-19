@@ -203,7 +203,7 @@ class FrameDisplay() :
         self.scoreFunc = scoreFunc
         self.batch = batch
         self.state = state
-        self.group = pyglet.graphics.OrderedGroup(23)
+        self.group = pyglet.graphics.Group(order=23)
 
         self.pins = []
 
@@ -305,7 +305,7 @@ class BowlingScoreboard(Scoreboard) :
         for i in range(0, len(self.state.bowlers)) :
             rowLabel = pyglet.text.Label('B'+str(i+1), Scoreboard.TEXT_FONT, Scoreboard.SMALL_TEXT_SIZE, batch=self.batch, group=gp)             
             rowLabel.anchor_x = 'left'
-            rowLabel.position = (BowlingScoreboard.HEADER_X, BowlingScoreboard.ROWS[i] - 44)
+            rowLabel.position = (BowlingScoreboard.HEADER_X, BowlingScoreboard.ROWS[i] - 44, 0)
             
             self.labels.append(rowLabel)
 
@@ -323,7 +323,7 @@ class BowlingScoreboard(Scoreboard) :
             self.frames.append(frameSet)
             columnLabel = pyglet.text.Label(str(i+1), Scoreboard.TEXT_FONT, Scoreboard.SMALL_TEXT_SIZE, batch = self.batch, group=gp)             
             columnLabel.anchor_x = 'center'
-            columnLabel.position = (x+self.frames[i][0].getWidth() // 2, BowlingScoreboard.HEADER_Y)
+            columnLabel.position = (x+self.frames[i][0].getWidth() // 2, BowlingScoreboard.HEADER_Y, 0)
             self.labels.append(columnLabel)
             x += self.frames[i][0].getWidth() + BowlingScoreboard.SPACING
 

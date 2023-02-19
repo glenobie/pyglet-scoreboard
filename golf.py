@@ -159,7 +159,7 @@ class GolfHole() :
         self.position = position
         self.leftGolfer = leftGolfer
         self.rightGolfer = rightGolfer
-        self.group = pyglet.graphics.OrderedGroup(23)
+        self.group = pyglet.graphics.Group(order=23)
         
         self.leftScore = ScoreboardElement(text=str(leftGolfer), textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.VERY_SMALL_TEXT_SIZE, textColor=Scoreboard.WHITE,
                               updateFunc=partial(state.getScoreAsString, leftGolfer), digitFont=Scoreboard.DIGIT_FONT,
@@ -281,10 +281,10 @@ class GolfScoreboard(Scoreboard) :
         self.createLeaderBoardColumn(GolfScoreboard.LEADERBOARD_COLS[3], 'BACK', self.state.getShotsBackAsString)
 
     def createLeaderBoardColumn(self, x, title, func) :
-        fg = pyglet.graphics.OrderedGroup(2)
+        fg = pyglet.graphics.Group(order=2)
         header = pyglet.text.Label(title, GolfScoreboard.LEADERBOARD_FONT, GolfScoreboard.LEADERBOARD_FONT_SIZE,
                                         batch=self.batch, group=fg )
-        header.position = (x, 450)
+        header.position = (x, 450, 0)
         header.anchor_x = 'right'
         self.leaderLabels.append(header)
         
@@ -298,7 +298,7 @@ class GolfScoreboard(Scoreboard) :
             if selectedGolfer :
                 golfer.color = GolfScoreboard.GREEN
       
-            golfer.position = (x, nextRow)
+            golfer.position = (x, nextRow, 0)
             golfer.anchor_x = 'right'
             nextRow = nextRow - golfer.content_height
             self.leaderLabels.append(golfer)

@@ -53,8 +53,8 @@ class CardDisplay() :
         self.font_size = font_size
         self.deck = deck
         self.batch = batch
-        self.fg = pyglet.graphics.OrderedGroup(2)
-        self.bg = pyglet.graphics.OrderedGroup(1)
+        self.fg = pyglet.graphics.Group(order=2)
+        self.bg = pyglet.graphics.Group(order=1)
         deck.addDrawnCardListener(self)
 
         self.cardDoc = pyglet.text.document.UnformattedDocument('?')
@@ -84,9 +84,9 @@ class CardDisplay() :
     
     def setPosition(self, x, y) :
         #TODO remove constants for computations
-        self.cardLayout.position = (x,y)
+        self.cardLayout.position = (x,y, 0)
         self.cardBack.position = (x + 19, y - 220)
-        self.labelLayout.position = (x+106, y-260)
+        self.labelLayout.position = (x+106, y-260, 0)
 
     def rewriteLabel(self, card) :
         text = ''

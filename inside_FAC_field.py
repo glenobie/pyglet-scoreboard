@@ -40,7 +40,7 @@ class InsideFACField() :
         #center layout in border
         x = left #+ (self.border.width - self.layout.content_width) / 2
         y = bottom +  (self.border.height - self.layout.content_height + InsideFACField.LINE_SPACING) // 2
-        self.layout.position = (x, y)
+        self.layout.position = (x, y, 0)
 
     #replace all >= or <= in document text with underlined > or underline <
     def replaceComparators(self, comparator) :

@@ -77,8 +77,8 @@ class InsideCreaseSet(FACSet) :
     def __init__(self, loader) :
         FACSet.__init__(self, loader)
         self.paintBackground(FACSet.W_COLOR_WHITE)
-        self.fg = pyglet.graphics.OrderedGroup(62)
-        self.FACbg = pyglet.graphics.OrderedGroup(5)
+        self.fg = pyglet.graphics.Group(order=62)
+        self.FACbg = pyglet.graphics.Group(order=5)
 
         self.positions = ['C', 'LW', 'RW', 'LD', 'RD']
 

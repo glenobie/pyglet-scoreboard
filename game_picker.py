@@ -98,8 +98,7 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
     
     def on_draw(self) :
         self.clear()
-        if not self.activeScreen is None :
-            self.activeScreen.draw() 
+        self.activeScreen.draw() 
 
     def on_close(self):
         if self.displayingFAC :
@@ -171,7 +170,6 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
 
     # open the selected scoreboard
     def processSelection(self, loadAutoSave=True) :
-        self.activeScreen = None
         picked = self.pickerScreen.scoreboardTuples[self.pickerScreen.getSelection()]
         scoreboardClass = getattr(importlib.import_module(picked[1]), picked[2])
         self.activeScreen = scoreboardClass()
