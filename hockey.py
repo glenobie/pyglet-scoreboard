@@ -25,14 +25,14 @@ class HockeyTeamState(TeamState):
 ###########################################
 class HockeyGameState(TimedGameState) :
     
-    def __init__(self):
+    def __init__(self, timeInterval = 20):
         #invoking the __init__ of the parent class 
         TimedGameState.__init__(self) 
         self.maxScore = 19
         
         self.teams = [ HockeyTeamState(0, self.getMaxScore()), HockeyTeamState(0, self.getMaxScore()) ]
     
-        self.TIME_INTERVAL = 20
+        self.TIME_INTERVAL = timeInterval
         self.MINUTES_PER_PERIOD = 20
         self.MAX_SECONDS = self.MINUTES_PER_PERIOD * 60
         
@@ -125,6 +125,18 @@ class HockeyScoreboard(Scoreboard) :
         self.state.modifyPenaltyClock(1, 1) 
         self.updateElements()
  
+
+class HockeyScoreboardSubset(Scoreboard) :
+    def __init__(self) :
+        self.state = HockeyGameState(timeInterval=30)
+        Scoreboard.__init__(self)
+        
+        self.addScores(3, 470)
+        self.addClock(440)
+        self.addPeriod(300)
+
+ 
+
 
 
 
