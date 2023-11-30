@@ -39,8 +39,8 @@ class Die :
         cls.InteriorSpaces[key] = value
 
     def __init__(self, color, text_color=(0,0,0,255), sides=6, batch=None, startAtZero=False) :
-        self.bg = pyglet.graphics.OrderedGroup(4)
-        self.fg = pyglet.graphics.OrderedGroup(99)
+        self.bg = pyglet.graphics.Group(order=4)
+        self.fg = pyglet.graphics.Group(order=99)
         self.batch = batch
 
         self.listeners = []
@@ -152,7 +152,7 @@ class Die :
 
         layout_y = self.border.y + (self.border.height  - self.layout.content_height) // 2
 
-        self.layout.position = (x, layout_y)
+        self.layout.position = (x, layout_y, 0)
 
     def getWidth(self) :
         return self.border.width

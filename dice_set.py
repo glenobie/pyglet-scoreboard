@@ -9,7 +9,7 @@ class DiceSet :
     # pass me a list of Die objects
     def __init__(self, dice, batch) :
 
-        self.fg = pyglet.graphics.OrderedGroup(59)
+        self.fg = pyglet.graphics.Group(order=59)
         self.batch = batch
         self.dice = dice
         self.computeTotal()
@@ -49,10 +49,16 @@ class DiceSet :
             if d.getValue() != d1 :
                 return False
         return True
+    
+    def notAllEqual(self) :
+        return not(self.allEqual())
 
     # does the total of the dice equal the value passed
     def totalEquals(self, value) :
-        return True if self.total == value else False
+        return self.total == value 
+    
+    def totalInRange(self, v1, v2) :
+        return self.total >= v1 and self.total <= v2
 
     # true if any of the dice in the set equal the valye
     def anyDieEquals(self, value) :

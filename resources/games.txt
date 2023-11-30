@@ -112,12 +112,18 @@ SoccerScoreboard
 soccer-blast.png
 blast_FAC
 SoccerBlastSet
+APBA Soccer
+soccer
+SoccerScoreboard
+apba-soccer.png
+apba_soccer_FAC
+APBASoccerSet
 Dice United
 soccer
 SoccerScoreboard
 dice-united.png
-hmg_FAC
-HistoryMakerGolfSet
+dice_united_FAC
+DiceUnitedSet
 The Beautiful Game
 soccer
 SoccerScoreboard

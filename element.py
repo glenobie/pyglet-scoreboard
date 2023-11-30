@@ -62,8 +62,8 @@ class ScoreboardElement :
                    maxDigits=2, displayLeadingZeroes=False, batch=None) :
 
         # border will go in the background group, all others foreground
-        self.bg = pyglet.graphics.OrderedGroup(3)
-        self.fg = pyglet.graphics.OrderedGroup(24)
+        self.bg = pyglet.graphics.Group(order=3)
+        self.fg = pyglet.graphics.Group(order=24)
 
         self.isOn = True
         self.updateFunc = updateFunc
@@ -144,7 +144,7 @@ class ScoreboardElement :
         if not (self.label is None) :
             self.label.anchor_x = 'center'
             self.label.anchor_y = 'top'
-            self.label.position = (x, y)
+            self.label.position = (x, y, 0)
             y = y - self.label.content_height - ScoreboardElement.VERTICAL_SPACING
         self.positionBorderAndLayoutFromBottomLeft(x - self.border.getWidth() // 2, y - self.border.getHeight())
         
@@ -183,7 +183,7 @@ class ScoreboardElement :
         width = self.layout.document.get_style('maxWidth', 0)
         height = self.layout.document.get_style('maxHeight', 0)
         self.layout.position = ( x + self.border.getWidth() - (self.border.getWidth() - width) // 2,
-                                     y + 2 + (self.border.getHeight()  - height ) // 2) # added a fudge of 2
+                                     y + 2 + (self.border.getHeight()  - height ) // 2, 0) # added a fudge of 2
  
     def getHeight(self) :
         return self.height
@@ -220,7 +220,7 @@ class HorizontalElement(ScoreboardElement) :
             self.label.anchor_y = 'top'
             totalWidth += HorizontalElement.SPACING + self.label.content_width
             x -= totalWidth // 2
-            self.label.position = (x, y)
+            self.label.position = (x, y, 0)
             x += HorizontalElement.SPACING + self.label.content_width
         else :
             x -= totalWidth // 2
@@ -277,7 +277,7 @@ class ClockElement(ScoreboardElement) :
 
         totalWidth = self.minutesElement.getWidth() + self.secondsElement.getWidth() + self.colon.content_width + ClockElement.SPACE_AROUND_COLON * 2
         colon_x = (x - totalWidth // 2) + self.minutesElement.getWidth() + ClockElement.SPACE_AROUND_COLON
-        self.colon.position = (colon_x,  y)  
+        self.colon.position = (colon_x,  y, 0)  
 
         self.minutesElement.setRightTop(colon_x - ClockElement.SPACE_AROUND_COLON, y)
         self.secondsElement.setLeftTop(colon_x + self.colon.content_width + ClockElement.SPACE_AROUND_COLON, y)

@@ -19,16 +19,16 @@ class SoccerGameState(TimedGameState) :
         self.teams = [SoccerTeamState(0, self.getMaxScore()), 
                       SoccerTeamState(0, self.getMaxScore())]
         self.TIME_INTERVAL = 60
-        self.MINUTES_PER_PERIOD = 45
-        self.MAX_SECONDS = self.MINUTES_PER_PERIOD * 60
-        self.seconds = self.MAX_SECONDS
+        self.MINUTES_PER_PERIOD = 60
+        self.MAX_SECONDS =  self.MINUTES_PER_PERIOD * 60
+        self.seconds = 0 #self.MAX_SECONDS
         self.timeDivisionName = "Half"
         self.maxPeriods = 2
 
     def resetHalf(self):
         for team in self.teams :
             team.resetScore()
-        self.seconds = self.MAX_SECONDS
+        self.seconds = 0 # self.MAX_SECONDS
 
     def restoreFromList(self, stateList) :
         self.seconds = int(stateList[0].strip('\n'))
@@ -55,3 +55,6 @@ class SoccerScoreboard(Scoreboard) :
         self.addClock(440)
         self.addPeriod(300, maxDigits=1)
 
+    def handle_X(self, modified=False) :
+        self.state.modifyTime(not(modified))
+        self.updateElements()

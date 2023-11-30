@@ -90,8 +90,8 @@ class InsidePaintSet(FACSet) :
         FACSet.__init__(self, loader)
         self.paintBackground(FACSet.W_COLOR_WHITE)
         self.positions = ['C', 'PF', 'F', 'SG', 'PG']
-        self.fg = pyglet.graphics.OrderedGroup(62)
-        self.FACbg = pyglet.graphics.OrderedGroup(5)
+        self.fg = pyglet.graphics.Group(order=62)
+        self.FACbg = pyglet.graphics.Group(order=5)
         self.createLayout()
 
 
