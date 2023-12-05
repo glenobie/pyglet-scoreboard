@@ -12,23 +12,33 @@ class SoccerTeamState(TeamState) :
 ###########################
 class SoccerGameState(TimedGameState) :
     
-    def __init__(self):
+    def __init__(self, timeInterval = -60):
         #invoking the __init__ of the parent class 
         TimedGameState.__init__(self) 
         self.maxScore = 19
         self.teams = [SoccerTeamState(0, self.getMaxScore()), 
                       SoccerTeamState(0, self.getMaxScore())]
-        self.TIME_INTERVAL = 60
-        self.MINUTES_PER_PERIOD = 60
-        self.MAX_SECONDS =  self.MINUTES_PER_PERIOD * 60
-        self.seconds = 0 #self.MAX_SECONDS
+        self.TIME_INTERVAL = timeInterval
+        self.MAX_MINUTES = 45
+        self.extraTime = 0
+        self.MAX_SECONDS = (self.MAX_MINUTES  + self.extraTime) * 60
+        self.seconds = 0 
         self.timeDivisionName = "Half"
         self.maxPeriods = 2
 
     def resetHalf(self):
-        for team in self.teams :
-            team.resetScore()
         self.seconds = 0 # self.MAX_SECONDS
+        self.extraTime = 0
+
+    def getExtraTime(self) :
+        return self.extraTime
+    
+    def modifyExtraTime(self, increment=True) :
+        value = 1 if increment else -1
+        self.extraTime += value
+        if self.extraTime < 0 :
+            self.extraTime = 0
+        self.MAX_SECONDS = (self.MAX_MINUTES + self.extraTime) * 60 
 
     def restoreFromList(self, stateList) :
         self.seconds = int(stateList[0].strip('\n'))
@@ -47,14 +57,31 @@ class SoccerGameState(TimedGameState) :
  ############################################    
 class SoccerScoreboard(Scoreboard) :   
     def __init__(self) :
-        self.state = SoccerGameState()
+        self.state = SoccerGameState(timeInterval=-60)
         Scoreboard.__init__(self)
-        
-        self.addLargeElement(2, Scoreboard.LEFT_CENTER, 470, 'GUEST', partial(self.state.getScore, 0), Scoreboard.RED)
-        self.addLargeElement(2, Scoreboard.RIGHT_CENTER, 470, 'HOME', partial(self.state.getScore, 1), Scoreboard.RED)
+        self.addElements()
+
+    def addElements(self) :        
+        self.addScores(2, 470)
         self.addClock(440)
         self.addPeriod(300, maxDigits=1)
 
-    def handle_X(self, modified=False) :
-        self.state.modifyTime(not(modified))
+        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 200, 'EXTRA', partial(self.state.getExtraTime), Scoreboard.BLUE)
+
+
+    def handle_A(self, modified=False) :
+        self.state.modifyExtraTime(not(modified))
         self.updateElements()
+
+    def handle_Q(self, modified=False) :
+        if modified :
+            self.state.resetHalf()
+        self.updateElements()
+
+
+class APBASoccerScoreboard(SoccerScoreboard) :   
+    def __init__(self) :
+        Scoreboard.__init__(self)
+        self.state = SoccerGameState(timeInterval = -30)
+        self.addElements()
+        

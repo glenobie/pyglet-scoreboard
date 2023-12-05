@@ -114,7 +114,7 @@ blast_FAC
 SoccerBlastSet
 APBA Soccer
 soccer
-SoccerScoreboard
+APBASoccerScoreboard
 apba-soccer.png
 apba_soccer_FAC
 APBASoccerSet

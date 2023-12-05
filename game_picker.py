@@ -23,10 +23,15 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
         # create window(s)
         display = pyglet.canvas.get_display()
         screens = display.get_screens()
-        pyglet.window.Window.__init__(self, width, height, fullscreen=isPi, screen=screens[0])
+        pyglet.window.Window.__init__(self, width, height, fullscreen=False, screen=screens[0]) #False was isPi
         self.displayingFAC = (isPi and len(screens) > 1) or not(isPi)
+        for i in screens :
+            print(i)
         if self.displayingFAC :
-            self.createFACWindow(isPi, width, height)
+            #self.createFACWindow(isPi, width, height)
+            #self.windowFAC = FastActionWindow(width, height, fullscreen=False, screen=screens[1])
+            self.createFACWindow_v2(isPi, width, height)
+
 
         pyglet.clock.schedule_interval(self.autosave, MainWindow.AUTOSAVE_INTERVAL)
 
@@ -61,6 +66,16 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
             os.makedirs(dir)
         return loader
 
+    def createFACWindow_v2(self, isPi, width, height) :
+        if isPi:
+            otherX = self.width if self.get_location()[0] == 0 else 0
+            self.windowFAC = FastActionWindow(width, height, fullscreen=False)
+            self.windowFAC.set_location(otherX, 0)
+        else:
+            self.windowFAC = FastActionWindow(width, height, fullscreen=False)    
+
+ 
+
     def createFACWindow(self, isPi, width, height) :
         # Ideally, you just find both screens and assign a fullscreen window to each screen. 
         # But this was not consistently putting both windows on different screens.
@@ -72,7 +87,7 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
             self.set_exclusive_mouse(True)
             while not(positionedCorrectly) :           
                 
-                self.windowFAC = FastActionWindow(width, height, fullscreen=False)
+                self.windowFAC = FastActionWindow(width, height, fullscreen=False) # was False
                 otherX = self.width if self.get_location()[0] == 0 else 0
                 self.windowFAC.set_location(otherX, 0)
 

@@ -38,7 +38,7 @@ class Scoreboard(KeyHandler) :
 
     def __init__(self) :
         self.batch = pyglet.graphics.Batch()
-        self.bg = pyglet.graphics.Group(order=0)
+        self.bg = pyglet.graphics.OrderedGroup(0)
         self.attachedFAC = None
 
         self.background = pyglet.shapes.Rectangle(0,0,800,480, (28,28,28), self.batch, self.bg)

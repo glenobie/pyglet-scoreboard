@@ -9,7 +9,7 @@ class DiceSet :
     # pass me a list of Die objects
     def __init__(self, dice, batch) :
 
-        self.fg = pyglet.graphics.Group(order=59)
+        self.fg = pyglet.graphics.OrderedGroup(59)
         self.batch = batch
         self.dice = dice
         self.computeTotal()

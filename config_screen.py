@@ -35,8 +35,8 @@ class ConfigScreen(KeyHandler) :
         self.scoreboards = []
 
         # border will go in the background group, all others foreground
-        self.bg = pyglet.graphics.Group(order=0)
-        self.fg = pyglet.graphics.Group(order=1)
+        self.bg = pyglet.graphics.OrderedGroup(0)
+        self.fg = pyglet.graphics.OrderedGroup(1)
 
         self.createUserConfigFiles()
 
