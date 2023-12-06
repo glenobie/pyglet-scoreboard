@@ -1,6 +1,6 @@
 #!/bin/bash
 
 if (./git-test) then
-	git -C /home/pi/myCode/pyglet-scoreboard/ pull
+	git -C ~/pyglet-scoreboard/ fetch https://github.com/glenobie/pyglet-scoreboard EightInchScreen
 fi
 
