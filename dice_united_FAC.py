@@ -21,7 +21,7 @@ class DiceUnitedSet(FACSet) :
         self.timeSet.attachBooleanFunctionLabel((partial(self.timeSet.allEqual), "Double Time"))
         self.timeSet.attachBooleanFunctionLabel((partial(self.timeSet.notAllEqual),  partial(self.timeSet.totalAsString)))
         self.timeSet.setTitle('Time')
-        self.timeSet.setPosition(130, 380, 16)
+        self.timeSet.setPosition(120, 380+FACSet.OFFSET_FROM_BOTTOM, 16)
 
         activity = Die(Die.D_AQUA, sides=20, text_color=Die.T_WHITE, batch=self.batch)
         activity.setInteriorSpacingPct(0.2)
@@ -31,7 +31,7 @@ class DiceUnitedSet(FACSet) :
         self.blueSet.attachBooleanFunctionLabel((partial(self.blueSet.totalInRange, 13, 16), "Home Pitch"))
         self.blueSet.attachBooleanFunctionLabel((partial(self.blueSet.totalInRange, 17, 20), "Away Pitch"))
         self.blueSet.setTitle('Activity')
-        self.blueSet.setPosition(440, 380, 16)
+        self.blueSet.setPosition(472, 380+FACSet.OFFSET_FROM_BOTTOM, 16)
      
         lookup100 = Die(Die.D_DARK_GREEN, sides=100, text_color=Die.T_WHITE,batch=self.batch)
         lookup100.setInteriorSpacingPct(0.4)
@@ -39,12 +39,12 @@ class DiceUnitedSet(FACSet) :
         lookup20.setInteriorSpacingPct(0.4)
         self.tableDice = BorderedDiceSet([lookup100, lookup20], batch=self.batch)
         self.tableDice.setTitle('Tables')
-        self.tableDice.setPosition(400, 150, 16)
+        self.tableDice.setPosition(400, 150+FACSet.OFFSET_FROM_BOTTOM, 16)
 
         control = Die(Die.D_ORANGE, sides=20, text_color=Die.T_WHITE, batch=self.batch)
         control.setInteriorSpacingPct(0.2)
         self.testDice = BorderedDiceSet([control], 20, self.batch)
-        self.testDice.setPosition(120, 150, 16)
+        self.testDice.setPosition(120, 150+FACSet.OFFSET_FROM_BOTTOM, 16)
         self.testDice.setTitle('Control')
 
     def draw(self) :

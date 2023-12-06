@@ -91,34 +91,34 @@ class InsidePitchSet(FACSet) :
 
     def createDice(self) :
         self.pitcher = IP_DiceSet(title= 'Pitcher', label='WP/HR?/??', batch=self.batch)
-        self.pitcher.setTopLeft(36, 454)
+        self.pitcher.setTopLeft(36, 454+FACSet.OFFSET_FROM_BOTTOM)
 
         self.hitter = IP_DiceSet(title= 'Hitter', label='HBP/K/W/HR', batch=self.batch)
-        self.hitter.setTopLeft(286, 454)
+        self.hitter.setTopLeft(286, 454+FACSet.OFFSET_FROM_BOTTOM)
 
         self.ballpark = IP_DiceSet(title= 'Ballpark', label='H?/E/Strategy', batch=self.batch)
-        self.ballpark.setTopLeft(540, 454)
+        self.ballpark.setTopLeft(540, 454+FACSet.OFFSET_FROM_BOTTOM)
 
 
         starLine = Die(Die.D_AQUA, Die.T_WHITE, 6, self.batch)
         starLine.scale(0.8)
         self.starSet = BorderedDiceSet([starLine], batch=self.batch)
         self.starSet.setTitle('**')
-        self.starSet.setPosition(28, 100, 10)
+        self.starSet.setPosition(28, 100+FACSet.OFFSET_FROM_BOTTOM, 10)
 
 
         range = Die(Die.D_GREEN, Die.T_WHITE, 6, self.batch)
         range.scale(0.8)
         self.rangeSet = BorderedDiceSet([range], batch=self.batch)
         self.rangeSet.setTitle('Range')
-        self.rangeSet.setPosition(172, 100, 10)
+        self.rangeSet.setPosition(172, 100+FACSet.OFFSET_FROM_BOTTOM, 10)
 
 
         field = Die(Die.D_DARK_GREEN, Die.T_WHITE, 6, self.batch)
         field.scale(0.8)
         self.fieldSet = BorderedDiceSet([field], batch=self.batch)
         self.fieldSet.setTitle('DP/SF')
-        self.fieldSet.setPosition(316, 100, 10)
+        self.fieldSet.setPosition(316, 100+FACSet.OFFSET_FROM_BOTTOM, 10)
 
         b1 = Die(Die.D_GOLD, Die.T_BLACK, 6, self.batch)
         b2 = Die(Die.D_ORANGE, Die.T_WHITE, 6, self.batch)
@@ -130,7 +130,7 @@ class InsidePitchSet(FACSet) :
 
         self.baseRunningSet = BorderedDiceSet(d, batch= self.batch)
         self.baseRunningSet.setTitle('Running')
-        self.baseRunningSet.setPosition(460, 100, 10)
+        self.baseRunningSet.setPosition(460, 100+FACSet.OFFSET_FROM_BOTTOM, 10)
 
 
 

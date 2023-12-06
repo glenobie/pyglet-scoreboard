@@ -13,6 +13,8 @@ class Scoreboard(KeyHandler) :
     RIGHT_CENTER = 660
     CENTER = 400
 
+    OFFSET_FROM_BOTTOM = 700
+
     # font sizes
     SCORE_SIZE = 76
     CLOCK_SIZE = 84
@@ -41,7 +43,7 @@ class Scoreboard(KeyHandler) :
         self.bg = pyglet.graphics.OrderedGroup(0)
         self.attachedFAC = None
 
-        self.background = pyglet.shapes.Rectangle(0,0,800,480, (28,28,28), self.batch, self.bg)
+        self.background = pyglet.shapes.Rectangle(0,0+Scoreboard.OFFSET_FROM_BOTTOM,800,480+Scoreboard.OFFSET_FROM_BOTTOM, (28,28,28), self.batch, self.bg)
 
         self.elements = []
 

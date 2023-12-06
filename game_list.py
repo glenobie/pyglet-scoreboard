@@ -10,7 +10,7 @@ class GameList() :
     EMPTY = -1 # selected item if list is empty
     BOTTOM = 100
     WIDTH = 260
-    HEIGHT = 300
+    HEIGHT = 1000
     SPACING = 6
   
 
@@ -120,13 +120,16 @@ class GameList() :
     # make/remake the layout after changes in  document
     # TODO: could use event listener??
     def makeLayout(self, scroll_y) :
-        layout = pyglet.text.layout.ScrollableTextLayout(self.doc, GameList.WIDTH, GameList.HEIGHT,  
+
+        #Got rid of Scrollable Layout which wasn't working well in Pyglet 1.5
+        
+        layout = pyglet.text.layout.TextLayout(self.doc, GameList.WIDTH, GameList.HEIGHT,  
                                                          multiline=True, 
                                                          batch=self.batch, group=self.textGroup)
         layout.anchor_x = 'left'
         layout.y = GameList.BOTTOM
         layout.x = self.xPos
-        layout.view_y = scroll_y
+        #layout.view_y = scroll_y
         return layout
         
     def selectNext(self, direction) :

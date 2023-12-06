@@ -89,13 +89,13 @@ class HockeyScoreboard(Scoreboard) :
         self.state = HockeyGameState()
         Scoreboard.__init__(self)
         
-        self.addScores(3, 470)
-        self.addClock(440)
-        self.addPeriod(300)
-        self.addPenaltyClock('Penalty 1', Scoreboard.LEFT_CENTER, 300, 0, 0)
-        self.addPenaltyClock('Penalty 1', Scoreboard.RIGHT_CENTER, 300, 1, 0)
-        self.addPenaltyClock('Penalty 2', Scoreboard.LEFT_CENTER, 160, 0, 1)
-        self.addPenaltyClock('Penalty 2', Scoreboard.RIGHT_CENTER, 160, 1, 1)
+        self.addScores(3, 470 + Scoreboard.OFFSET_FROM_BOTTOM)
+        self.addClock(440+ Scoreboard.OFFSET_FROM_BOTTOM)
+        self.addPeriod(300+ Scoreboard.OFFSET_FROM_BOTTOM)
+        self.addPenaltyClock('Penalty 1', Scoreboard.LEFT_CENTER, 300+ Scoreboard.OFFSET_FROM_BOTTOM, 0, 0)
+        self.addPenaltyClock('Penalty 1', Scoreboard.RIGHT_CENTER, 300+ Scoreboard.OFFSET_FROM_BOTTOM, 1, 0)
+        self.addPenaltyClock('Penalty 2', Scoreboard.LEFT_CENTER, 160+ Scoreboard.OFFSET_FROM_BOTTOM, 0, 1)
+        self.addPenaltyClock('Penalty 2', Scoreboard.RIGHT_CENTER, 160+ Scoreboard.OFFSET_FROM_BOTTOM, 1, 1)
 
 
     def addPenaltyClock(self, text, x, y, team, clock) :

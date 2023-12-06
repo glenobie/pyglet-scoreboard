@@ -18,7 +18,7 @@ class APBASoccerSet(FACSet) :
         die2 = Die(Die.D_WHITE, sides=6, text_color=Die.T_BLACK, batch=self.batch)
         die2.setInteriorSpacingPct(0.2)
         self.diceSet = BorderedDiceSet([die1, die2], batch=self.batch)
-        self.diceSet.setPosition(290, 380, 16)
+        self.diceSet.setPosition(290, 380+FACSet.OFFSET_FROM_BOTTOM, 16)
 
      
 

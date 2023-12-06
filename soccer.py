@@ -62,11 +62,11 @@ class SoccerScoreboard(Scoreboard) :
         self.addElements()
 
     def addElements(self) :        
-        self.addScores(2, 470)
-        self.addClock(440)
-        self.addPeriod(300, maxDigits=1)
+        self.addScores(2, 470+ Scoreboard.OFFSET_FROM_BOTTOM)
+        self.addClock(440+ Scoreboard.OFFSET_FROM_BOTTOM)
+        self.addPeriod(300+ Scoreboard.OFFSET_FROM_BOTTOM, maxDigits=1)
 
-        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 200, 'EXTRA', partial(self.state.getExtraTime), Scoreboard.BLUE)
+        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 200+ Scoreboard.OFFSET_FROM_BOTTOM, 'EXTRA', partial(self.state.getExtraTime), Scoreboard.BLUE)
 
 
     def handle_A(self, modified=False) :

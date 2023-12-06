@@ -73,14 +73,14 @@ class BasketballScoreboard(Scoreboard) :
         self.state = BasketballGameState()
         Scoreboard.__init__(self)
          
-        self.addScores(3, 470)
-        self.addClock(440)
-        self.addPeriod(300)
+        self.addScores(3, 470+Scoreboard.OFFSET_FROM_BOTTOM)
+        self.addClock(440+Scoreboard.OFFSET_FROM_BOTTOM)
+        self.addPeriod(300+Scoreboard.OFFSET_FROM_BOTTOM)
 
-        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 300, 'Team Fouls', partial(self.state.getTeamFouls, 0), Scoreboard.RED)
-        self.addMediumElement(2, Scoreboard.RIGHT_CENTER, 300, 'Team Fouls', partial(self.state.getTeamFouls, 1), Scoreboard.RED)
-        self.addMediumElement(1, Scoreboard.LEFT_CENTER, 160, 'Timeouts', partial(self.state.getTimeoutsTaken, 0), Scoreboard.RED)
-        self.addMediumElement(1, Scoreboard.RIGHT_CENTER, 160, 'Timeouts', partial(self.state.getTimeoutsTaken, 1), Scoreboard.RED)
+        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 300+Scoreboard.OFFSET_FROM_BOTTOM, 'Team Fouls', partial(self.state.getTeamFouls, 0), Scoreboard.RED)
+        self.addMediumElement(2, Scoreboard.RIGHT_CENTER, 300+Scoreboard.OFFSET_FROM_BOTTOM, 'Team Fouls', partial(self.state.getTeamFouls, 1), Scoreboard.RED)
+        self.addMediumElement(1, Scoreboard.LEFT_CENTER, 160+Scoreboard.OFFSET_FROM_BOTTOM, 'Timeouts', partial(self.state.getTimeoutsTaken, 0), Scoreboard.RED)
+        self.addMediumElement(1, Scoreboard.RIGHT_CENTER, 160+Scoreboard.OFFSET_FROM_BOTTOM, 'Timeouts', partial(self.state.getTimeoutsTaken, 1), Scoreboard.RED)
 
      # handle keys
 

@@ -132,21 +132,21 @@ class BaseballScoreboard(Scoreboard) :
         self.state = BaseballGameState()
         Scoreboard.__init__(self)
         
-        self.addScores(2, 470)
-        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 300, 'Hits', partial(self.state.getHits, 0), Scoreboard.RED)
-        self.addMediumElement(2, Scoreboard.RIGHT_CENTER, 300, 'Hits', partial(self.state.getHits, 1), Scoreboard.RED)
-        self.addMediumElement(1, Scoreboard.LEFT_CENTER, 160, 'Errors', partial(self.state.getErrors, 0), Scoreboard.RED)
-        self.addMediumElement(1, Scoreboard.RIGHT_CENTER, 160, 'Errors', partial(self.state.getErrors, 1), Scoreboard.RED)
+        self.addScores(2, 470+Scoreboard.OFFSET_FROM_BOTTOM)
+        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 300+Scoreboard.OFFSET_FROM_BOTTOM, 'Hits', partial(self.state.getHits, 0), Scoreboard.RED)
+        self.addMediumElement(2, Scoreboard.RIGHT_CENTER, 300+Scoreboard.OFFSET_FROM_BOTTOM, 'Hits', partial(self.state.getHits, 1), Scoreboard.RED)
+        self.addMediumElement(1, Scoreboard.LEFT_CENTER, 160+Scoreboard.OFFSET_FROM_BOTTOM, 'Errors', partial(self.state.getErrors, 0), Scoreboard.RED)
+        self.addMediumElement(1, Scoreboard.RIGHT_CENTER, 160+Scoreboard.OFFSET_FROM_BOTTOM, 'Errors', partial(self.state.getErrors, 1), Scoreboard.RED)
 
-        self.addMediumElement(1, Scoreboard.CENTER, 290, 'Outs', self.state.getOuts, Scoreboard.GREEN)
-        self.addMediumElement(2, Scoreboard.CENTER, 460, 'Inning', self.state.getInning, Scoreboard.GREEN)
+        self.addMediumElement(1, Scoreboard.CENTER, 290+Scoreboard.OFFSET_FROM_BOTTOM, 'Outs', self.state.getOuts, Scoreboard.GREEN)
+        self.addMediumElement(2, Scoreboard.CENTER, 460+Scoreboard.OFFSET_FROM_BOTTOM, 'Inning', self.state.getInning, Scoreboard.GREEN)
 
         # add layouts for top and bottom of inning indication
         self.top = ScoreboardElement(text=None, textFont=Scoreboard.TEXT_FONT, textSize=Scoreboard.MEDIUM_TEXT_SIZE, textColor=Scoreboard.WHITE, 
                               updateFunc=self.state.getHalfInning, digitFont=Scoreboard.DIGIT_FONT,
                               digitSize=Scoreboard.VERY_SMALL_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=3, 
                               batch=self.batch)
-        self.top.setCenterTop(300, 395)
+        self.top.setCenterTop(300, 395+Scoreboard.OFFSET_FROM_BOTTOM)
         self.elements.append(self.top)
         self.top.setOn(self.state.getTeamAtBat() == GameState.GUEST_INDEX)
 
@@ -154,7 +154,7 @@ class BaseballScoreboard(Scoreboard) :
                               updateFunc=self.state.getHalfInning, digitFont=Scoreboard.DIGIT_FONT,
                               digitSize=Scoreboard.VERY_SMALL_DIGIT_SIZE, digitColor=Scoreboard.GREEN, maxDigits=3, 
                               batch=self.batch)
-        self.bottom.setCenterTop(500, 370)
+        self.bottom.setCenterTop(500, 370+Scoreboard.OFFSET_FROM_BOTTOM)
         self.elements.append(self.bottom)
         self.bottom.setOn(self.state.getTeamAtBat() == GameState.HOME_INDEX)
 

@@ -5,15 +5,14 @@ from random import seed
 import time
 
 ####################################################################
-class FastActionWindow(pyglet.window.Window) :
+class FastActionWindow() :
 
-    def __init__(self, width, height, fullscreen, screen=None) :
-        pyglet.window.Window.__init__(self, width, height, fullscreen=fullscreen, screen=screen)
+    def __init__(self) :
+        
         seed(time.time_ns())
         self.fac = ChoiceFAC()
 
-    def on_draw(self) :
-        self.clear()
+    def draw(self) :
         self.fac.draw()
  
     def setFACSet(self, fac):

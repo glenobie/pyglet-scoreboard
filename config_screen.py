@@ -20,7 +20,6 @@ def listDifference(list1, list2) :
     
 
 class ConfigScreen(KeyHandler) :
-
     LINES_PER_GAME = 6
     END_OF_FILE = 'EOF'
     ALL_GAMES_FILE = 'games.txt'
@@ -35,8 +34,8 @@ class ConfigScreen(KeyHandler) :
         self.scoreboards = []
 
         # border will go in the background group, all others foreground
-        self.bg = pyglet.graphics.OrderedGroup(0)
-        self.fg = pyglet.graphics.OrderedGroup(1)
+        self.bg = pyglet.graphics.OrderedGroup(400)
+        self.fg = pyglet.graphics.OrderedGroup(401)
 
         self.createUserConfigFiles()
 

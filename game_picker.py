@@ -18,21 +18,14 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
     INDEX_ICON = 2
     AUTOSAVE_INTERVAL = 60 # scoreboards will autosave every AUTOSAVE_INTERVAL seconds
 
+
     def __init__(self, width, height, isPi = False) :
 
-        # create window(s)
+        # create window
         display = pyglet.canvas.get_display()
-        screens = display.get_screens()
-        pyglet.window.Window.__init__(self, width, height, fullscreen=False, screen=screens[0]) #False was isPi
-        self.displayingFAC = (isPi and len(screens) > 1) or not(isPi)
-        for i in screens :
-            print(i)
-        if self.displayingFAC :
-            #self.createFACWindow(isPi, width, height)
-            #self.windowFAC = FastActionWindow(width, height, fullscreen=False, screen=screens[1])
-            self.createFACWindow_v2(isPi, width, height)
-
-
+        
+        pyglet.window.Window.__init__(self, width, height, fullscreen=False) 
+        self.windowFAC = FastActionWindow()  
         pyglet.clock.schedule_interval(self.autosave, MainWindow.AUTOSAVE_INTERVAL)
 
         self.path = ['resources', 'resources/icons', 'resources/fonts']
@@ -61,7 +54,7 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
         font.load(FACSet.TEXT_FONT)
         font.load(PlayingCardDeck.CARD_FONT)
         # find user save directory. If does not exist, create it
-        dir = pyglet.resource.get_settings_path('Scoreboard')
+        dir = pyglet.resource.get_settings_path('Scoreboard') #test
         if not os.path.exists(dir):
             os.makedirs(dir)
         return loader
@@ -111,10 +104,9 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
     def on_draw(self) :
         self.clear()
         self.activeScreen.draw() 
+        self.windowFAC.draw()
 
     def on_close(self):
-        if self.displayingFAC :
-            self.windowFAC.close()
         return super().on_close()
 
 
@@ -136,8 +128,7 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
             self.activeScreen.handle_Z(modified)
         elif symbol == pyglet.window.key.C :
             if modified and self.activeScreen == self.pickerScreen:
-                if self.displayingFAC :
-                    self.windowFAC.close()
+
                 self.close()
             self.activeScreen.handle_C(modified)
         elif symbol == pyglet.window.key.X :
@@ -157,19 +148,15 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
 
             self.activeScreen.handle_E(modified)
         elif symbol == pyglet.window.key.L :
-            if self.displayingFAC :
-                self.windowFAC.handle_L()
+            self.windowFAC.handle_L()
         elif symbol == pyglet.window.key.K :
-            if self.displayingFAC :
-                self.windowFAC.handle_K()
+            self.windowFAC.handle_K()
         elif symbol == pyglet.window.key.J :
-            if self.displayingFAC :
-                self.windowFAC.handle_J()
+            self.windowFAC.handle_J()
 
     # handle the modified S key
     def handle_modified_S(self) :
-        if self.displayingFAC :
-            self.windowFAC.clearFACSet()
+        self.windowFAC.clearFACSet()
         if self.activeScreen == self.configScreen :
             self.configScreen.handleExit()
             if self.configScreen.getNumGamesChosen() > 0 :
@@ -186,32 +173,32 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
         self.activeScreen = scoreboardClass()
         if loadAutoSave :
             self.activeScreen.loadFromAutosaveFile()
-        if self.displayingFAC :
-            class_ = getattr(importlib.import_module(picked[4]), picked[5])
-            fac = class_(self.loader)
-            self.windowFAC.setFACSet(fac)
-            self.activeScreen.attachFAC(fac) # for messages bewteen FAC and Scoreboard
+
+        class_ = getattr(importlib.import_module(picked[4]), picked[5])
+        fac = class_(self.loader)
+        self.windowFAC.setFACSet(fac)
+        self.activeScreen.attachFAC(fac) # for messages bewteen FAC and Scoreboard
 
 
 ##################################################################
 class GamePicker(KeyHandler) :
-
+    OFFSET_FROM_BOTTOM = 700
     def __init__(self, scoreboardTuples, batch) :
         self.batch = batch
         self.scoreboardTuples = scoreboardTuples
                 # center points for the icons
-        self.controlPoints = ( (400, 240, 1),   # 0: front, center
-                               (220, 260, 0.6),   # 1: front, left of center
-                               (100, 300, 0.48),  # 2: front, just before apex
-                               (60, 330, 0.4),    # 3: left apex
-                               (120, 340, 0.35),  # 4: back, just after apex
-                               (260, 380, 0.3),   # 5: back, left of center
-                               (400, 390, 0.24),  # 6: back center
-                               (540, 380, 0.3),   # 7: back, right of center
-                               (680, 340, 0.35),  # 8: back, just before apex
-                               (740, 330, 0.4),   # 9: right apex
-                               (700, 300, 0.48),  # 10: right, front, just after apex
-                               (580, 260, 0.6),   # 11: front, right of center
+        self.controlPoints = ( (400, 240+GamePicker.OFFSET_FROM_BOTTOM, 1),   # 0: front, center q
+                               (220, 260+GamePicker.OFFSET_FROM_BOTTOM, 0.6),   # 1: front, left of center q
+                               (100, 280+GamePicker.OFFSET_FROM_BOTTOM, 0.48),  # 2: front, just before apex q
+                               (60, 330+GamePicker.OFFSET_FROM_BOTTOM, 0.4),    # 3: left apex
+                               (120, 340+GamePicker.OFFSET_FROM_BOTTOM, 0.35),  # 4: back, just after apex
+                               (140, 360+GamePicker.OFFSET_FROM_BOTTOM, 0.3),   # 5: back, left of center
+                               (400, 390+GamePicker.OFFSET_FROM_BOTTOM, 0.24),  # 6: back center q
+                               (660, 360+GamePicker.OFFSET_FROM_BOTTOM, 0.3),   # 5: back, right of center
+                               (680, 340+GamePicker.OFFSET_FROM_BOTTOM, 0.35),  # 8: back, just before apex
+                               (740, 330+GamePicker.OFFSET_FROM_BOTTOM, 0.4),   # 9: right apex
+                               (700, 280+GamePicker.OFFSET_FROM_BOTTOM, 0.48),  # 10: right, front, just after apex
+                               (580, 260+GamePicker.OFFSET_FROM_BOTTOM, 0.6),   # 11: front, right of center q
                              )
         self.options = Carousel(self.controlPoints, self.scoreboardTuples)
         self.options.initialize()    
@@ -226,6 +213,7 @@ class GamePicker(KeyHandler) :
     def update(self, dt) :
         for t in self.scoreboardTuples :
             t[3].update(dt)
+        
 
     def getSelection(self) :
         return self.options.getSelection()

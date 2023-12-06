@@ -90,7 +90,7 @@ class InsideCreaseSet(FACSet) :
         self.valueFields = []
         x = InsideCreaseSet.SPACE
         for col in InsideCreaseSet.COLUMNS :
-            y = InsideCreaseSet.SPACE
+            y = InsideCreaseSet.SPACE + FACSet.OFFSET_FROM_BOTTOM
             for spot in col :
                 if not(spot is None) :
                     if spot[0] == InsideCreaseSet.TEXT_FIELD_COLOR :

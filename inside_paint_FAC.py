@@ -100,7 +100,7 @@ class InsidePaintSet(FACSet) :
         self.valueFields = []
         x = InsidePaintSet.SPACE
         for col in InsidePaintSet.COLUMNS :
-            y = InsidePaintSet.SPACE
+            y = InsidePaintSet.SPACE + FACSet.OFFSET_FROM_BOTTOM
             for spot in col :
                 if not(spot is None) :
                     if spot[0] == InsidePaintSet.TEXT_FIELD_COLOR :
@@ -117,7 +117,7 @@ class InsidePaintSet(FACSet) :
                         self.valueFields.append(f)
                     f.setPosition(x, y)
 
-                y += InsidePaintSet.FIELD_HEIGHT + InsidePaintSet.SPACE
+                y += InsidePaintSet.FIELD_HEIGHT + InsidePaintSet.SPACE 
             x += InsidePaintSet.FIELD_WIDTH + InsidePaintSet.SPACE
 
         self.valueFields[3].setFont(FACSet.DINGBAT_FONT, InsideFACField.FONT_RED, 44)
