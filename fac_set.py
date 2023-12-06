@@ -28,6 +28,15 @@ class FACSet() :
     def getBatch(self) :
         return self.batch
 
+    def handle_J(self) :
+        0
+
+    def handle_K(self) :
+        0
+
+    def handle_L(self) :
+        0
+
 
 class ChoiceFAC(FACSet) :
     def __init__(self, loader=None) :
