@@ -35,3 +35,15 @@ __pycache__/sprite.cpython-39.pyc
 __pycache__/sprite.cpython-310.pyc
 __pycache__/team_state.cpython-310.pyc
 __pycache__/text_box.cpython-310.pyc
+__pycache__/carousel.cpython-311.pyc
+__pycache__/config_screen.cpython-311.pyc
+__pycache__/die.cpython-311.pyc
+__pycache__/element.cpython-311.pyc
+__pycache__/fac_set.cpython-311.pyc
+__pycache__/fast_action_window.cpython-311.pyc
+__pycache__/game_list.cpython-311.pyc
+__pycache__/game_picker.cpython-311.pyc
+__pycache__/key_handler.cpython-311.pyc
+__pycache__/playing_cards.cpython-311.pyc
+__pycache__/scoreboard.cpython-311.pyc
+__pycache__/sprite.cpython-311.pyc
