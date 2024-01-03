@@ -287,9 +287,9 @@ class TenthFrameDisplay(FrameDisplay) :
 class BowlingScoreboard(Scoreboard) :
 
     FIRST_COLUMN = 54
-    ROWS = [400, 300, 200, 100]
+    ROWS = [400+Scoreboard.OFFSET_FROM_BOTTOM, 300+Scoreboard.OFFSET_FROM_BOTTOM, 200+Scoreboard.OFFSET_FROM_BOTTOM, 100+Scoreboard.OFFSET_FROM_BOTTOM]
     SPACING = 4
-    HEADER_Y = 424
+    HEADER_Y = 424+Scoreboard.OFFSET_FROM_BOTTOM
     HEADER_X = 14
 
     def __init__(self) :

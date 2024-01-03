@@ -81,8 +81,8 @@ class TennisGameState(GameState) :
 ##################################
 class TennisScoreboard(Scoreboard) :
 
-    P1_Y = 360
-    P2_Y = 240
+    P1_Y = 360 + Scoreboard.OFFSET_FROM_BOTTOM
+    P2_Y = 240 + Scoreboard.OFFSET_FROM_BOTTOM
 
     COLS = [198, 428, 508, 588, 668, 748]
   
