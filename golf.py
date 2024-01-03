@@ -250,7 +250,8 @@ class GolfScoreboard(Scoreboard) :
     GREEN = (10, 200, 40, 255)
 
 
-    POSITIONS = ( (120, 474), (360, 474), (120, 316), (360, 316), (120, 158), (360, 158)  )
+    POSITIONS = ( (120, 474+Scoreboard.OFFSET_FROM_BOTTOM), (360, 474+Scoreboard.OFFSET_FROM_BOTTOM), (120, 316+Scoreboard.OFFSET_FROM_BOTTOM), 
+                  (360, 316+Scoreboard.OFFSET_FROM_BOTTOM), (120, 158+Scoreboard.OFFSET_FROM_BOTTOM), (360, 158+Scoreboard.OFFSET_FROM_BOTTOM)  )
     LEADERBOARD_COLS = (540, 610, 690, 770)
 
     def __init__(self) :
@@ -284,11 +285,11 @@ class GolfScoreboard(Scoreboard) :
         fg = pyglet.graphics.OrderedGroup(2)
         header = pyglet.text.Label(title, GolfScoreboard.LEADERBOARD_FONT, GolfScoreboard.LEADERBOARD_FONT_SIZE,
                                         batch=self.batch, group=fg )
-        header.position = (x, 450)
+        header.position = (x, 450+Scoreboard.OFFSET_FROM_BOTTOM)
         header.anchor_x = 'right'
         self.leaderLabels.append(header)
         
-        nextRow = 450 - header.content_height
+        nextRow = 450 - header.content_height +Scoreboard.OFFSET_FROM_BOTTOM``
         
         for g in self.state.getLeaderboard() :
             selectedGolfer = (g.getID() == self.holes[self.selectedHole].getLeftGolferID()) or (g.getID() == self.holes[self.selectedHole].getRightGolferID())

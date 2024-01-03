@@ -32,34 +32,34 @@ class HistoryMakerGolfSet(FACSet) :
 
         self.deciderSet = BorderedDiceSet([self.decider], batch=self.batch)
         self.deciderSet.setTitle('Decider')
-        self.deciderSet.setPosition(570, 360, 20)
+        self.deciderSet.setPosition(570, 360 + FACSet.OFFSET_FROM_BOTTOM, 20)
         self.deciderSet.setLabel('Roll #' + str(self.decisionNumber))
 
         for d in dice :
             d.scale(0.6)
 
         self.allDice = DiceSet(dice, self.batch)
-        self.allDice.setPosition(480, 60, 16)
+        self.allDice.setPosition(480, 60 + FACSet.OFFSET_FROM_BOTTOM, 16)
 
         d = []
         d.append(self.white.makeClone())
         self.controlSet = DiceSet(d, self.batch)
         self.controlSet.attachBooleanFunctionLabel((partial(self.controlSet.totalEquals, 6), 'Go For It?'))
         self.controlSet.attachBooleanFunctionLabel((partial(self.controlSet.totalEquals, 4), 'Extra Control?'))
-        self.controlSet.setPosition(40, 400, 30)
+        self.controlSet.setPosition(40, 400 + FACSet.OFFSET_FROM_BOTTOM, 30)
     
         d = []
         d.append(self.gray.makeClone())
         d.append(self.black.makeClone())
         self.courseSet = SortedDiceSet(d, self.batch)
-        self.courseSet.setPosition(40,280,30)
+        self.courseSet.setPosition(40,280 + FACSet.OFFSET_FROM_BOTTOM,30)
 
         d = []
         d.append(self.gray.makeClone())
         d.append(self.black.makeClone())
         d.append(self.green.makeClone())
         self.golferSet = SortedDiceSet(d, self.batch)
-        self.golferSet.setPosition(40, 160, 30)
+        self.golferSet.setPosition(40, 160 + FACSet.OFFSET_FROM_BOTTOM, 30)
 
 
     def draw(self) :
