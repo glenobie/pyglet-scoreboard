@@ -13,7 +13,7 @@ class Scoreboard(KeyHandler) :
     RIGHT_CENTER = 660
     CENTER = 400
 
-    OFFSET_FROM_BOTTOM = 700
+    OFFSET_FROM_BOTTOM = 800
 
     # font sizes
     SCORE_SIZE = 76

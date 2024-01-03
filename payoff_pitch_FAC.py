@@ -31,7 +31,7 @@ class PayoffPitchSet(FACSet) :
         self.pitchSet = BorderedDiceSet(d, batch= self.batch)
         self.pitchSet.setTitle('Pitch')
         self.pitchSet.attachBooleanFunctionLabel((self.always, self.pitchSet.totalAsString))
-        self.pitchSet.setPosition(60, 400, 10)
+        self.pitchSet.setPosition(60, 400 + FACSet.OFFSET_FROM_BOTTOM, 10)
 
         h1 = Die(Die.D_RED, Die.T_WHITE, 100, self.batch)
         h1.scale(0.8);
@@ -45,7 +45,7 @@ class PayoffPitchSet(FACSet) :
         self.hitSet.attachBooleanFunctionLabel((partial(self.hitSet.totalEquals, 33), "WP?"))
         self.hitSet.attachBooleanFunctionLabel((partial(self.hitSet.totalEquals, 34), "WP?"))
         self.hitSet.attachBooleanFunctionLabel((partial(self.hitSet.totalEquals, 35), "WP?"))
-        self.hitSet.setPosition(360, 400, 10)
+        self.hitSet.setPosition(360, 400 + FACSet.OFFSET_FROM_BOTTOM, 10)
 
         dp1 = Die(Die.D_GREEN, Die.T_WHITE, 6, self.batch)
         dp2 = Die(Die.D_GREEN, Die.T_WHITE, 6, self.batch)
@@ -57,7 +57,7 @@ class PayoffPitchSet(FACSet) :
         self.dpSet = BorderedDiceSet(dp, batch= self.batch)
         self.dpSet.setTitle('DP?')
         self.dpSet.attachBooleanFunctionLabel((self.always, self.dpSet.totalAsString))
-        self.dpSet.setPosition(60, 220, 10)
+        self.dpSet.setPosition(60, 220 + FACSet.OFFSET_FROM_BOTTOM, 10)
 
 
     def draw(self) :
