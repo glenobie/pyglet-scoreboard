@@ -51,25 +51,25 @@ class HockeyBlastSet(BlastSet) :
         self.batch = pyglet.graphics.Batch()
         white = Die(Die.D_WHITE, sides=6, batch=self.batch)
         black = Die(Die.D_BLACK, sides=6, text_color=Die.T_WHITE,batch=self.batch)
-        self.normalDice = self.createBlastDice(white, black,100, 380, 16, 'Normal Minutes', HockeyBlastSet.NORMAL)
+        self.normalDice = self.createBlastDice(white, black,100, 380 + FACSet.OFFSET_FROM_BOTTOM, 16, 'Normal Minutes', HockeyBlastSet.NORMAL)
 
 
-        self.powerDice = self.createBlastDice(white.makeClone(), black.makeClone(),  500, 400, 16, 
+        self.powerDice = self.createBlastDice(white.makeClone(), black.makeClone(),  500, 400 + FACSet.OFFSET_FROM_BOTTOM, 16, 
                                                 'Power', HockeyBlastSet.POWER, 0.76)
         self.powerDice.setBorderColor((255,0,0), 255)
-        self.emptyNetDice = self.createBlastDice(white.makeClone(), black.makeClone(), 500, 248, 16, 
+        self.emptyNetDice = self.createBlastDice(white.makeClone(), black.makeClone(), 500, 248 + FACSet.OFFSET_FROM_BOTTOM, 16, 
                                                 'Empty Net', HockeyBlastSet.EMPTY_NET, 0.76)
         self.emptyNetDice.setBorderColor((255,255,0), 255)
-        self.threeOn3Dice = self.createBlastDice(white.makeClone(), black.makeClone(),  500, 90, 16, 
+        self.threeOn3Dice = self.createBlastDice(white.makeClone(), black.makeClone(),  500, 90 + FACSet.OFFSET_FROM_BOTTOM, 16, 
                                                 '3 on 3', HockeyBlastSet.THREE_ON_3, 0.76)
         self.threeOn3Dice.setBorderColor((0,255,255), 255)
         red = Die(Die.D_RED, sides=6, text_color=Die.T_WHITE, batch=self.batch)
         blue = Die(Die.D_BLUE, sides=6, text_color=Die.T_WHITE, batch=self.batch)
 
         self.d6s = DiceSet([red, blue], self.batch)
-        self.d6s.setPosition(120, 96, 16) 
+        self.d6s.setPosition(120, 96 + FACSet.OFFSET_FROM_BOTTOM, 16) 
         self.green = Die(Die.D_GREEN, text_color=Die.T_WHITE, sides=6, batch=self.batch) 
-        self.green.setCenter(170, 220)
+        self.green.setCenter(170, 220 + FACSet.OFFSET_FROM_BOTTOM)
 
 
     def handle_L(self) :
@@ -91,23 +91,23 @@ class SoccerBlastSet(BlastSet) :
         self.batch = pyglet.graphics.Batch()
         white = Die(Die.D_WHITE, sides=6, batch=self.batch)
         black = Die(Die.D_BLACK, sides=6, text_color=Die.T_WHITE,batch=self.batch)
-        self.normalDice = self.createBlastDice(white, black,100, 380, 16, 'Pitch Action', SoccerBlastSet.NORMAL)
+        self.normalDice = self.createBlastDice(white, black,100, 380 + FACSet.OFFSET_FROM_BOTTOM, 16, 'Pitch Action', SoccerBlastSet.NORMAL)
 
 
         red = Die(Die.D_RED, sides=6, text_color=Die.T_WHITE, batch=self.batch)
         blue = Die(Die.D_BLUE, sides=6, text_color=Die.T_WHITE, batch=self.batch)
 
         self.d6s = DiceSet([red, blue], self.batch)
-        self.d6s.setPosition(120, 96, 16) 
+        self.d6s.setPosition(120, 96 + FACSet.OFFSET_FROM_BOTTOM, 16) 
         self.green = Die(Die.D_GREEN, text_color=Die.T_WHITE, sides=6, batch=self.batch) 
-        self.green.setCenter(170, 220)
+        self.green.setCenter(170, 220 + FACSet.OFFSET_FROM_BOTTOM)
         self.gold = Die(Die.D_GOLD, sides=6, batch=self.batch)
         self.gold.scale(0.75)
 
         self.goldSet = BorderedDiceSet([self.gold], spacing = 22, batch=self.batch)
         self.goldSet.setTitleFontSize(16)
         self.goldSet.setTitle('Optional')
-        self.goldSet.setPosition(500, 380)
+        self.goldSet.setPosition(500, 380 + FACSet.OFFSET_FROM_BOTTOM)
 
 
     def handle_L(self) :
@@ -137,13 +137,13 @@ class LacrosseBlastSet(BlastSet) :
         self.batch = pyglet.graphics.Batch()
         white = Die(Die.D_WHITE, sides=6, batch=self.batch)
         black = Die(Die.D_BLACK, sides=6, text_color=Die.T_WHITE,batch=self.batch)
-        self.normalDice = self.createBlastDice(white, black,100, 380, 16, 'Normal Minutes', LacrosseBlastSet.NORMAL)
+        self.normalDice = self.createBlastDice(white, black,100, 380 + FACSet.OFFSET_FROM_BOTTOM, 16, 'Normal Minutes', LacrosseBlastSet.NORMAL)
 
 
-        self.powerDice = self.createBlastDice(white.makeClone(), black.makeClone(),  500, 320, 16, 
+        self.powerDice = self.createBlastDice(white.makeClone(), black.makeClone(),  500, 320 + FACSet.OFFSET_FROM_BOTTOM, 16, 
                                                 'Power', LacrosseBlastSet.POWER, 0.76)
         self.powerDice.setBorderColor((255,0,0), 255)
-        self.emptyNetDice = self.createBlastDice(white.makeClone(), black.makeClone(), 500, 128, 16, 
+        self.emptyNetDice = self.createBlastDice(white.makeClone(), black.makeClone(), 500, 128 + FACSet.OFFSET_FROM_BOTTOM, 16, 
                                                 'Empty Net', LacrosseBlastSet.EMPTY_NET, 0.76)
         self.emptyNetDice.setBorderColor((255,255,0), 255)
 
@@ -151,9 +151,9 @@ class LacrosseBlastSet(BlastSet) :
         blue = Die(Die.D_BLUE, sides=6, text_color=Die.T_WHITE, batch=self.batch)
 
         self.d6s = DiceSet([red, blue], self.batch)
-        self.d6s.setPosition(120, 96, 16) 
+        self.d6s.setPosition(120, 96 + FACSet.OFFSET_FROM_BOTTOM, 16) 
         self.green = Die(Die.D_GREEN, text_color=Die.T_WHITE, sides=6, batch=self.batch) 
-        self.green.setCenter(170, 220)
+        self.green.setCenter(170, 220 + FACSet.OFFSET_FROM_BOTTOM)
 
 
     def handle_L(self) :

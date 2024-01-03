@@ -51,8 +51,8 @@ class LacrosseScoreboard(Scoreboard) :
         self.state = LacrosseGameState()        
         Scoreboard.__init__(self)
 
-        self.addLargeElement(2, Scoreboard.LEFT_CENTER, 470, 'GUEST', partial(self.state.getScore, 0), Scoreboard.RED)
-        self.addLargeElement(2, Scoreboard.RIGHT_CENTER, 470, 'HOME', partial(self.state.getScore, 1), Scoreboard.RED)
-        self.addClock(440)
-        self.addPeriod(300, maxDigits=1)
+        self.addLargeElement(2, Scoreboard.LEFT_CENTER, 470 + Scoreboard.OFFSET_FROM_BOTTOM, 'GUEST', partial(self.state.getScore, 0), Scoreboard.RED)
+        self.addLargeElement(2, Scoreboard.RIGHT_CENTER, 470 + Scoreboard.OFFSET_FROM_BOTTOM, 'HOME', partial(self.state.getScore, 1), Scoreboard.RED)
+        self.addClock(440 + Scoreboard.OFFSET_FROM_BOTTOM)
+        self.addPeriod(300 + Scoreboard.OFFSET_FROM_BOTTOM, maxDigits=1)
 

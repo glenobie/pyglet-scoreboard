@@ -21,7 +21,7 @@ class HistoryMakerBaseballSet(FACSet) :
             d.scale(0.6)
 
         self.allDice = DiceSet(dice, self.batch)
-        self.allDice.setPosition(570, 60, 12)
+        self.allDice.setPosition(570, 60 + FACSet.OFFSET_FROM_BOTTOM, 12)
 
         self.decider = Die(Die.D_WHITE, text_color=Die.T_WHITE, sides=2, batch = self.batch)
         self.decider.setInteriorSpacingPct(0.36)
@@ -31,22 +31,22 @@ class HistoryMakerBaseballSet(FACSet) :
 
         self.deciderSet = BorderedDiceSet([self.decider], batch=self.batch)
         self.deciderSet.setTitle('Decider')
-        self.deciderSet.setPosition(570, 360, 20)
+        self.deciderSet.setPosition(570, 360 + FACSet.OFFSET_FROM_BOTTOM, 20)
         self.deciderSet.setLabel('Roll #' + str(self.decisionNumber))
 
 
         d1 = [self.red.makeClone()]
         self.oneSet = DiceSet(d1, self.batch)
-        self.oneSet.setPosition(40, 400, 20)
+        self.oneSet.setPosition(40, 400 + FACSet.OFFSET_FROM_BOTTOM, 20)
     
         d2 = [self.black.makeClone(), self.blue.makeClone()]
         self.twoSet = SortedDiceSet(d2, self.batch)
-        self.twoSet.setPosition(40,280,20)
+        self.twoSet.setPosition(40,280 + FACSet.OFFSET_FROM_BOTTOM,20)
 
         d3 = [self.red.makeClone(), self.blue.makeClone(), self.black.makeClone()]
         self.threeSet = SortedDiceSet(d3, self.batch)
         self.threeSet.attachBooleanFunctionLabel((self.isRarePlayRoll, 'RARE PLAY!'))
-        self.threeSet.setPosition(40, 160, 20)
+        self.threeSet.setPosition(40, 160 + FACSet.OFFSET_FROM_BOTTOM, 20)
 
 
     def isRarePlayRoll(self) :
