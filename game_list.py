@@ -8,12 +8,10 @@ class GameList() :
     GREY = (10,10,10)
 
     EMPTY = -1 # selected item if list is empty
-    BOTTOM = 200
+    BOTTOM = 300
     WIDTH = 260
     HEIGHT = 900
     SPACING = 6
-  
-    # test comment
 
     def __init__(self, labelText, gameList, batch, textGroup, bgGroup, xPos) :
         self.gameList = gameList
