@@ -62,7 +62,7 @@ class ConfigScreen(KeyHandler) :
         else :
             updateText = 'Internet connection found. [MOD+F2] will update and restart.'
 
-        self.msg = pyglet.text.Label(updateText, font_name='Arial', font_size=16, x=20, y=20, batch=self.batch, group=self.fg)
+        self.msg = pyglet.text.Label(updateText, font_name='Arial', font_size=16, x=20, y=100, batch=self.batch, group=self.fg)
 
     def createUserConfigFiles(self) :
         # find user config directory or create it
