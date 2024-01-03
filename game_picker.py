@@ -185,7 +185,7 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
 
 ##################################################################
 class GamePicker(KeyHandler) :
-    OFFSET_FROM_BOTTOM = 800
+    OFFSET_FROM_BOTTOM = 720
     def __init__(self, scoreboardTuples, batch) :
         self.batch = batch
         self.scoreboardTuples = scoreboardTuples
