@@ -15,14 +15,14 @@ class InsideVolleySet(FACSet) :
         player.setInteriorSpacingPct(0.2)
         self.playerDice = BorderedDiceSet([player], batch=self.batch)
         self.playerDice.setTitle('Who?')
-        self.playerDice.setPosition(160, 260, 16)
+        self.playerDice.setPosition(160, 260 + FACSet.OFFSET_FROM_BOTTOM, 16)
         self.playerDice.attachBooleanFunctionLabel( ( partial(self.playerDice.totalEquals, 1), 'Event'))
         self.playerDice.attachBooleanFunctionLabel( ( partial(self.playerDice.totalEquals, 100), 'Event'))
 
         aqua = Die(Die.D_AQUA, sides=6, text_color=Die.T_WHITE, batch=self.batch)
         blue = Die(Die.D_LIGHT_BLUE, sides=6, text_color=Die.T_WHITE, batch=self.batch)
         self.whatDice = BorderedDiceSet([aqua, blue],  batch=self.batch)
-        self.whatDice.setPosition(400, 260, 16)
+        self.whatDice.setPosition(400, 260 + FACSet.OFFSET_FROM_BOTTOM, 16)
         self.whatDice.setTitle('What?')
 
 
