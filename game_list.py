@@ -8,9 +8,9 @@ class GameList() :
     GREY = (10,10,10)
 
     EMPTY = -1 # selected item if list is empty
-    BOTTOM = 100
+    BOTTOM = 200
     WIDTH = 260
-    HEIGHT = 1000
+    HEIGHT = 900
     SPACING = 6
   
 
