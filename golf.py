@@ -289,7 +289,7 @@ class GolfScoreboard(Scoreboard) :
         header.anchor_x = 'right'
         self.leaderLabels.append(header)
         
-        nextRow = 450 - header.content_height +Scoreboard.OFFSET_FROM_BOTTOM``
+        nextRow = 450 - header.content_height +  Scoreboard.OFFSET_FROM_BOTTOM
         
         for g in self.state.getLeaderboard() :
             selectedGolfer = (g.getID() == self.holes[self.selectedHole].getLeftGolferID()) or (g.getID() == self.holes[self.selectedHole].getRightGolferID())
