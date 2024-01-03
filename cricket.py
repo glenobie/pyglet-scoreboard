@@ -248,8 +248,8 @@ class ODICricketScoreboard(CricketScoreboard) :
     def __init__(self) :
         self.state = CricketGameState()
         CricketScoreboard.__init__(self)    
-        self.addMediumElement(2, Scoreboard.CENTER, 150, 'Overs', self.state.getOvers, Scoreboard.GREEN)
-        self.addMediumElement(1, Scoreboard.LEFT_CENTER, 150, 'Balls', self.state.getBalls, Scoreboard.GREEN)
+        self.addMediumElement(2, Scoreboard.CENTER, 150 + Scoreboard.OFFSET_FROM_BOTTOM, 'Overs', self.state.getOvers, Scoreboard.GREEN)
+        self.addMediumElement(1, Scoreboard.LEFT_CENTER, 150 + Scoreboard.OFFSET_FROM_BOTTOM, 'Balls', self.state.getBalls, Scoreboard.GREEN)
 
 
 #########################################################################
