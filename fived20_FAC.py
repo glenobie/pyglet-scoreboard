@@ -34,11 +34,11 @@ class FiveD20Set(FACSet) :
 
         self.defPlayCall = BorderedTextBox('Def Adj', 100, 100, batch=self.batch, text_size = 26)
         self.defPlayCall.setTitleFontSize(16)
-        self.defPlayCall.setPosition(600, 30)
+        self.defPlayCall.setPosition(600, 30 + FACSet.OFFSET_FROM_BOTTOM)
 
         self.offPlayCall = BorderedTextBox('Off Adj', 100, 100, text_size = 26, batch=self.batch)
         self.offPlayCall.setTitleFontSize(16)
-        self.offPlayCall.setPosition(450, 30)
+        self.offPlayCall.setPosition(450, 30 + FACSet.OFFSET_FROM_BOTTOM)
         self.situation = self.updateSituation()
 
 
@@ -87,7 +87,7 @@ class FiveD20Set(FACSet) :
         self.defPenaltyDice = BorderedDiceSet([self.defPen], spacing=18, batch=self.batch)
         self.defPenaltyDice.setTitle("Penalty")
         self.defPenaltyDice.setTitleFontSize(16)
-        self.defPenaltyDice.setPosition(640, 234, 16)
+        self.defPenaltyDice.setPosition(640, 234 + FACSet.OFFSET_FROM_BOTTOM, 16)
 
         self.retBlack = Die(Die.D_BLACK, text_color=Die.T_WHITE, sides=20, batch=self.batch)
         self.retBlack.scale(FiveD20Set.SCALE)
@@ -99,10 +99,10 @@ class FiveD20Set(FACSet) :
         self.returnDice.setTitleFontSize(16)
 
         self.changeMode(kicking=True)
-        self.playDice.setPosition(40, 394, 16)
-        self.defDice.setPosition(40, 234, 16)
-        self.returnDice.setPosition(40, 84, 16)
-        self.offPenaltyDice.setPosition(640, 394, 16)
+        self.playDice.setPosition(40, 394 + FACSet.OFFSET_FROM_BOTTOM, 16)
+        self.defDice.setPosition(40, 234 + FACSet.OFFSET_FROM_BOTTOM, 16)
+        self.returnDice.setPosition(40, 84 + FACSet.OFFSET_FROM_BOTTOM, 16)
+        self.offPenaltyDice.setPosition(640, 394 + FACSet.OFFSET_FROM_BOTTOM, 16)
 
     def homeFieldCheck(self) :
         return self.defWhite.getValue() == 1 or self.defWhite.getValue() == 20

@@ -158,13 +158,13 @@ class FootballScoreboard(Scoreboard) :
 
 
     def addElements(self) :
-        self.addScores(2, 470)
-        self.addClock(450)
-        self.addPeriod(340, horizontal=True)
-        self.addHorizontalElement(1, Scoreboard.CENTER, 242, 'Down:', self.state.getDown, Scoreboard.YELLOW )
-        self.addHorizontalElement(2, Scoreboard.CENTER, 162, 'Yards to Go:', self.state.getYardsToGain, Scoreboard.YELLOW )
-        self.addYardsToEndzone(70)
-        self.ballMarker = self.addBallLocation(250)
+        self.addScores(2, 470 + Scoreboard.OFFSET_FROM_BOTTOM)
+        self.addClock(450 + Scoreboard.OFFSET_FROM_BOTTOM)
+        self.addPeriod(340 + Scoreboard.OFFSET_FROM_BOTTOM, horizontal=True)
+        self.addHorizontalElement(1, Scoreboard.CENTER, 242 + Scoreboard.OFFSET_FROM_BOTTOM, 'Down:', self.state.getDown, Scoreboard.YELLOW )
+        self.addHorizontalElement(2, Scoreboard.CENTER, 162 + Scoreboard.OFFSET_FROM_BOTTOM, 'Yards to Go:', self.state.getYardsToGain, Scoreboard.YELLOW )
+        self.addYardsToEndzone(70 + Scoreboard.OFFSET_FROM_BOTTOM)
+        self.ballMarker = self.addBallLocation(250 + Scoreboard.OFFSET_FROM_BOTTOM)
 
     def changePossessingTeam(self) :
         pos = self.ballMarker.getCenter()
@@ -179,7 +179,7 @@ class FootballScoreboard(Scoreboard) :
                                 updateFunc=self.state.getLineOfScrimmage, digitFont=Scoreboard.DIGIT_FONT,
                                 digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2,
                                 displayLeadingZeroes=False, batch=self.batch)
-        e.setCenterTop(Scoreboard.LEFT_CENTER, height)
+        e.setCenterTop(Scoreboard.LEFT_CENTER, height + Scoreboard.OFFSET_FROM_BOTTOM)
         self.elements.append(e)
         return e
 
@@ -189,7 +189,7 @@ class FootballScoreboard(Scoreboard) :
                                 updateFunc=self.state.getYardsToEndzone, digitFont=Scoreboard.DIGIT_FONT,
                                 digitSize=Scoreboard.SMALL_DIGIT_SIZE, digitColor=Scoreboard.YELLOW, maxDigits=2,
                                 displayLeadingZeroes=False, batch=self.batch)
-        e.setCenterTop(Scoreboard.CENTER, height)
+        e.setCenterTop(Scoreboard.CENTER, height + Scoreboard.OFFSET_FROM_BOTTOM)
         self.elements.append(e)
 
     def reportFieldPosition(self) :

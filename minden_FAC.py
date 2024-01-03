@@ -21,12 +21,12 @@ class MindenCricketSet(FACSet) :
         d2.setInteriorSpacingPct(0.2)
 
         self.dice = BorderedDiceSet([d1, d2], batch=self.batch)
-        self.dice.setPosition(460, 320, 16)
+        self.dice.setPosition(460, 320 + FACSet.OFFSET_FROM_BOTTOM, 16)
 
     def createCards(self) :
         self.deck = PlayingCardDeck()
         self.cardDisplay = CardDisplay(140, self.deck, self.batch)
-        self.cardDisplay.setPosition(80,420)
+        self.cardDisplay.setPosition(80,420 + FACSet.OFFSET_FROM_BOTTOM)
 
     def draw(self) :
         self.batch.draw()

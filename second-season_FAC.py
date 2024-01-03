@@ -41,10 +41,10 @@ class SecondSeasonSet(FACSet) :
         self.createDice()
 
         self.defPlayCall = BorderedTextBox('Defense', 300, 110, self.batch)
-        self.defPlayCall.setPosition(200, 184)
+        self.defPlayCall.setPosition(200, 184 + FACSet.OFFSET_FROM_BOTTOM)
 
         self.offPlayCall = BorderedTextBox('Offense', 400, 110, self.batch)
-        self.offPlayCall.setPosition(280, 26)
+        self.offPlayCall.setPosition(280, 26 + FACSet.OFFSET_FROM_BOTTOM)
 
         self.down = 1
         self.distance = 10
@@ -74,14 +74,14 @@ class SecondSeasonSet(FACSet) :
 
         self.chartDice = BorderedDiceSet([self.red, self.white], 24 , self.batch)
         self.chartDice.setTitle('Chart Dice')
-        self.chartDice.setPosition(40, 394, 16)
+        self.chartDice.setPosition(40, 394 + FACSet.OFFSET_FROM_BOTTOM, 16)
 
         self.finderDie = Die(Die.D_BLUE, text_color=Die.T_WHITE, sides=20, batch=self.batch)
         self.finderDie.setInteriorSpacingPct(0.2)
         self.finderDie.scale(0.8)
         self.playerSet = BorderedDiceSet([self.finderDie], 24, self.batch)
         self.playerSet.setTitle("Finder")
-        self.playerSet.setPosition(620,394)        
+        self.playerSet.setPosition(620,394 + FACSet.OFFSET_FROM_BOTTOM)        
 
         self.defenseDie = Die(Die.D_AQUA, text_color=Die.T_WHITE, sides=20, batch=self.batch)
         self.defenseDie.setInteriorSpacingPct(0.2)
@@ -89,7 +89,7 @@ class SecondSeasonSet(FACSet) :
         self.defenseSet = BorderedDiceSet([self.defenseDie], 20, self.batch)
         self.defenseSet.setTitleFontSize(16)
         self.defenseSet.setTitle("Defense")
-        self.defenseSet.setPosition(40, 240)    
+        self.defenseSet.setPosition(40, 240 + FACSet.OFFSET_FROM_BOTTOM)    
 
         self.o1 = Die(Die.D_GREEN, text_color=Die.T_WHITE, sides=6, batch=self.batch)
         self.o1.scale(0.7)
@@ -98,7 +98,7 @@ class SecondSeasonSet(FACSet) :
         self.offenseSet = BorderedDiceSet([self.o1,self.o2], 20, self.batch)
         self.offenseSet.setTitle('Offense')
         self.offenseSet.setTitleFontSize(16)
-        self.offenseSet.setPosition(40, 80)
+        self.offenseSet.setPosition(40, 80 + FACSet.OFFSET_FROM_BOTTOM)
 
     def callPlays(self) :
         defense = self.defensiveCalls[self.defenseDie.getValue()-1][self.situation]

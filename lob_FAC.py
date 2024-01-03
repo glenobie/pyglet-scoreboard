@@ -17,13 +17,13 @@ class LegendsOfBoxingSet(FACSet) :
         redD20.setInteriorSpacingPct(0.2)
         self.redSet = BorderedDiceSet([redD20], batch=self.batch)
         self.redSet.setTitle('Control')
-        self.redSet.setPosition(230, 380, 16)
+        self.redSet.setPosition(230, 380 + FACSet.OFFSET_FROM_BOTTOM, 16)
 
         blueD20 = Die(Die.D_BLUE, sides=20, text_color=Die.T_WHITE, batch=self.batch)
         blueD20.setInteriorSpacingPct(0.2)
         self.blueSet = BorderedDiceSet([blueD20], batch=self.batch)
         self.blueSet.setTitle('Control')
-        self.blueSet.setPosition(440, 380, 16)
+        self.blueSet.setPosition(440, 380 + FACSet.OFFSET_FROM_BOTTOM, 16)
 
         punch = Die(Die.D_DARK_GREEN, sides=100, text_color=Die.T_WHITE,batch=self.batch)
         punch.setInteriorSpacingPct(0.4)
@@ -32,12 +32,12 @@ class LegendsOfBoxingSet(FACSet) :
 
         self.punchDice = BorderedDiceSet([punch, defense], batch=self.batch)
         self.punchDice.setTitle('Punch & Defense')
-        self.punchDice.setPosition(160, 150, 16)
+        self.punchDice.setPosition(160, 150 + FACSet.OFFSET_FROM_BOTTOM, 16)
 
         d20 = Die(Die.D_AQUA, sides=20, text_color=Die.T_WHITE, batch=self.batch)
         d20.setInteriorSpacingPct(0.2)
         self.testDice = BorderedDiceSet([d20], 20, self.batch)
-        self.testDice.setPosition(520, 150, 16)
+        self.testDice.setPosition(520, 150 + FACSet.OFFSET_FROM_BOTTOM, 16)
         self.testDice.setTitle('Tests')
 
     def draw(self) :

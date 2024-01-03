@@ -25,14 +25,14 @@ class RWBRSet(FACSet) :
         self.groupSet.attachBooleanFunctionLabel((partial(self.groupSet.totalEquals, 5), 'BOTTOM'))
         self.groupSet.attachBooleanFunctionLabel((partial(self.groupSet.totalEquals, 6), 'DUEL!'))
         self.groupSet.setTitle('Group')
-        self.groupSet.setPosition(140, 380, 16)
+        self.groupSet.setPosition(140, 380 + FACSet.OFFSET_FROM_BOTTOM, 16)
 
         self.black = Die(Die.D_BLACK, sides=6, text_color=Die.T_WHITE,batch=self.batch)
         self.gray = Die(Die.D_GRAY, sides=6, text_color=Die.T_WHITE,batch=self.batch)
 
         self.courseDice = BorderedDiceSet([self.gray, self.black], batch=self.batch)
         self.courseDice.setTitle('Track')
-        self.courseDice.setPosition(440, 380, 16)
+        self.courseDice.setPosition(440, 380 + FACSet.OFFSET_FROM_BOTTOM, 16)
 
         self.red = Die(Die.D_RED, text_color=Die.T_WHITE, sides=6, batch=self.batch)
         self.white = Die(Die.D_WHITE, sides=6, batch=self.batch)
@@ -42,7 +42,7 @@ class RWBRSet(FACSet) :
         self.challengeDice = BorderedDiceSet(self.challenge, batch=self.batch)
         self.challengeDice.attachBooleanFunctionLabel((self.challengeDice.allEqual, 'PROBLEM!'))
         self.challengeDice.setTitle('Challenge #' + str(self.challengeNumber) )
-        self.challengeDice.setPosition(200, 140, 16)
+        self.challengeDice.setPosition(200, 140 + FACSet.OFFSET_FROM_BOTTOM, 16)
 
 
     def draw(self) :

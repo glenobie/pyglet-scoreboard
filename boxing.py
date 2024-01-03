@@ -96,15 +96,15 @@ class BoxingScoreboard(Scoreboard) :
         Scoreboard.__init__(self)
 
         
-        self.addLargeElement(2, Scoreboard.LEFT_CENTER, 470, 'RED', partial(self.state.getScore, 0), Scoreboard.RED)
-        self.addLargeElement(2, Scoreboard.RIGHT_CENTER, 470, 'BLUE', partial(self.state.getScore, 1), Scoreboard.BLUE)
-        self.addClock(440, 1)
-        self.addPeriod(300, maxDigits=2)
+        self.addLargeElement(2, Scoreboard.LEFT_CENTER, 470 + Scoreboard.OFFSET_FROM_BOTTOM, 'RED', partial(self.state.getScore, 0), Scoreboard.RED)
+        self.addLargeElement(2, Scoreboard.RIGHT_CENTER, 470 + Scoreboard.OFFSET_FROM_BOTTOM, 'BLUE', partial(self.state.getScore, 1), Scoreboard.BLUE)
+        self.addClock(440 + Scoreboard.OFFSET_FROM_BOTTOM, 1)
+        self.addPeriod(300 + Scoreboard.OFFSET_FROM_BOTTOM, maxDigits=2)
 
-        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 300, 'Endurance', partial(self.state.getEndurance, 0), Scoreboard.RED)
-        self.addMediumElement(2, Scoreboard.RIGHT_CENTER, 300, 'Endurance', partial(self.state.getEndurance, 1), Scoreboard.BLUE)
-        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 160, 'TKO Points', partial(self.state.getTkoPoints, 0), Scoreboard.RED)
-        self.addMediumElement(2, Scoreboard.RIGHT_CENTER, 160, 'TKO Points', partial(self.state.getTkoPoints, 1), Scoreboard.BLUE)
+        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 300 + Scoreboard.OFFSET_FROM_BOTTOM, 'Endurance', partial(self.state.getEndurance, 0), Scoreboard.RED)
+        self.addMediumElement(2, Scoreboard.RIGHT_CENTER, 300 + Scoreboard.OFFSET_FROM_BOTTOM, 'Endurance', partial(self.state.getEndurance, 1), Scoreboard.BLUE)
+        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 160 + Scoreboard.OFFSET_FROM_BOTTOM, 'TKO Points', partial(self.state.getTkoPoints, 0), Scoreboard.RED)
+        self.addMediumElement(2, Scoreboard.RIGHT_CENTER, 160 + Scoreboard.OFFSET_FROM_BOTTOM, 'TKO Points', partial(self.state.getTkoPoints, 1), Scoreboard.BLUE)
  
     # handle keys
 

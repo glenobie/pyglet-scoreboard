@@ -185,13 +185,13 @@ class CricketScoreboard(Scoreboard) :
         #self.state = CricketGameState()
         Scoreboard.__init__(self)
         
-        self.addLargeElement(3, Scoreboard.CENTER, 470, 'Total', self.state.getTotal, Scoreboard.RED)
-        self.addMediumElement(1, Scoreboard.CENTER, 290, 'Wickets', self.state.getWickets, Scoreboard.GREEN)
-        self.addMediumElement(3, Scoreboard.RIGHT_CENTER, 150, 'Last Innings', self.state.getLastInnings, Scoreboard.GREEN)
-        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 290, 'Extras', self.state.getExtras, Scoreboard.RED)
-        self.addMediumElement(3, Scoreboard.RIGHT_CENTER, 290, 'Last Wicket', self.state.getLastWicket, Scoreboard.RED)
-        self.addLargeElement(3, Scoreboard.LEFT_CENTER, 400, None, partial(self.state.getBatterRuns, 0), Scoreboard.RED)
-        self.addLargeElement(3, Scoreboard.RIGHT_CENTER, 400, None, partial(self.state.getBatterRuns, 1), Scoreboard.RED)
+        self.addLargeElement(3, Scoreboard.CENTER, 470 + Scoreboard.OFFSET_FROM_BOTTOM, 'Total', self.state.getTotal, Scoreboard.RED)
+        self.addMediumElement(1, Scoreboard.CENTER, 290 + Scoreboard.OFFSET_FROM_BOTTOM, 'Wickets', self.state.getWickets, Scoreboard.GREEN)
+        self.addMediumElement(3, Scoreboard.RIGHT_CENTER, 150 + Scoreboard.OFFSET_FROM_BOTTOM, 'Last Innings', self.state.getLastInnings, Scoreboard.GREEN)
+        self.addMediumElement(2, Scoreboard.LEFT_CENTER, 290 + Scoreboard.OFFSET_FROM_BOTTOM, 'Extras', self.state.getExtras, Scoreboard.RED)
+        self.addMediumElement(3, Scoreboard.RIGHT_CENTER, 290 + Scoreboard.OFFSET_FROM_BOTTOM, 'Last Wicket', self.state.getLastWicket, Scoreboard.RED)
+        self.addLargeElement(3, Scoreboard.LEFT_CENTER, 400 + Scoreboard.OFFSET_FROM_BOTTOM, None, partial(self.state.getBatterRuns, 0), Scoreboard.RED)
+        self.addLargeElement(3, Scoreboard.RIGHT_CENTER, 400 + Scoreboard.OFFSET_FROM_BOTTOM, None, partial(self.state.getBatterRuns, 1), Scoreboard.RED)
         self.addBatterNumber(450, Scoreboard.LEFT_CENTER, partial(self.state.getBatterNumber, 0))
         self.addBatterNumber(450, Scoreboard.RIGHT_CENTER, partial(self.state.getBatterNumber, 1))
 
@@ -200,7 +200,7 @@ class CricketScoreboard(Scoreboard) :
                               updateFunc=func, digitFont=Scoreboard.DIGIT_FONT,
                               digitSize=Scoreboard.VERY_SMALL_DIGIT_SIZE, digitColor=Scoreboard.RED, maxDigits=2, 
                               batch=self.batch)
-        e.setCenterTop(x, height)
+        e.setCenterTop(x, height + Scoreboard.OFFSET_FROM_BOTTOM)
         self.elements.append(e)
 
     # handle keys
@@ -286,7 +286,7 @@ class TestCricketScoreboard(CricketScoreboard) :
                               digitSize=Scoreboard.MEDIUM_DIGIT_SIZE, digitColor=Scoreboard.YELLOW, maxDigits=2, 
                               batch=self.batch)
 
-        e.setCenterTop(Scoreboard.LEFT_CENTER, 150)
+        e.setCenterTop(Scoreboard.LEFT_CENTER, 150 + Scoreboard.OFFSET_FROM_BOTTOM)
         self.elements.append(e)
 
-        self.addMediumElement(3, Scoreboard.CENTER, 150, 'Partnership', self.state.getPartnership, Scoreboard.RED)
+        self.addMediumElement(3, Scoreboard.CENTER, 150 + Scoreboard.OFFSET_FROM_BOTTOM, 'Partnership', self.state.getPartnership, Scoreboard.RED)
