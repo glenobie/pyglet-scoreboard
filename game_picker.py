@@ -24,7 +24,7 @@ class MainWindow(KeyHandler, pyglet.window.Window) :
         # create window
         display = pyglet.canvas.get_display()
         
-        pyglet.window.Window.__init__(self, width, height, fullscreen=True) 
+        pyglet.window.Window.__init__(self, width, height, fullscreen=False) 
         self.windowFAC = FastActionWindow()  
         pyglet.clock.schedule_interval(self.autosave, MainWindow.AUTOSAVE_INTERVAL)
 
